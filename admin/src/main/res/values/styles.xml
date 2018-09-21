@@ -1,0 +1,272 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="android:windowBackground">@color/windowBackgroundCoclor</item>
+    </style>
+
+    <!--TextView-->
+    <style name="NoteTheme">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/distance16</item>
+        <item name="android:layout_marginTop">@dimen/distance16</item>
+        <item name="android:layout_marginBottom">@dimen/distance16</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">#999</item>
+    </style>
+
+    <style name="HeadLargeTheme">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/distance16</item>
+        <item name="android:layout_marginTop">@dimen/distance8</item>
+        <item name="android:layout_marginBottom">@dimen/distance8</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
+    <style name="HeadMediumTheme">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/distance16</item>
+        <item name="android:layout_marginTop">@dimen/distance8</item>
+        <item name="android:layout_marginBottom">@dimen/distance8</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
+    <style name="HeadSmallTheme">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/distance16</item>
+        <item name="android:layout_marginTop">@dimen/distance8</item>
+        <item name="android:layout_marginBottom">@dimen/distance8</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Paragraph">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/distance16</item>
+        <item name="android:layout_marginTop">@dimen/distance8</item>
+        <item name="android:layout_marginBottom">@dimen/distance8</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:lineSpacingExtra">8dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#000</item>
+
+    </style>
+
+    <style name="ParagraphCenterNormal">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/distance16</item>
+        <item name="android:layout_marginBottom">@dimen/distance16</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="HintNormal">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginTop">@dimen/distance16</item>
+        <item name="android:layout_marginBottom">@dimen/distance16</item>
+        <item name="android:layout_marginRight">@dimen/distance16</item>
+        <item name="android:layout_marginLeft">@dimen/distance16</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#999</item>
+    </style>
+
+    <!--Toolbar-->
+
+    <style name="ToolbarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/toolbar_height</item>
+        <item name="android:textColorPrimary">@color/toolbarTextColorPrimary</item>
+        <item name="android:textColorSecondary">@color/toolbarTextColorSecondary</item>
+        <item name="android:actionMenuTextColor">@color/toolbarActionMenuTextColor</item>
+        <item name="android:background">@color/toolbarbackground</item>
+    </style>
+
+    <style name="OverlayTheme">
+        <item name="overlapAnchor">false</item>
+        <item name="android:background">@color/windowBackgroundCoclor</item>
+        <item name="android:textColorPrimary">#222</item>
+        <item name="android:textColorSecondary">#222</item>
+    </style>
+
+    <style name="SpinnerNormal">
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:popupBackground">#fff</item>
+        <item name="android:popupAnimationStyle">@style/OverlayTheme</item>
+        <item name="android:layout_margin">@dimen/distance16</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:spinnerMode">dropdown</item>
+        <item name="android:dropDownHeight">130dp</item>
+    </style>
+
+    <style name="SpinnerDropdown">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/toolbar_height</item>
+        <item name="android:background">#fff</item>
+    </style>
+
+    <style name="MenuNormal">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">#3F51B5</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TabLyoutNormal" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/colorPrimary</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="android:layout_height">@dimen/tabbar_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="tabTextAppearance">@style/TabLyout.TextCustomApearance</item>
+    </style>
+
+    <style name="RelativeLayoutTile">
+        <item name="android:layout_height">@dimen/distance64</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="LinearLayoutTile">
+        <item name="android:layout_height">@dimen/distance64</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="TabLyout.TextCustomApearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
+    <style name="ButtonNormal" parent="Button">
+        <item name="android:layout_marginTop">@dimen/distance4</item>
+    </style>
+    <style name="ButtonSmall" parent="Button">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginLeft">@dimen/distance64</item>
+        <item name="android:layout_marginRight">@dimen/distance64</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginLeft">@dimen/distance64</item>
+        <item name="android:layout_marginRight">@dimen/distance64</item>
+    </style>
+
+
+    <style name="EditTextNormal" parent="EditText">
+        <item name="android:layout_centerVertical">false</item>
+
+    </style>
+
+    <style name="EditTextCenter" parent="EditText">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginRight">@dimen/distance32</item>
+        <item name="android:layout_marginLeft">@dimen/distance32</item>
+    </style>
+
+    <style name="EditText">
+        <item name="android:textColorPrimary">#222</item>
+        <item name="android:textColorSecondary">#222</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:colorAccent" tools:targetApi="lollipop">@color/colorPrimary</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginTop">@dimen/distance8</item>
+        <item name="android:layout_marginBottom">@dimen/distance8</item>
+        <item name="android:layout_marginRight">@dimen/distance8</item>
+        <item name="android:layout_marginLeft">@dimen/distance16</item>
+        <item name="android:colorControlActivated" tools:targetApi="lollipop">@color/colorPrimary</item>
+    </style>
+
+    <style name="InputAreaNormal">
+        <item name="android:layout_width">@dimen/distance64</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/distance16</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="RelativeLayoutFirst">
+        <item name="android:background">#fff</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/distance32</item>
+    </style>
+
+    <style name="RelativeLayoutNormal">
+        <item name="android:background">#fff</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/distance1</item>
+    </style>
+
+    <style name="ImageNormal">
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/distance16</item>
+        <item name="android:layout_marginTop">@dimen/distance16</item>
+        <item name="android:layout_marginBottom">@dimen/distance16</item>
+        <item name="android:layout_marginRight">@dimen/distance4</item>
+    </style>
+
+    <style name="CheckBoxNormal">
+        <item name="android:layout_marginLeft">@dimen/distance16</item>
+        <item name="android:layout_marginTop">@dimen/distance16</item>
+        <item name="android:layout_marginBottom">@dimen/distance16</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:buttonTint" tools:targetApi="lollipop">@color/colorPrimary</item>
+        <item name="android:colorControlHighlight" tools:targetApi="lollipop">@color/colorPrimary</item>
+        <item name="android:colorControlActivated" tools:targetApi="lollipop">@color/colorPrimary</item>
+        <item name="android:colorAccent" tools:targetApi="lollipop">@color/colorPrimary</item>
+    </style>
+
+</resources>

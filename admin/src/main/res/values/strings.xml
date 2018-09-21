@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">案例追踪管理员版</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="example">例子</string>
+    <string name="menu_main_bnb_1">事件</string>
+    <string name="menu_main_bnb_2">公司</string>
+    <string name="menu_main_bnb_3">用户</string>
+
+    <string name="toolbar_tilte_admin_passed">全部管理员</string>
+    <string name="toolbar_tilte_admin_locked">已锁定的管理员</string>
+    <string name="toolbar_tilte_admin_deleted">已删除的管理员</string>
+
+    <string name="toolbar_tilte_user_passed">全部用户</string>
+    <string name="toolbar_tilte_user_locked">已锁定的用户</string>
+    <string name="toolbar_tilte_user_deleted">已删除的用户</string>
+
+    <string name="toolbar_tilte_company_unchecked">待审核的公司</string>
+    <string name="toolbar_tilte_company_passed">已通过的公司</string>
+    <string name="toolbar_tilte_company_rejected">未通过的公司</string>
+    <string name="toolbar_tilte_company_deleted">已删除的公司</string>
+    <string name="toolbar_tilte_company_add">新增公司</string>
+    <string name="toolbar_tilte_company_edit">编辑公司</string>
+
+    <string name="toolbar_tilte_product_unchecked">待审核的产品</string>
+    <string name="toolbar_tilte_product_passed">已通过的产品</string>
+    <string name="toolbar_tilte_product_rejected">未通过的产品</string>
+    <string name="toolbar_tilte_product_deleted">已删除的产品</string>
+
+    <string name="toolbar_tilte_case_unchecked">待审核的案例</string>
+    <string name="toolbar_tilte_case_passed">已通过的案例</string>
+    <string name="toolbar_tilte_case_rejected">未通过的案例</string>
+    <string name="toolbar_tilte_case_deleted">已删除的案例</string>
+
+    <string name="toolbar_tilte_event_unchecked">待审核的事件</string>
+    <string name="toolbar_tilte_event_passed">已通过的事件</string>
+    <string name="toolbar_tilte_event_rejected">未通过的事件</string>
+    <string name="toolbar_tilte_event_deleted">已删除的事件</string>
+
+    <string name="toolbar_tilte_timeline_unchecked">待审核的时间线</string>
+    <string name="toolbar_tilte_timeline_passed">已通过的时间线</string>
+    <string name="toolbar_tilte_timeline_rejected">未通过的时间线</string>
+    <string name="toolbar_tilte_timeline_deleted">已删除的时间线</string>
+
+</resources>

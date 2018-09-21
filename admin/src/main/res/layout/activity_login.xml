@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".admin.LoginActivity">
+
+    <include
+        android:id="@+id/a_login_toolbar"
+        layout="@layout/tile_toolbar"/>
+    <EditText
+        android:id="@+id/et_login_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入用户名"
+        style="@style/EditTextCenter"
+        android:inputType="text" />
+    <EditText
+        android:id="@+id/et_login_password"
+        android:hint="请输入密码"
+        style="@style/EditTextCenter"
+        android:inputType="textPassword" />
+    <TextView
+        android:id="@+id/tv_login_tips"
+        android:layout_marginLeft="@dimen/distance16"
+        android:layout_marginRight="@dimen/distance16"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_login_login"
+        android:text="登  录"
+        style="@style/ButtonNormal" />
+
+</LinearLayout>

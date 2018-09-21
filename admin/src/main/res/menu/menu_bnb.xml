@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bnb_a_main_1"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="@string/menu_main_bnb_1" />
+    <item
+        android:id="@+id/bnb_a_main_2"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="@string/menu_main_bnb_2" />
+    <item
+        android:id="@+id/bnb_a_main_3"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="@string/menu_main_bnb_3" />
+
+</menu>

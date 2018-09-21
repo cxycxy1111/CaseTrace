@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/tile_rv_case_list_rl_1"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tile_rv_case_list_head_medium"
+            android:layout_marginTop="@dimen/distance16"
+            android:text="@string/example"
+            style="@style/HeadMediumTheme" />
+        <ImageView
+            android:layout_marginTop="@dimen/distance16"
+            android:layout_marginRight="@dimen/distance16"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/distance32"
+            android:layout_height="@dimen/distance32" />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/tile_rv_case_list_content"
+        android:layout_below="@id/tile_rv_case_list_rl_1"
+        android:layout_marginTop="@dimen/distance4"
+        android:layout_marginBottom="@dimen/distance4"
+        android:text="@string/example"
+        style="@style/Paragraph" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tile_rv_case_list_hint"
+            android:text="@string/example"
+            android:layout_marginTop="@dimen/distance2"
+            android:layout_alignParentRight="true"
+            style="@style/HintNormal" />
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/windowBackgroundCoclor"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/t_rv_head_text"
+        android:layout_marginTop="@dimen/distance8"
+        android:layout_marginBottom="@dimen/distance8"
+        android:text="@string/example"
+        style="@style/HintNormal" />
+
+</LinearLayout>
