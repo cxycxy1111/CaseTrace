@@ -50,7 +50,7 @@ public class CompanyListActivity extends BaseActivity {
     }
 
     private void req(final int req_type) {
-        Map<String,String> map = new HashMap<>();
+        final Map<String,String> map = new HashMap<>();
         map.put("holder_type","-1");
         arrayList.add(map);
         recyclerView = (RecyclerView)findViewById(R.id.rv_a_rv_list);
@@ -84,7 +84,7 @@ public class CompanyListActivity extends BaseActivity {
 
             @Override
             public void onRespSessionExpired() {
-
+                ViewHandler.alertShowAndExitApp(CompanyListActivity.this);
             }
 
             @Override
@@ -122,12 +122,24 @@ public class CompanyListActivity extends BaseActivity {
 
             @Override
             public void onRespError() {
-
+                arrayList.clear();
+                ArrayList<Map<String,String>> list = new ArrayList<>();
+                Map map1 =new  HashMap<String,String>();
+                map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_ERROR));
+                list.add(map);
+                arrayList.addAll(list);
+                adaptor1.notifyDataSetChanged();
             }
 
             @Override
             public void onReqFailure(Object object) {
-
+                arrayList.clear();
+                Map<String,String> map = new HashMap<>();
+                map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_NET_ERROR));
+                ArrayList<Map<String,String>> list = new ArrayList<>();
+                list.add(map);
+                arrayList.addAll(list);
+                adaptor1.notifyDataSetChanged();
             }
         },CompanyListActivity.this);
         NetUtil.reqSendGet(this,url,callback);

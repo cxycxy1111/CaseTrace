@@ -80,7 +80,7 @@ public class TimelineListActivity extends BaseActivity {
 
             @Override
             public void onRespSessionExpired() {
-
+                ViewHandler.alertShowAndExitApp(TimelineListActivity.this);
             }
 
             @Override
@@ -113,12 +113,24 @@ public class TimelineListActivity extends BaseActivity {
 
             @Override
             public void onRespError() {
-
+                arrayList.clear();
+                Map<String,String> map = new HashMap<>();
+                map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_ERROR));
+                ArrayList<Map<String,String>> list = new ArrayList<>();
+                list.add(map);
+                arrayList.addAll(list);
+                adaptor1.notifyDataSetChanged();
             }
 
             @Override
             public void onReqFailure(Object object) {
-
+                arrayList.clear();
+                Map<String,String> map = new HashMap<>();
+                map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_NET_ERROR));
+                ArrayList<Map<String,String>> list = new ArrayList<>();
+                list.add(map);
+                arrayList.addAll(list);
+                adaptor1.notifyDataSetChanged();
             }
         },TimelineListActivity.this);
         NetUtil.reqSendGet(this,url,callback);

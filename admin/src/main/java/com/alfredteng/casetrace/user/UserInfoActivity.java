@@ -25,6 +25,7 @@ import com.alfredteng.casetrace.utils.NetRespStatType;
 import com.alfredteng.casetrace.utils.NetUtil;
 import com.alfredteng.casetrace.utils.Tool;
 import com.alfredteng.casetrace.utils.ViewHandler;
+import com.alfredteng.casetrace.utils.adaptor.RecyclerViewAdaptor1;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,16 +43,11 @@ public class UserInfoActivity extends BaseActivity {
 
     private static final String TAG = "UserInfoActivity";
     private long id = 0;
-    private int selected_sp_company_pos = 0;
     private int status;
-    private int selected_admin_type = 1;
     private boolean del = false;
     private boolean isAdd = false;
     private String[] str_keys = new String[]{"id","nick_name","user_name","status","del",
-            "email","create_time","icon","motto","company_id","name"};
-    private String[] str_keys_company = new String[]{"id","name","status","del","creator","creator_type","nick_name","icon"};
-    private List<String> list_company = new ArrayList<>();
-    private List<String> list_admin_type = new ArrayList<>();
+            "email","create_time","icon","motto","name"};
 
     private View[] views_add;
     private View[] views_modify;
@@ -66,10 +62,8 @@ public class UserInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_user_info);
         initViews();
         isAdd = getIntent().getBooleanExtra("is_add",false);
-        initAdminType();
         if (isAdd) {
             views_add = new View[]{tv_user_name,rl_del,rl_status};
-
             ViewHandler.viewHide(views_add);
             ViewHandler.initToolbarWithBackButton(this,toolbar,"新增用户");
         }else {
@@ -161,15 +155,8 @@ public class UserInfoActivity extends BaseActivity {
         et_pwd = (EditText)findViewById(R.id.et_pwd_a_user_info);
     }
 
-    private void initAdminType() {
-        list_admin_type.add("超级管理员");
-        list_admin_type.add("普通管理员");
-        list_admin_type.add("公司超级管理员");
-        list_admin_type.add("公司普通管理员");
-    }
-
     private void load(long id) {
-        String url = "/admin/admin/qry/detail?id=" + id;
+        String url = "/admin/user/qry/detail?id=" + id;
         BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
             @Override
             public void onRespStatus(String body) {
@@ -181,12 +168,15 @@ public class UserInfoActivity extends BaseActivity {
                 arrayList = JsonUtil.strToListMap(body,str_keys);
                 Map<String,String> map = new HashMap<>();
                 map = arrayList.get(0);
-                selected_admin_type = Integer.parseInt(String.valueOf(map.get("type")));
-
                 tv_user_name.setText(map.get("user_name"));
                 et_nick_name.setText(map.get("nick_name"));
                 et_email.setText(map.get("email"));
                 et_motto.setText(map.get("motto"));
+                if (Tool.parseStringToBool(arrayList.get(0).get("del"))) {
+                    tv_del.setText("已删除");
+                }else {
+                    tv_del.setText("未删除");
+                }
                 switch (Integer.parseInt(String.valueOf(map.get("status")))) {
                     case 0:
                         tv_status.setText("正常");
@@ -229,10 +219,9 @@ public class UserInfoActivity extends BaseActivity {
                     ViewHandler.toastShow(UserInfoActivity.this,"部分资料过长，请重新输入");
                     return;
                 }
-                url.append("/add?company=").append(String.valueOf(arrayList_company.get(selected_sp_company_pos).get("id")))
-                        .append("&user_name=").append(et_user_name.getText().toString())
+                url.append("/add?")
+                        .append("user_name=").append(et_user_name.getText().toString())
                         .append("&pwd=").append(et_pwd.getText().toString())
-                        .append("&type=").append(selected_admin_type)
                         .append("&email=").append(et_email.getText().toString())
                         .append("&motto=").append(et_motto.getText().toString());
                 if (et_nick_name.getText().toString().equals("")) {
@@ -249,9 +238,8 @@ public class UserInfoActivity extends BaseActivity {
                     ViewHandler.toastShow(UserInfoActivity.this,"部分资料过长，请重新输入");
                     return;
                 }
-                url.append("/edit?company=").append(String.valueOf(arrayList_company.get(selected_sp_company_pos).get("id")))
-                        .append("&type=").append(String.valueOf(selected_admin_type))
-                        .append("&email=").append(et_email.getText().toString())
+                url.append("/edit?")
+                        .append("email=").append(et_email.getText().toString())
                         .append("&motto=").append(et_motto.getText().toString());
                 if (et_nick_name.getText().toString().equals("")) {
                     url.append("&nick_name=").append(et_user_name.getText().toString());

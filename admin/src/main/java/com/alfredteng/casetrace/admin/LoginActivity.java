@@ -111,7 +111,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
             @Override
             public void onRespError() {
-
+                tv_tips.setText(NetUtil.CANT_CONNECT_INTERNET);
             }
 
             @Override

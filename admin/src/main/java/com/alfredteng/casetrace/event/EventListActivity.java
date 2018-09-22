@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.alfredteng.casetrace.R;
+import com.alfredteng.casetrace.cases.CaseListActivity;
 import com.alfredteng.casetrace.company.CompanyInfoActivity;
 import com.alfredteng.casetrace.utils.BaseActivity;
 import com.alfredteng.casetrace.utils.BaseHttpCallback;
@@ -80,7 +81,7 @@ public class EventListActivity extends BaseActivity {
 
             @Override
             public void onRespSessionExpired() {
-
+                ViewHandler.alertShowAndExitApp(EventListActivity.this);
             }
 
             @Override
@@ -114,12 +115,24 @@ public class EventListActivity extends BaseActivity {
 
             @Override
             public void onRespError() {
-
+                arrayList.clear();
+                Map<String,String> map = new HashMap<>();
+                map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_ERROR));
+                ArrayList<Map<String,String>> list = new ArrayList<>();
+                list.add(map);
+                arrayList.addAll(list);
+                adaptor1.notifyDataSetChanged();
             }
 
             @Override
             public void onReqFailure(Object object) {
-
+                arrayList.clear();
+                Map<String,String> map = new HashMap<>();
+                map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_NET_ERROR));
+                ArrayList<Map<String,String>> list = new ArrayList<>();
+                list.add(map);
+                arrayList.addAll(list);
+                adaptor1.notifyDataSetChanged();
             }
         },EventListActivity.this);
         NetUtil.reqSendGet(this,url,callback);

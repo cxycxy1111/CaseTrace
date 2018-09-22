@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.alfredteng.casetrace.R;
+import com.alfredteng.casetrace.utils.NetUtil;
 
 
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ public class RecyclerViewAdaptor1 extends RecyclerView.Adapter implements View.O
     public static final int TYPE_ADMIN = 3;
     public static final int TYPE_EMPTY = 0;
     public static final int TYPE_LOADING = -1;
+    public static final int TYPE_ERROR = -2;
+    public static final int TYPE_NET_ERROR = -3;
     private Context context;
     public String str_body_key = "";
     private ArrayList<Map<String,String>> arrayList;
@@ -54,6 +57,12 @@ public class RecyclerViewAdaptor1 extends RecyclerView.Adapter implements View.O
             case TYPE_LOADING:
                 vg = (ViewGroup)inflater.inflate(R.layout.tile_rv_loading,parent,false);
                 return new Loading(vg);
+            case TYPE_ERROR:
+                vg = (ViewGroup)inflater.inflate(R.layout.tile_rv_empty,parent,false);
+                return new Empty(vg);
+            case TYPE_NET_ERROR:
+                vg = (ViewGroup)inflater.inflate(R.layout.tile_rv_empty,parent,false);
+                return new Empty(vg);
             default:return null;
         }
     }
@@ -85,6 +94,14 @@ public class RecyclerViewAdaptor1 extends RecyclerView.Adapter implements View.O
                 final Loading loading = (Loading) holder;
                 loading.itemView.setTag(position);
                 break;
+            case TYPE_ERROR:
+                final Empty empty1 = (Empty)holder;
+                empty1.itemView.setTag(position);
+                empty1.tv.setText(NetUtil.UNKNOWN_ERROR);
+            case TYPE_NET_ERROR:
+                final Empty empty2 = (Empty)holder;
+                empty2.itemView.setTag(position);
+                empty2.tv.setText(NetUtil.CANT_CONNECT_INTERNET);
             default:break;
         }
     }

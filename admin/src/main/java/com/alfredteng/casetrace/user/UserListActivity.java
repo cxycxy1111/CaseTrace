@@ -86,7 +86,9 @@ public class UserListActivity extends BaseActivity {
                         if (arrayList.size() == 0){
                             Map<String,String> map = new HashMap<>();
                             map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_EMPTY));
-                            arrayList.add(map);
+                            ArrayList<Map<String,String>> list = new ArrayList<>();
+                            list.add(map);
+                            arrayList.addAll(list);
                         }
                         adaptor1.notifyDataSetChanged();
                 }
@@ -94,7 +96,7 @@ public class UserListActivity extends BaseActivity {
 
             @Override
             public void onRespSessionExpired() {
-
+                ViewHandler.alertShowAndExitApp(UserListActivity.this);
             }
 
             @Override
@@ -175,11 +177,24 @@ public class UserListActivity extends BaseActivity {
 
             @Override
             public void onRespError() {
-
+                arrayList.clear();
+                Map<String,String> map = new HashMap<>();
+                map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_ERROR));
+                ArrayList<Map<String,String>> list = new ArrayList<>();
+                list.add(map);
+                arrayList.addAll(list);
+                adaptor1.notifyDataSetChanged();
             }
 
             @Override
             public void onReqFailure(Object object) {
+                arrayList.clear();
+                Map<String,String> map = new HashMap<>();
+                map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_NET_ERROR));
+                ArrayList<Map<String,String>> list = new ArrayList<>();
+                list.add(map);
+                arrayList.addAll(list);
+                adaptor1.notifyDataSetChanged();
 
             }
         },UserListActivity.this);

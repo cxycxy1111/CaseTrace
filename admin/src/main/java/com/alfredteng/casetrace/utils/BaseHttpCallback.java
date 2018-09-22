@@ -69,6 +69,7 @@ public class BaseHttpCallback implements Callback {
                     Log.d(TAG, "handleResponse: " + body);
                 }
             }else {
+                Log.d(TAG, "handleResponse: body: " +body);
                 baseHttpResultListener.onRespError();
             }
         }catch (Exception e) {
