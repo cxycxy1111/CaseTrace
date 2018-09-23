@@ -32,6 +32,8 @@ public class CompanyListActivity extends BaseActivity {
     private RecyclerViewAdaptor1 adaptor1;
     private int entity_type = 0;
     private int req_type = 0;
+    private int page_no = 1;
+    private boolean isLoadEnd = false;
     private String url = "";
     private String str_body_key = "";
     private static final String TAG = "RecyclerView";
@@ -46,14 +48,16 @@ public class CompanyListActivity extends BaseActivity {
         req_type = getIntent().getIntExtra("req_type",0);
         initToolbar(entity_type,req_type);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        recyclerView = (RecyclerView)findViewById(R.id.rv_a_rv_list);
         req(req_type);
     }
 
     private void req(final int req_type) {
-        final Map<String,String> map = new HashMap<>();
-        map.put("holder_type","-1");
-        arrayList.add(map);
-        recyclerView = (RecyclerView)findViewById(R.id.rv_a_rv_list);
+        if (page_no == 1) {
+            final Map<String,String> map = new HashMap<>();
+            map.put("holder_type","-1");
+            arrayList.add(map);
+        }
         adaptor1 = new RecyclerViewAdaptor1(arrayList,CompanyListActivity.this,str_body_key);
         adaptor1.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
             @Override
@@ -62,6 +66,24 @@ public class CompanyListActivity extends BaseActivity {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(CompanyListActivity.this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(adaptor1);
+        StringBuilder builder = new StringBuilder();
+        builder.append("/admin/");
+        builder.append("company/qry/");
+        switch (req_type) {
+            case PASSED:
+                builder.append("normal?page_no=").append(page_no);
+                break;
+            case UNCHECKED:
+                builder.append("unchecked?page_no=").append(page_no);
+                break;
+            case REJECTED:
+                builder.append("rejected?page_no=1").append(page_no);
+                break;
+            case DELETED:
+                builder.append("deleted?page_no=1").append(page_no);
+                break;
+        }
+        url = builder.toString();
         BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
 
             @Override
@@ -75,9 +97,6 @@ public class CompanyListActivity extends BaseActivity {
                             arrayList.add(map);
                         }
                         adaptor1.notifyDataSetChanged();break;
-                    case STATUS_SESSION_EXPIRED:
-                        ViewHandler.alertShowAndExitApp(CompanyListActivity.this);
-                        break;
                     default:break;
                 }
             }
@@ -89,8 +108,9 @@ public class CompanyListActivity extends BaseActivity {
 
             @Override
             public void onRespMapList(String body) throws IOException {
-                arrayList.clear();
-                adaptor1.notifyDataSetChanged();
+                if (page_no == 1) {
+                    arrayList.clear();
+                }
                 ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
                 arrayList_temp = JsonUtil.strToListMap(body,str_key_company);
                 str_body_key = "name";
@@ -105,8 +125,20 @@ public class CompanyListActivity extends BaseActivity {
                     map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_EMPTY));
                     arrayList_temp.add(map);
                 }
-                arrayList.addAll(arrayList_temp);
-                adaptor1.notifyDataSetChanged();
+                if (arrayList_temp.size() >= BaseActivity.LOAD_NUM) {
+                    Map<String,String> map1 = new HashMap<>();
+                    map1.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_LOAD_MORE));
+                    arrayList_temp.add(map1);
+                }else {
+                    if (page_no != 1) {
+                        arrayList.remove(arrayList.size()-1);
+                    }
+                    Map<String,String> map1 = new HashMap<>();
+                    map1.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_END));
+                    arrayList_temp.add(map1);
+                    isLoadEnd = true;
+                }
+                arrayList.addAll((page_no-1)*BaseActivity.LOAD_NUM,arrayList_temp);
                 adaptor1.setStr_body_key(str_body_key);
                 adaptor1.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
                     @Override
@@ -118,6 +150,23 @@ public class CompanyListActivity extends BaseActivity {
                         startActivityForResult(intent,1);
                     }
                 });
+                if (isLoadEnd) {
+                    adaptor1.setOnLoadMoreClickListener(new RecyclerViewAdaptor1.OnLoadMoreClickListener() {
+                        @Override
+                        public void onLoadMoreClick(View view, int position) {
+
+                        }
+                    });
+                }else {
+                    adaptor1.setOnLoadMoreClickListener(new RecyclerViewAdaptor1.OnLoadMoreClickListener() {
+                        @Override
+                        public void onLoadMoreClick(View view, int position) {
+                            req(req_type);
+                        }
+                    });
+                }
+                page_no =page_no + 1;
+                adaptor1.notifyDataSetChanged();
             }
 
             @Override
@@ -125,8 +174,8 @@ public class CompanyListActivity extends BaseActivity {
                 arrayList.clear();
                 ArrayList<Map<String,String>> list = new ArrayList<>();
                 Map map1 =new  HashMap<String,String>();
-                map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_ERROR));
-                list.add(map);
+                map1.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_ERROR));
+                list.add(map1);
                 arrayList.addAll(list);
                 adaptor1.notifyDataSetChanged();
             }
@@ -146,9 +195,6 @@ public class CompanyListActivity extends BaseActivity {
     }
 
     private void initToolbar(int entity_type,int req_type) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("/admin/");
-        builder.append("company/qry/");
         switch (req_type) {
             case PASSED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_company_passed);
@@ -163,30 +209,18 @@ public class CompanyListActivity extends BaseActivity {
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_company_deleted);
                 break;
         }
-        switch (req_type) {
-            case PASSED:
-                builder.append("normal?page_no=1");
-                break;
-            case UNCHECKED:
-                builder.append("unchecked?page_no=1");
-                break;
-            case REJECTED:
-                builder.append("rejected?page_no=1");
-                break;
-            case DELETED:
-                builder.append("deleted?page_no=1");
-                break;
-        }
-        url = builder.toString();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        page_no = 1;
+        isLoadEnd = false;
         arrayList.clear();
         recyclerView.setLayoutManager(null);
         recyclerView.setAdapter(null);
         adaptor1.setOnItemClickListener(null);
+        adaptor1 = null;
         req(req_type);
     }
 

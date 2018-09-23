@@ -130,6 +130,7 @@ public class AdminInfoActivity extends BaseActivity {
             case 103:
                 Intent intent = new Intent(AdminInfoActivity.this,AdminPwdModifyActivity.class);
                 intent.putExtra("id",id);
+                intent.putExtra("source",0);
                 startActivityForResult(intent,1);
                 break;
             case 104:
@@ -243,7 +244,7 @@ public class AdminInfoActivity extends BaseActivity {
     }
 
     private void loadCompany() {
-        String url = "/admin/company/qry/normal?page_no=1";
+        String url = "/admin/company/qry/ignoreStatus";
         BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
             @Override
             public void onRespStatus(String body) {
@@ -265,6 +266,8 @@ public class AdminInfoActivity extends BaseActivity {
                 for (int i = 0;i < arrayList_company.size();i++) {
                     list_company.add(arrayList_company.get(i).get("name"));
                 }
+                Tool.sortListMapAsc(arrayList_company,"name");
+                Tool.sortListAsc(list_company);
                 refreshCompanySpinner();
             }
 

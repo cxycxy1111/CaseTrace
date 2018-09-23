@@ -24,10 +24,13 @@ public class RecyclerViewAdaptor1 extends RecyclerView.Adapter implements View.O
     public static final int TYPE_LOADING = -1;
     public static final int TYPE_ERROR = -2;
     public static final int TYPE_NET_ERROR = -3;
+    public static final int TYPE_LOAD_MORE = -4;
+    public static final int TYPE_END = -5;
     private Context context;
     public String str_body_key = "";
     private ArrayList<Map<String,String>> arrayList;
     private OnItemClickListener onItemClickListener = null;
+    private OnLoadMoreClickListener onLoadMoreClickListener = null;
 
     public RecyclerViewAdaptor1(ArrayList<Map<String, String>> list, Context context,String str_body_key) {
         this.arrayList = list;
@@ -63,6 +66,13 @@ public class RecyclerViewAdaptor1 extends RecyclerView.Adapter implements View.O
             case TYPE_NET_ERROR:
                 vg = (ViewGroup)inflater.inflate(R.layout.tile_rv_empty,parent,false);
                 return new Empty(vg);
+            case TYPE_LOAD_MORE:
+                vg = (ViewGroup)inflater.inflate(R.layout.tile_rv_load_more,parent,false);
+                vg.setOnClickListener(this);
+                return new LoadMore(vg);
+            case TYPE_END:
+                vg = (ViewGroup)inflater.inflate(R.layout.tile_rv_end,parent,false);
+                return new End(vg);
             default:return null;
         }
     }
@@ -98,10 +108,22 @@ public class RecyclerViewAdaptor1 extends RecyclerView.Adapter implements View.O
                 final Empty empty1 = (Empty)holder;
                 empty1.itemView.setTag(position);
                 empty1.tv.setText(NetUtil.UNKNOWN_ERROR);
+                break;
             case TYPE_NET_ERROR:
                 final Empty empty2 = (Empty)holder;
                 empty2.itemView.setTag(position);
                 empty2.tv.setText(NetUtil.CANT_CONNECT_INTERNET);
+                break;
+            case TYPE_LOAD_MORE:
+                final LoadMore load_more = (LoadMore) holder;
+                load_more.itemView.setTag(position);
+                load_more.tv.setText("加载更多");
+                break;
+            case TYPE_END:
+                final End end = (End) holder;
+                end.itemView.setTag(position);
+                end.tv.setText("已加载完全部数据");
+                break;
             default:break;
         }
     }
@@ -148,6 +170,22 @@ public class RecyclerViewAdaptor1 extends RecyclerView.Adapter implements View.O
         }
     }
 
+    private static class LoadMore extends RecyclerView.ViewHolder {
+        TextView tv;
+        private LoadMore(View view){
+            super(view);
+            tv = (TextView)itemView.findViewById(R.id.t_rv_load_more_text);
+        }
+    }
+
+    private static class End extends RecyclerView.ViewHolder {
+        TextView tv;
+        private End(View view){
+            super(view);
+            tv = (TextView)itemView.findViewById(R.id.t_rv_end_text);
+        }
+    }
+
     private static class Loading extends RecyclerView.ViewHolder {
         private Loading(View view){
             super(view);
@@ -166,12 +204,27 @@ public class RecyclerViewAdaptor1 extends RecyclerView.Adapter implements View.O
         void onItemClick(View view,int position);
     }
 
+    public interface OnLoadMoreClickListener {
+        void onLoadMoreClick(View view,int position);
+    }
+
+    public void setOnLoadMoreClickListener(OnLoadMoreClickListener onLoadMoreClickListener) {
+        this.onLoadMoreClickListener = onLoadMoreClickListener;
+    }
+
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
     @Override
     public void onClick(View v) {
-        onItemClickListener.onItemClick(v,(int)v.getTag());
+        switch (v.getId()) {
+            case R.id.rl_t_load_more:
+                onLoadMoreClickListener.onLoadMoreClick(v,(int)v.getTag());
+                break;
+            default:
+                onItemClickListener.onItemClick(v,(int)v.getTag());
+                break;
+        }
     }
 }

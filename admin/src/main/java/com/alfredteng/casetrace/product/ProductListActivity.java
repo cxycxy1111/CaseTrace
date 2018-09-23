@@ -32,6 +32,8 @@ public class ProductListActivity extends BaseActivity {
     private RecyclerViewAdaptor1 adaptor1;
     private int entity_type = 0;
     private int req_type = 0;
+    private int page_no = 1;
+    private boolean isLoadEnd = false;
     private String url = "";
     private String str_body_key = "";
     private static final String TAG = "RecyclerView";
@@ -47,15 +49,17 @@ public class ProductListActivity extends BaseActivity {
         entity_type = getIntent().getIntExtra("entity_type",0);
         req_type = getIntent().getIntExtra("req_type",0);
         initToolbar(entity_type,req_type);
+        recyclerView = (RecyclerView)findViewById(R.id.rv_a_rv_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         req(req_type);
     }
 
     private void req(final int req_type) {
-        Map<String,String> map = new HashMap<>();
-        map.put("holder_type","-1");
-        arrayList.add(map);
-        recyclerView = (RecyclerView)findViewById(R.id.rv_a_rv_list);
+        if (page_no == 1) {
+            Map<String,String> map = new HashMap<>();
+            map.put("holder_type","-1");
+            arrayList.add(map);
+        }
         adaptor1 = new RecyclerViewAdaptor1(arrayList,ProductListActivity.this,str_body_key);
         adaptor1.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
             @Override
@@ -64,6 +68,27 @@ public class ProductListActivity extends BaseActivity {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(ProductListActivity.this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(adaptor1);
+        StringBuilder builder = new StringBuilder();
+        builder.append("/admin/").append("product/qry/");
+        switch (req_type) {
+            case PASSED:
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_passed);
+                builder.append("normal?page_no=").append(page_no);
+                break;
+            case UNCHECKED:
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_unchecked);
+                builder.append("unchecked?page_no=").append(page_no);
+                break;
+            case REJECTED:
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_rejected);
+                builder.append("rejected?page_no=").append(page_no);
+                break;
+            case DELETED:
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_deleted);
+                builder.append("deleted?page_no=").append(page_no);
+                break;
+        }
+        url = builder.toString();
         BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
 
             @Override
@@ -87,11 +112,11 @@ public class ProductListActivity extends BaseActivity {
 
             @Override
             public void onRespMapList(String body) throws IOException {
-                arrayList.clear();
-                adaptor1.notifyDataSetChanged();
+                if (page_no == 1) {
+                    arrayList.clear();
+                }
                 ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
                 arrayList_temp = JsonUtil.strToListMap(body,str_key_product);
-                str_body_key = "name";
                 for (int i = 0;i < arrayList_temp.size();i++) {
                     Map<String,String> map = new HashMap<>();
                     map = arrayList_temp.get(i);
@@ -103,14 +128,49 @@ public class ProductListActivity extends BaseActivity {
                     map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_EMPTY));
                     arrayList_temp.add(map);
                 }
+                if (arrayList_temp.size() >= BaseActivity.LOAD_NUM) {
+                    Map<String,String> map1 = new HashMap<>();
+                    map1.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_LOAD_MORE));
+                    arrayList_temp.add(map1);
+                }else {
+                    if (page_no != 1) {
+                        arrayList.remove(arrayList.size()-1);
+                    }
+                    Map<String,String> map1 = new HashMap<>();
+                    map1.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_END));
+                    arrayList_temp.add(map1);
+                    isLoadEnd = true;
+                }
                 arrayList.addAll(arrayList_temp);
-                adaptor1.notifyDataSetChanged();
+                str_body_key = "name";
                 adaptor1.setStr_body_key(str_body_key);
                 adaptor1.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(ProductListActivity.this,ProductInfoActivity.class);
+                        intent.putExtra("id",Long.parseLong(String.valueOf(arrayList.get(position).get("id"))));
+                        intent.putExtra("req_type",req_type);
+                        intent.putExtra("is_add",false);
+                        startActivityForResult(intent,1);
                     }
                 });
+                if (isLoadEnd) {
+                    adaptor1.setOnLoadMoreClickListener(new RecyclerViewAdaptor1.OnLoadMoreClickListener() {
+                        @Override
+                        public void onLoadMoreClick(View view, int position) {
+
+                        }
+                    });
+                }else {
+                    adaptor1.setOnLoadMoreClickListener(new RecyclerViewAdaptor1.OnLoadMoreClickListener() {
+                        @Override
+                        public void onLoadMoreClick(View view, int position) {
+                            req(req_type);
+                        }
+                    });
+                }
+                page_no = page_no+1;
+                adaptor1.notifyDataSetChanged();
             }
 
             @Override
@@ -139,37 +199,32 @@ public class ProductListActivity extends BaseActivity {
     }
 
     private void initToolbar(int entity_type,int req_type) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("/admin/");
-        builder.append("product/qry/");
         switch (req_type) {
             case PASSED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_passed);
-                builder.append("normal?page_no=1");
                 break;
             case UNCHECKED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_unchecked);
-                builder.append("unchecked?page_no=1");
                 break;
             case REJECTED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_rejected);
-                builder.append("rejected?page_no=1");
                 break;
             case DELETED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_deleted);
-                builder.append("deleted?page_no=1");
                 break;
         }
-        url = builder.toString();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        page_no = 1;
+        isLoadEnd = false;
         arrayList.clear();
         recyclerView.setLayoutManager(null);
         recyclerView.setAdapter(null);
         adaptor1.setOnItemClickListener(null);
+        adaptor1 = null;
         req(req_type);
     }
 

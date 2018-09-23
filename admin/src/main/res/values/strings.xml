@@ -23,6 +23,9 @@
     <string name="toolbar_tilte_company_add">新增公司</string>
     <string name="toolbar_tilte_company_edit">编辑公司</string>
 
+
+    <string name="toolbar_tilte_product_add">新增产品</string>
+    <string name="toolbar_tilte_product_edit">编辑产品</string>
     <string name="toolbar_tilte_product_unchecked">待审核的产品</string>
     <string name="toolbar_tilte_product_passed">已通过的产品</string>
     <string name="toolbar_tilte_product_rejected">未通过的产品</string>
@@ -37,6 +40,8 @@
     <string name="toolbar_tilte_event_passed">已通过的事件</string>
     <string name="toolbar_tilte_event_rejected">未通过的事件</string>
     <string name="toolbar_tilte_event_deleted">已删除的事件</string>
+    <string name="toolbar_tilte_event_add">新增事件</string>
+    <string name="toolbar_tilte_event_edit">编辑事件</string>
 
     <string name="toolbar_tilte_timeline_unchecked">待审核的时间线</string>
     <string name="toolbar_tilte_timeline_passed">已通过的时间线</string>

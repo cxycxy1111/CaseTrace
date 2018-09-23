@@ -107,6 +107,7 @@ public class UserInfoActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                setResult(1);
                 this.finish();
                 break;
             case 101:
@@ -121,6 +122,7 @@ public class UserInfoActivity extends BaseActivity {
             case 103:
                 Intent intent = new Intent(UserInfoActivity.this,AdminPwdModifyActivity.class);
                 intent.putExtra("id",id);
+                intent.putExtra("source",1);
                 startActivityForResult(intent,1);
                 break;
             case 104:
@@ -172,11 +174,6 @@ public class UserInfoActivity extends BaseActivity {
                 et_nick_name.setText(map.get("nick_name"));
                 et_email.setText(map.get("email"));
                 et_motto.setText(map.get("motto"));
-                if (Tool.parseStringToBool(arrayList.get(0).get("del"))) {
-                    tv_del.setText("已删除");
-                }else {
-                    tv_del.setText("未删除");
-                }
                 switch (Integer.parseInt(String.valueOf(map.get("status")))) {
                     case 0:
                         tv_status.setText("正常");
@@ -261,7 +258,7 @@ public class UserInfoActivity extends BaseActivity {
                 url.append("/unlock?id=").append(id);
                 break;
         }
-        Log.d(TAG, "checkBeforeSubmit: " + url.toString());
+        Log.d(TAG, "checkBeforeSubmit: url: " + url.toString());
         submit(url.toString());
     }
 

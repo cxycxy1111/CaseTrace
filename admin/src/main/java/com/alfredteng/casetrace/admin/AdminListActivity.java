@@ -20,6 +20,7 @@ import com.alfredteng.casetrace.utils.NetUtil;
 import com.alfredteng.casetrace.utils.Tool;
 import com.alfredteng.casetrace.utils.ViewHandler;
 import com.alfredteng.casetrace.utils.adaptor.RecyclerViewAdaptor1;
+import com.fasterxml.jackson.databind.ser.Serializers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +35,8 @@ public class AdminListActivity extends BaseActivity {
     private RecyclerViewAdaptor1 adaptor1;
     private int entity_type = 0;
     private int req_type = 0;
-    private String url = "";
+    private int page_no = 1;
+    private boolean isLoadEnd = false;
     private String str_body_key = "";
     private static final String TAG = "RecyclerView";
     private String[] str_key_admin = new String[]{"id","nick_name","user_name","status","del",
@@ -48,14 +50,16 @@ public class AdminListActivity extends BaseActivity {
         req_type = getIntent().getIntExtra("req_type",0);
         initToolbar(entity_type,req_type);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        recyclerView = (RecyclerView)findViewById(R.id.rv_a_rv_list);
         req(req_type);
     }
 
     private void req(final int req_type) {
-        Map<String,String> map = new HashMap<>();
-        map.put("holder_type","-1");
-        arrayList.add(map);
-        recyclerView = (RecyclerView)findViewById(R.id.rv_a_rv_list);
+        if (page_no == 1) {
+            Map<String,String> map = new HashMap<>();
+            map.put("holder_type", String.valueOf(RecyclerViewAdaptor1.TYPE_LOADING));
+            arrayList.add(map);
+        }
         adaptor1 = new RecyclerViewAdaptor1(arrayList,AdminListActivity.this,str_body_key);
         adaptor1.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
             @Override
@@ -64,6 +68,22 @@ public class AdminListActivity extends BaseActivity {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(AdminListActivity.this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(adaptor1);
+        StringBuilder builder = new StringBuilder();
+        builder.append("/admin/").append("admin/qry/");
+        switch (req_type) {
+            case PASSED:
+                builder.append("normal?page_no=1");
+                break;
+            case DELETED:
+                builder.append("deleted?page_no=1");
+                break;
+            case LOCKED:
+                builder.append("locked?page_no=1");
+                break;
+            default:
+                break;
+        }
+        String url = builder.toString();
         BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
 
             @Override
@@ -89,11 +109,13 @@ public class AdminListActivity extends BaseActivity {
 
             @Override
             public void onRespMapList(String body) throws IOException {
-                arrayList.clear();
-                adaptor1.notifyDataSetChanged();
+                if (page_no == 1) {
+                    arrayList.clear();
+                }
                 ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
                 arrayList_temp = JsonUtil.strToListMap(body,str_key_admin);
                 str_body_key = "nick_name";
+                //补充类型
                 for (int i = 0;i < arrayList_temp.size();i++) {
                     Map<String,String> map = new HashMap<>();
                     map = arrayList_temp.get(i);
@@ -104,6 +126,20 @@ public class AdminListActivity extends BaseActivity {
                     Map<String,String> map = new HashMap<>();
                     map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_EMPTY));
                     arrayList_temp.add(map);
+                }
+                //
+                if (arrayList_temp.size() == BaseActivity.LOAD_NUM) {
+                    Map<String,String> map1 = new HashMap<>();
+                    map1.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_LOAD_MORE));
+                    arrayList_temp.add(map1);
+                }else {
+                    if (page_no != 1) {
+                        arrayList.remove(arrayList.size()-1);
+                    }
+                    Map<String,String> map1 = new HashMap<>();
+                    map1.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_END));
+                    arrayList_temp.add(map1);
+                    isLoadEnd = true;
                 }
                 arrayList.addAll(arrayList_temp);
                 adaptor1.notifyDataSetChanged();
@@ -119,6 +155,23 @@ public class AdminListActivity extends BaseActivity {
                         startActivityForResult(intent,1);
                     }
                 });
+                if (isLoadEnd) {
+                    adaptor1.setOnLoadMoreClickListener(new RecyclerViewAdaptor1.OnLoadMoreClickListener() {
+                        @Override
+                        public void onLoadMoreClick(View view, int position) {
+
+                        }
+                    });
+                }else {
+                    adaptor1.setOnLoadMoreClickListener(new RecyclerViewAdaptor1.OnLoadMoreClickListener() {
+                        @Override
+                        public void onLoadMoreClick(View view, int position) {
+                            req(req_type);
+                        }
+                    });
+                }
+                page_no = page_no+1;
+                adaptor1.notifyDataSetChanged();
             }
 
             @Override
@@ -147,34 +200,31 @@ public class AdminListActivity extends BaseActivity {
     }
 
     private void initToolbar(int entity_type,int req_type) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("/admin/").append("admin/qry/");
         switch (req_type) {
             case PASSED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_passed);
-                builder.append("normal?page_no=1");
                 break;
             case DELETED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_deleted);
-                builder.append("deleted?page_no=1");
                 break;
             case LOCKED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_locked);
-                builder.append("locked?page_no=1");
                 break;
             default:
                 break;
         }
-        url = builder.toString();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        page_no = 1;
+        isLoadEnd = false;
         arrayList.clear();
         recyclerView.setLayoutManager(null);
         recyclerView.setAdapter(null);
         adaptor1.setOnItemClickListener(null);
+        adaptor1=null;
         req(req_type);
     }
 

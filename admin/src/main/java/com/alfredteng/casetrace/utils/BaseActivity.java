@@ -64,6 +64,8 @@ public class BaseActivity extends AppCompatActivity{
     public static final int ENTITY_USER = 6;
     public static final int ENTITY_ADMIN = 7;
 
+    public static final int LOAD_NUM = 10;
+
 
     private ProgressBar progressBar;
 

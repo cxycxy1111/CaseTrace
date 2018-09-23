@@ -157,6 +157,12 @@ public class ViewHandler {
         activity.getSupportActionBar().setTitle(title);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+    public static void initToolbarWithBackButton(final BaseActivity activity,Toolbar toolbar,final int title) {
+        toolbar = (Toolbar)activity.findViewById(R.id.toolbar_general);
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setTitle(title);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
     public static void initToolbar(final BaseActivity activity,Toolbar toolbar,final int title) {
         toolbar = (Toolbar)activity.findViewById(R.id.toolbar_general);

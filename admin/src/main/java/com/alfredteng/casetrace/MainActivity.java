@@ -14,6 +14,8 @@ import android.view.MenuItem;
 
 import com.alfredteng.casetrace.admin.AdminInfoActivity;
 import com.alfredteng.casetrace.company.CompanyInfoActivity;
+import com.alfredteng.casetrace.event.EventInfoActivity;
+import com.alfredteng.casetrace.product.ProductInfoActivity;
 import com.alfredteng.casetrace.user.UserInfoActivity;
 import com.alfredteng.casetrace.utils.BaseActivity;
 import com.alfredteng.casetrace.utils.MainFragment;
@@ -67,14 +69,21 @@ public class MainActivity extends BaseActivity implements MainFragment.OnFragmen
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = null;
         switch (item.getItemId()) {
+            case 101:
+                intent = new Intent(this, EventInfoActivity.class);
+                break;
             case 104:
                 intent = new Intent(this,CompanyInfoActivity.class);
+                break;
+            case 105:
+                intent = new Intent(this, ProductInfoActivity.class);
                 break;
             case  106:
                 intent = new Intent(this,AdminInfoActivity.class);
                 break;
             case 107:
                 intent = new Intent(this, UserInfoActivity.class);
+                break;
         }
         if (intent != null) {
             intent.putExtra("is_add",true);

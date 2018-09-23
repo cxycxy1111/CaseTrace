@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.alfredteng.casetrace.R;
 import com.alfredteng.casetrace.company.CompanyInfoActivity;
@@ -16,6 +17,7 @@ import com.alfredteng.casetrace.utils.BaseHttpResultListener;
 import com.alfredteng.casetrace.utils.JsonUtil;
 import com.alfredteng.casetrace.utils.NetRespStatType;
 import com.alfredteng.casetrace.utils.NetUtil;
+import com.alfredteng.casetrace.utils.Tool;
 import com.alfredteng.casetrace.utils.ViewHandler;
 import com.alfredteng.casetrace.utils.adaptor.RecyclerViewAdaptor1;
 
@@ -32,6 +34,8 @@ public class UserListActivity extends BaseActivity {
     private RecyclerViewAdaptor1 adaptor1;
     private int entity_type = 0;
     private int req_type = 0;
+    private int page_no = 1;
+    private boolean isLoadEnd = false;
     private String url = "";
     private String str_body_key = "";
     private static final String TAG = "RecyclerView";
@@ -60,22 +64,80 @@ public class UserListActivity extends BaseActivity {
         req_type = getIntent().getIntExtra("req_type",0);
         initToolbar(entity_type,req_type);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        recyclerView = (RecyclerView)findViewById(R.id.rv_a_rv_list);
         req(req_type);
     }
 
     private void req(final int req_type) {
-        Map<String,String> map = new HashMap<>();
-        map.put("holder_type","-1");
-        arrayList.add(map);
-        recyclerView = (RecyclerView)findViewById(R.id.rv_a_rv_list);
+        if (page_no ==1) {
+            Map<String,String> map = new HashMap<>();
+            map.put("holder_type","-1");
+            arrayList.add(map);
+        }
         adaptor1 = new RecyclerViewAdaptor1(arrayList,UserListActivity.this,str_body_key);
         adaptor1.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
             }
         });
-        recyclerView.setLayoutManager(new LinearLayoutManager(UserListActivity.this,LinearLayoutManager.VERTICAL,false));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(UserListActivity.this,LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adaptor1);
+        StringBuilder builder = new StringBuilder();
+        builder.append("/admin/");
+        switch (entity_type) {
+            case ENTITY_ADMIN:
+                builder.append("admin/qry/");
+                break;
+            case ENTITY_USER:
+                builder.append("user/qry/");
+                break;
+            case ENTITY_COMPANY:
+                builder.append("company/qry/");
+                break;
+            case ENTITY_PRODUCT:
+                builder.append("product/qry/");
+                break;
+            case ENTITY_EVENT:
+                builder.append("event/qry/");
+                break;
+            case ENTITY_TIMELINE:
+                builder.append("timeline/qry/");
+                break;
+            case ENTITY_CASE:
+                builder.append("case/qry/");
+                break;
+            default:break;
+        }
+        if (entity_type == ENTITY_ADMIN || entity_type == ENTITY_USER) {
+            switch (req_type) {
+                case PASSED:
+                    builder.append("normal?page_no=1");
+                    break;
+                case LOCKED:
+                    builder.append("locked?page_no=1");
+                    break;
+                case DELETED:
+                    builder.append("deleted?page_no=1");
+                    break;
+            }
+        } else {
+            switch (req_type) {
+                case PASSED:
+                    builder.append("normal?page_no=").append(page_no);
+                    break;
+                case UNCHECKED:
+                    builder.append("unchecked?page_no=1").append(page_no);
+                    break;
+                case REJECTED:
+                    builder.append("rejected?page_no=1").append(page_no);
+                    break;
+                case DELETED:
+                    builder.append("deleted?page_no=1").append(page_no);
+                    break;
+            }
+        }
+        url = builder.toString();
         BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
 
             @Override
@@ -91,6 +153,8 @@ public class UserListActivity extends BaseActivity {
                             arrayList.addAll(list);
                         }
                         adaptor1.notifyDataSetChanged();
+                        break;
+                    default:break;
                 }
             }
 
@@ -101,8 +165,9 @@ public class UserListActivity extends BaseActivity {
 
             @Override
             public void onRespMapList(String body) throws IOException {
-                arrayList.clear();
-                adaptor1.notifyDataSetChanged();
+                if (page_no == 1) {
+                    arrayList.clear();
+                }
                 ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
                 switch (entity_type) {
                     case ENTITY_ADMIN:
@@ -144,35 +209,54 @@ public class UserListActivity extends BaseActivity {
                     map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_EMPTY));
                     arrayList_temp.add(map);
                 }
-                arrayList.addAll(arrayList_temp);
-                adaptor1.notifyDataSetChanged();
-                adaptor1.setStr_body_key(str_body_key);
-                switch (entity_type) {
-                    case ENTITY_ADMIN:
-                        break;
-                    case ENTITY_USER:
-                        break;
-                    case ENTITY_COMPANY:
-                        adaptor1.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                Intent intent = new Intent(UserListActivity.this, CompanyInfoActivity.class);
-                                intent.putExtra("id",Long.parseLong(String.valueOf(arrayList.get(position).get("id"))));
-                                intent.putExtra("is_add",false);
-                                intent.putExtra("req_type",req_type);
-                                startActivityForResult(intent,1);
-                            }
-                        });
-                        break;
-                    case ENTITY_PRODUCT:
-                        break;
-                    case ENTITY_EVENT:
-                        break;
-                    case ENTITY_TIMELINE:
-                        break;
-                    case ENTITY_CASE:
-                        break;
+                if (arrayList_temp.size() >= BaseActivity.LOAD_NUM) {
+                    Map<String,String> map1 = new HashMap<>();
+                    map1.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_LOAD_MORE));
+                    arrayList_temp.add(map1);
+                }else {
+                    if (page_no != 1) {
+                        arrayList.remove(arrayList.size()-1);
+                    }
+                    Map<String,String> map1 = new HashMap<>();
+                    map1.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_END));
+                    arrayList_temp.add(map1);
+                    isLoadEnd = true;
                 }
+                arrayList.addAll(arrayList_temp);
+                adaptor1.setStr_body_key(str_body_key);
+                adaptor1.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(UserListActivity.this,UserInfoActivity.class);
+                        intent.putExtra("isAdd",false);
+                        intent.putExtra("id",Long.parseLong(String.valueOf(arrayList.get(position).get("id"))));
+                        intent.putExtra("status",Integer.parseInt(String.valueOf(arrayList.get(position).get("status"))));
+                        if (Tool.parseStringToBool(String.valueOf(arrayList.get(position).get("del")))) {
+                            intent.putExtra("del",true);
+                        }else {
+                            intent.putExtra("del",false);
+                        }
+                        startActivityForResult(intent,1);
+                    }
+                });
+                if (isLoadEnd) {
+                    adaptor1.setOnLoadMoreClickListener(new RecyclerViewAdaptor1.OnLoadMoreClickListener() {
+                        @Override
+                        public void onLoadMoreClick(View view, int position) {
+
+                        }
+                    });
+                }else {
+                    adaptor1.setOnLoadMoreClickListener(new RecyclerViewAdaptor1.OnLoadMoreClickListener() {
+                        @Override
+                        public void onLoadMoreClick(View view, int position) {
+                            req(req_type);
+                        }
+                    });
+                }
+                page_no = page_no + 1;
+                adaptor1.notifyDataSetChanged();
+                recyclerView.smoothScrollToPosition(adaptor1.getItemCount()-1);
             }
 
             @Override
@@ -202,11 +286,10 @@ public class UserListActivity extends BaseActivity {
     }
 
     private void initToolbar(int entity_type,int req_type) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("/admin/");
+
         switch (entity_type) {
             case ENTITY_ADMIN:
-                builder.append("admin/qry/");
+
                 switch (req_type) {
                     case PASSED:
                         ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_passed);
@@ -222,7 +305,6 @@ public class UserListActivity extends BaseActivity {
                 }
                 break;
             case ENTITY_USER:
-                builder.append("user/qry/");
                 switch (req_type) {
                     case PASSED:
                         ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_user_passed);
@@ -238,7 +320,6 @@ public class UserListActivity extends BaseActivity {
                 }
                 break;
             case ENTITY_COMPANY:
-                builder.append("company/qry/");
                 switch (req_type) {
                     case PASSED:
                         ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_company_passed);
@@ -255,7 +336,6 @@ public class UserListActivity extends BaseActivity {
                 }
                 break;
             case ENTITY_PRODUCT:
-                builder.append("product/qry/");
                 switch (req_type) {
                     case PASSED:
                         ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_passed);
@@ -272,7 +352,6 @@ public class UserListActivity extends BaseActivity {
                 }
                 break;
             case ENTITY_EVENT:
-                builder.append("event/qry/");
                 switch (req_type) {
                     case PASSED:
                         ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_event_passed);
@@ -289,7 +368,6 @@ public class UserListActivity extends BaseActivity {
                 }
                 break;
             case ENTITY_TIMELINE:
-                builder.append("timeline/qry/");
                 switch (req_type) {
                     case PASSED:
                         ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_passed);
@@ -306,7 +384,6 @@ public class UserListActivity extends BaseActivity {
                 }
                 break;
             case ENTITY_CASE:
-                builder.append("case/qry/");
                 switch (req_type) {
                     case PASSED:
                         ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_passed);
@@ -323,44 +400,18 @@ public class UserListActivity extends BaseActivity {
                 }
                 break;
         }
-        if (entity_type == ENTITY_ADMIN || entity_type == ENTITY_USER) {
-            switch (req_type) {
-                case PASSED:
-                    builder.append("normal?page_no=1");
-                    break;
-                case LOCKED:
-                    builder.append("locked?page_no=1");
-                    break;
-                case DELETED:
-                    builder.append("deleted?page_no=1");
-                    break;
-            }
-        } else {
-            switch (req_type) {
-                case PASSED:
-                    builder.append("normal?page_no=1");
-                    break;
-                case UNCHECKED:
-                    builder.append("unchecked?page_no=1");
-                    break;
-                case REJECTED:
-                    builder.append("rejected?page_no=1");
-                    break;
-                case DELETED:
-                    builder.append("deleted?page_no=1");
-                    break;
-            }
-        }
-        url = builder.toString();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        page_no =1;
+        isLoadEnd =false;
         arrayList.clear();
         recyclerView.setLayoutManager(null);
         recyclerView.setAdapter(null);
         adaptor1.setOnItemClickListener(null);
+        adaptor1 = null;
         req(req_type);
     }
 

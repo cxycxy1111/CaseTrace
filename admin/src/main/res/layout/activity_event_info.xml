@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".event.EventInfoActivity">
+
+    <include
+        android:id="@+id/tb_a_event_info"
+        layout="@layout/tile_toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/rl_name_a_event_info"
+        android:layout_marginTop="@dimen/distance32"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_name_a_event_info"
+            style="@style/Paragraph"
+            android:text="事件"
+            android:layout_alignParentLeft="true"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/et_name_a_event_info"
+            style="@style/EditTextNormal"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/distance192"
+            android:textAlignment="textEnd"
+            android:hint="事件"
+            android:inputType="text" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_happen_time_a_event_info"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_happen_time_a_event_info"
+            style="@style/Paragraph"
+            android:text="发生时间"
+            android:layout_alignParentLeft="true"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/et_happen_date_a_event_info"
+            android:layout_alignParentRight="false"
+            android:layout_toLeftOf="@id/et_happen_time_a_event_info"
+            style="@style/EditTextNormal"
+            android:layout_width="@dimen/distance128"
+            android:textAlignment="center"
+            android:hint="日期"
+            android:inputType="text" />
+        <EditText
+            android:id="@+id/et_happen_time_a_event_info"
+            style="@style/EditTextNormal"
+            android:layout_width="@dimen/distance72"
+            android:layout_alignParentRight="true"
+            android:textAlignment="center"
+            android:hint="时间"
+            android:inputType="text" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_status_name_a_event_info"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/distance16"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_status_hint_name_a_event_info"
+            style="@style/Paragraph"
+            android:text="状态"
+            android:layout_alignParentLeft="true"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_status_main_name_a_event_info"
+            android:text="@string/example"
+            style="@style/HintNormal"
+            android:layout_toRightOf="@id/tv_status_hint_name_a_event_info" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_del_name_a_event_info"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_del_hint_name_a_event_info"
+            style="@style/Paragraph"
+            android:text="是否已删除"
+            android:layout_alignParentLeft="true"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_del_main_name_a_event_info"
+            android:text="@string/example"
+            style="@style/HintNormal"
+            android:layout_toRightOf="@id/tv_del_hint_name_a_event_info" />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_tips"
+        android:layout_marginTop="@dimen/distance16"
+        android:layout_marginLeft="@dimen/distance16"
+        android:layout_marginRight="@dimen/distance16"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

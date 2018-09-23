@@ -25,16 +25,19 @@
             </intent-filter>
         </activity>
         <activity android:name=".admin.AdminListActivity" />
+        <activity android:name=".admin.AdminInfoActivity" />
+        <activity android:name=".admin.AdminPwdModifyActivity" />
         <activity android:name=".cases.CaseListActivity" />
         <activity android:name=".company.CompanyInfoActivity" />
         <activity android:name=".company.CompanyListActivity" />
         <activity android:name=".event.EventListActivity" />
+        <activity android:name=".event.EventInfoActivity" />
         <activity android:name=".product.ProductListActivity" />
+        <activity android:name=".product.ProductInfoActivity" />
         <activity android:name=".timeline.TimelineListActivity" />
         <activity android:name=".user.UserListActivity" />
-        <activity android:name=".admin.AdminInfoActivity" />
-        <activity android:name=".admin.AdminPwdModifyActivity"/>
-        <activity android:name=".user.UserInfoActivity"/>
+        <activity android:name=".user.UserInfoActivity" />
+        <activity android:name=".timeline.AddTimelineActivity"></activity>
     </application>
 
 </manifest>

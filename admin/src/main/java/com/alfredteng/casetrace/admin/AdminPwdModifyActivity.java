@@ -22,6 +22,7 @@ import java.io.IOException;
 
 public class AdminPwdModifyActivity extends BaseActivity {
 
+    private int source = 0;
     private long id = 0;
     private Toolbar toolbar;
     private EditText et_pwd;
@@ -39,6 +40,7 @@ public class AdminPwdModifyActivity extends BaseActivity {
         et_pwd.addTextChangedListener(watcher);
         et_pwd_rpt.addTextChangedListener(watcher);
         id = getIntent().getLongExtra("id",0);
+        source = getIntent().getIntExtra("source",0);
     }
 
     @Override
@@ -74,7 +76,15 @@ public class AdminPwdModifyActivity extends BaseActivity {
     }
 
     private void submit() {
-        String url = "/admin/admin/edit/password?id=" + id + "&pwd=" + et_pwd.getText().toString();
+        String url = "";
+        switch (source) {
+            case 0:
+                url = "/admin/admin/edit/password?id=" + id + "&pwd=" + et_pwd.getText().toString();
+                break;
+            case 1:
+                url = "/admin/user/edit/password?id=" + id + "&pwd=" + et_pwd.getText().toString();
+                break;
+        }
         BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
             @Override
             public void onRespStatus(String body) {

@@ -1,6 +1,7 @@
 package com.alfredteng.casetrace.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 public class NetUtil {
+
+    private static final String TAG = "NetUtil";
     /**
      * 从服务器中返回的stat的值类型
      */
@@ -62,6 +65,7 @@ public class NetUtil {
      */
     public static void reqSendGet(Context context, String address, Callback callback) {
         String str = SELECTED_HOST + address;
+        Log.d(TAG, "reqSendGet: url: " + str);
         initOkHttpClient(context);
         Request request = new Request
                 .Builder().url(str).method("GET",null).build();
