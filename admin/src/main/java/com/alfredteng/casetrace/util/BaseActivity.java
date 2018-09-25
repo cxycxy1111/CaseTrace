@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.utils;
+package com.alfredteng.casetrace.util;
 
 import android.app.Activity;
 import android.content.Context;

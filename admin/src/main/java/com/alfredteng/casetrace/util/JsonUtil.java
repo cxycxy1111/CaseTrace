@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.utils;
+package com.alfredteng.casetrace.util;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

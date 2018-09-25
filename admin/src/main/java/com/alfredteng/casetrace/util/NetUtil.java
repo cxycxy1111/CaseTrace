@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.utils;
+package com.alfredteng.casetrace.util;
 
 import android.content.Context;
 import android.util.Log;
@@ -58,12 +58,11 @@ public class NetUtil {
     private static OkHttpClient client;
 
     /**
-     *
-     * @param context Activity
+     *  @param context Activity
      * @param address URL
      * @param callback 回调
      */
-    public static void reqSendGet(Context context, String address, Callback callback) {
+    public static void reqSendGet(Context context, String address, BaseHttpCallback callback) {
         String str = SELECTED_HOST + address;
         Log.d(TAG, "reqSendGet: url: " + str);
         initOkHttpClient(context);

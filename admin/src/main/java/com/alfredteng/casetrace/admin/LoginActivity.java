@@ -9,18 +9,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alfredteng.casetrace.MainActivity;
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.utils.BaseActivity;
-import com.alfredteng.casetrace.utils.BaseHttpCallback;
-import com.alfredteng.casetrace.utils.BaseHttpResultListener;
-import com.alfredteng.casetrace.utils.NetRespStatType;
-import com.alfredteng.casetrace.utils.NetUtil;
-import com.alfredteng.casetrace.utils.SharedPrefMgr;
-import com.alfredteng.casetrace.utils.Tool;
-import com.alfredteng.casetrace.utils.ViewHandler;
+import com.alfredteng.casetrace.util.BaseActivity;
+import com.alfredteng.casetrace.util.BaseHttpCallback;
+import com.alfredteng.casetrace.util.BaseHttpResultListener;
+import com.alfredteng.casetrace.util.NetRespStatType;
+import com.alfredteng.casetrace.util.NetUtil;
+import com.alfredteng.casetrace.util.SharedPrefMgr;
+import com.alfredteng.casetrace.util.ViewHandler;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener{
 

@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.utils;
+package com.alfredteng.casetrace.util;
 
 public class BaseHttpExtException extends Exception {
 

@@ -1,10 +1,12 @@
-package com.alfredteng.casetrace.utils;
+package com.alfredteng.casetrace.util;
+
+import com.alfredteng.casetrace.MainActivity;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.alfredteng.casetrace.utils.NetUtil.*;
+import static com.alfredteng.casetrace.util.NetUtil.*;
 
 public enum NetRespStatType {
 

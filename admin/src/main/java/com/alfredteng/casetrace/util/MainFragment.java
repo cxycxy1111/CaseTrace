@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.utils;
+package com.alfredteng.casetrace.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,13 +14,11 @@ import android.view.ViewGroup;
 import com.alfredteng.casetrace.R;
 import com.alfredteng.casetrace.admin.AdminListActivity;
 import com.alfredteng.casetrace.cases.CaseListActivity;
-import com.alfredteng.casetrace.company.CompanyInfoActivity;
 import com.alfredteng.casetrace.company.CompanyListActivity;
 import com.alfredteng.casetrace.event.EventListActivity;
 import com.alfredteng.casetrace.product.ProductListActivity;
 import com.alfredteng.casetrace.timeline.TimelineListActivity;
 import com.alfredteng.casetrace.user.UserListActivity;
-import com.alfredteng.casetrace.utils.adaptor.RecyclerViewAdaptor1;
 
 import java.util.ArrayList;
 import java.util.HashMap;

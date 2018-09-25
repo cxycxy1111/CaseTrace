@@ -1,6 +1,5 @@
 package com.alfredteng.casetrace.admin;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -11,12 +10,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.utils.BaseActivity;
-import com.alfredteng.casetrace.utils.BaseHttpCallback;
-import com.alfredteng.casetrace.utils.BaseHttpResultListener;
-import com.alfredteng.casetrace.utils.NetRespStatType;
-import com.alfredteng.casetrace.utils.NetUtil;
-import com.alfredteng.casetrace.utils.ViewHandler;
+import com.alfredteng.casetrace.util.BaseActivity;
+import com.alfredteng.casetrace.util.BaseHttpCallback;
+import com.alfredteng.casetrace.util.BaseHttpResultListener;
+import com.alfredteng.casetrace.util.NetRespStatType;
+import com.alfredteng.casetrace.util.NetUtil;
+import com.alfredteng.casetrace.util.ViewHandler;
 
 import java.io.IOException;
 

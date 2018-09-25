@@ -1,10 +1,7 @@
-package com.alfredteng.casetrace.utils;
+package com.alfredteng.casetrace.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class SharedPrefMgr {
 
