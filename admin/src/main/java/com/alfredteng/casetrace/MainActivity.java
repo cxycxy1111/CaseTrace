@@ -16,6 +16,7 @@ import com.alfredteng.casetrace.admin.AdminInfoActivity;
 import com.alfredteng.casetrace.company.CompanyInfoActivity;
 import com.alfredteng.casetrace.event.EventInfoActivity;
 import com.alfredteng.casetrace.product.ProductInfoActivity;
+import com.alfredteng.casetrace.timeline.AddTimelineActivity;
 import com.alfredteng.casetrace.user.UserInfoActivity;
 import com.alfredteng.casetrace.util.BaseActivity;
 import com.alfredteng.casetrace.util.MainFragment;
@@ -79,13 +80,16 @@ public class MainActivity extends BaseActivity implements MainFragment.OnFragmen
             case 101:
                 intent = new Intent(this, EventInfoActivity.class);
                 break;
+            case 102:
+                intent = new Intent(this, AddTimelineActivity.class);
+                break;
             case 104:
                 intent = new Intent(this,CompanyInfoActivity.class);
                 break;
             case 105:
                 intent = new Intent(this, ProductInfoActivity.class);
                 break;
-            case  106:
+            case 106:
                 intent = new Intent(this,AdminInfoActivity.class);
                 break;
             case 107:

@@ -43,6 +43,8 @@
     <string name="toolbar_tilte_event_add">新增事件</string>
     <string name="toolbar_tilte_event_edit">编辑事件</string>
 
+    <string name="toolbar_tilte_timeline_add">新增时间线</string>
+    <string name="toolbar_tilte_timeline_edit">编辑时间线</string>
     <string name="toolbar_tilte_timeline_unchecked">待审核的时间线</string>
     <string name="toolbar_tilte_timeline_passed">已通过的时间线</string>
     <string name="toolbar_tilte_timeline_rejected">未通过的时间线</string>
