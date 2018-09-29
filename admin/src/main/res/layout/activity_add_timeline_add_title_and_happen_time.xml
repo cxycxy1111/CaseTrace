@@ -40,7 +40,7 @@
         <TextView
             android:id="@+id/tv_event_name_a_add_timeline_add_title_and_happen_time"
             style="@style/Paragraph"
-            android:text="公司"
+            android:text="事件"
             android:layout_alignParentLeft="true"
             android:layout_height="wrap_content" />
         <Spinner

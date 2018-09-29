@@ -75,6 +75,8 @@ public class TimelineListActivity extends BaseActivity {
                             arrayList.add(map);
                         }
                         adaptor1.notifyDataSetChanged();
+                        break;
+                    default:break;
                 }
             }
 

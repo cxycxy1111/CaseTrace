@@ -19,12 +19,13 @@ import io.github.mthli.knife.KnifeText;
 
 public class TimelineInfoActivity extends BaseActivity {
 
-    private Toolbar toolbar;
-    private KnifeText knife;
     private boolean isAdd = false;
     private long id;
-    private long event_id;
-    private String title;
+    private long event_id = 0;
+    private long timeline_id = 0;
+    private String title = "";
+    private Toolbar toolbar;
+    private KnifeText knife;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +35,12 @@ public class TimelineInfoActivity extends BaseActivity {
         knife = (KnifeText)findViewById(R.id.kt_a_add_timeline);
         knife.setSelection(knife.getEditableText().length());
         isAdd = getIntent().getBooleanExtra("isAdd",false);
+        //是新增时，检查是否存在草稿，如果有，加载草稿
         if (isAdd) {
             if (!Tool.getStringFromPref(this,"timeline_draft","content").equals("")) {
                 knife.fromHtml(Tool.getStringFromPref(this,"timeline_draft","body"));
             }
-        }else {
+        }else {//
             String content = getIntent().getStringExtra("content");
         }
         setupBold();
@@ -61,7 +63,10 @@ public class TimelineInfoActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                saveBeforeQuit();
+                //不是新增时，返回时保存
+                if (!isAdd) {
+                    saveBeforeQuit();
+                }
                 this.finish();
                 break;
             case 101:
