@@ -37,7 +37,8 @@
         <activity android:name=".timeline.TimelineListActivity" />
         <activity android:name=".user.UserListActivity" />
         <activity android:name=".user.UserInfoActivity" />
-        <activity android:name=".timeline.AddTimelineActivity"></activity>
+        <activity android:name=".timeline.TimelineInfoActivity" />
+        <activity android:name=".timeline.TimelineTitleAndHappenTimeInfoActivity"></activity>
     </application>
 
 </manifest>

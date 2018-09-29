@@ -16,22 +16,15 @@ import com.alfredteng.casetrace.admin.AdminInfoActivity;
 import com.alfredteng.casetrace.company.CompanyInfoActivity;
 import com.alfredteng.casetrace.event.EventInfoActivity;
 import com.alfredteng.casetrace.product.ProductInfoActivity;
-import com.alfredteng.casetrace.timeline.AddTimelineActivity;
+import com.alfredteng.casetrace.timeline.TimelineInfoActivity;
 import com.alfredteng.casetrace.user.UserInfoActivity;
 import com.alfredteng.casetrace.util.BaseActivity;
 import com.alfredteng.casetrace.util.MainFragment;
 import com.alfredteng.casetrace.util.ViewHandler;
 import com.alfredteng.casetrace.util.adaptor.MainActivityPagerAdapter;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends BaseActivity implements MainFragment.OnFragmentInteractionListener {
 
@@ -81,7 +74,7 @@ public class MainActivity extends BaseActivity implements MainFragment.OnFragmen
                 intent = new Intent(this, EventInfoActivity.class);
                 break;
             case 102:
-                intent = new Intent(this, AddTimelineActivity.class);
+                intent = new Intent(this, TimelineInfoActivity.class);
                 break;
             case 104:
                 intent = new Intent(this,CompanyInfoActivity.class);
