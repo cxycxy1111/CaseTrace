@@ -5,7 +5,9 @@ import android.app.TimePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.alfredteng.casetrace.R;
@@ -21,6 +24,7 @@ import com.alfredteng.casetrace.util.BaseActivity;
 import com.alfredteng.casetrace.util.BaseHttpCallback;
 import com.alfredteng.casetrace.util.BaseHttpResultListener;
 import com.alfredteng.casetrace.util.JsonUtil;
+import com.alfredteng.casetrace.util.NetRespStatType;
 import com.alfredteng.casetrace.util.NetUtil;
 import com.alfredteng.casetrace.util.Tool;
 import com.alfredteng.casetrace.util.ViewHandler;
@@ -41,11 +45,10 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
     private int current_year,current_month,current_date,current_hour,current_minute,current_second;
     private long event_id = 0;
     private long timeline_id = 0;
-    private String title = "";
     private String content = "";
-    private String happen_time = "";
     private String[] keys_event = new String[]{"id","title"};
     private Toolbar toolbar;
+    private TextView tv_tips;
     private List<String> list_event = new ArrayList<>();
     private ArrayList<Map<String,String>> arrayList_event = new ArrayList<>();
     private ArrayAdapter<String> adapter_event;
@@ -64,19 +67,17 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
         isAdd = getIntent().getBooleanExtra("isAdd",false);
         content = getIntent().getStringExtra("content");
         if (!isAdd) {
-            title = getIntent().getStringExtra("title");
-            happen_time = getIntent().getStringExtra("happen_time");
             event_id = getIntent().getLongExtra("event_id",0);
             timeline_id = getIntent().getLongExtra("timeline_id",0);
-            et_title.setText(title);
-            et_date.setText(happen_time.split(" ")[0]);
-            et_time.setText(happen_time.split(" ")[2]);
+            et_title.setText(getIntent().getStringExtra("title"));
+            et_date.setText(getIntent().getStringExtra("happen_time").split(" ")[0]);
+            et_time.setText(getIntent().getStringExtra("happen_time").split(" ")[2]);
         }
         if (isAdd) {
             initCurrentDateIfAdd();
         }else {
             try {
-                initCurrentDateIfEdit(happen_time);
+                initCurrentDateIfEdit(getIntent().getStringExtra("happen_time"));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -102,6 +103,7 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
                 event_id = Long.parseLong(String.valueOf(arrayList_event.get(0).get("id")));
             }
         });
+        loadEvent();
     }
 
     @Override
@@ -118,6 +120,9 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
+                break;
+            case 101:
+                checkBeforeCommit();
                 break;
             default:break;
         }
@@ -142,21 +147,23 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
         et_date = (EditText)findViewById(R.id.et_happen_date_a_add_timeline_add_title_and_happen_time);
         et_time = (EditText)findViewById(R.id.et_happen_time_a_add_timeline_add_title_and_happen_time);
         sp_event = (Spinner)findViewById(R.id.sp_event_name_a_add_timeline_add_title_and_happen_time);
+        tv_tips = (TextView)findViewById(R.id.tv_tips);
         et_date.setInputType(InputType.TYPE_NULL);
         et_time.setInputType(InputType.TYPE_NULL);
         et_date.setOnClickListener(this);
         et_time.setOnClickListener(this);
         et_date.setOnFocusChangeListener(this);
         et_time.setOnFocusChangeListener(this);
+        et_title.addTextChangedListener(textWatcher);
+        et_time.addTextChangedListener(textWatcher);
+        et_date.addTextChangedListener(textWatcher);
     }
-
 
     private void loadEvent() {
         String url = "/admin/event/qry/ignoreStatus";
         BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
             @Override
             public void onRespStatus(String body) {
-
             }
 
             @Override
@@ -165,15 +172,15 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
                 arrayList_temp = JsonUtil.strToListMap(body,keys_event);
                 if (arrayList_temp.size() != 0) {
                     ArrayList<String> list_temp = new ArrayList<>();
-                    list_event.clear();
+                    list_event.clear();//清空原事件列表
                     for (int i = 0;i < list_temp.size();i++) {
                         list_temp.add(arrayList_temp.get(i).get("title"));
                     }
                     list_event.addAll(list_temp);
-                    arrayList_event.clear();
+                    arrayList_event.clear();//清空事件列表
                     arrayList_event.addAll(arrayList_temp);
                     adapter_event.notifyDataSetChanged();
-                    if (isAdd) {
+                    if (isAdd) {//新增的话，定位到0
                         sp_event.setSelection(0);
                         event_id = Long.parseLong(String.valueOf(arrayList_event.get(0).get("id")));
                     }else {
@@ -203,6 +210,80 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
             }
         },this);
         NetUtil.reqSendGet(this,url,callback);
+    }
+
+    public void checkBeforeCommit() {
+        if (et_title.getText().toString().equals("")) {
+            tv_tips.setText("标题不能为空，请补充。");
+            return;
+        }
+        if (et_date.getText().toString().equals("") | et_time.getText().toString().equals("")) {
+            tv_tips.setText("日期或事件不能为空，请补充");
+            return;
+        }
+        if (event_id == 0) {
+            tv_tips.setText("请先添加事件");
+            return;
+        }
+        submit();
+    }
+
+    public void submit() {
+        String url = "";
+        HashMap<String,Object> map = new HashMap<>();
+        if (isAdd) {
+            String title = et_title.getText().toString();
+            String happen_time = et_date.getText().toString() + " " + et_time.getText().toString() + ":00";
+            url = "/admin/timeline/add";
+            map.put("event",String.valueOf(event_id));
+            map.put("title",title);
+            map.put("happen_time",happen_time);
+            map.put("content",content);
+
+        }else {
+            String title = et_title.getText().toString();
+            String happen_time = et_date.getText().toString() + " " + et_time.getText().toString() + ":00";
+            url = "/admin/timeline/edit";
+            map.put("event",String.valueOf(event_id));
+            map.put("title",title);
+            map.put("happen_time",happen_time);
+            map.put("content",content);
+            map.put("id",timeline_id);
+        }
+        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+            @Override
+            public void onRespStatus(String body) {
+                switch (NetRespStatType.dealWithRespStat(body)) {
+                    case SUCCESS:
+                        break;
+                    case FAIL:
+                        break;
+                    case DUPLICATE:
+                        break;
+                    default:break;
+                }
+            }
+
+            @Override
+            public void onRespMapList(String body) throws IOException {
+            }
+
+            @Override
+            public void onRespError() {
+                ViewHandler.toastShow(TimelineTitleAndHappenTimeInfoActivity.this,NetUtil.UNKNOWN_ERROR);
+            }
+
+            @Override
+            public void onReqFailure(Object object) {
+                ViewHandler.toastShow(TimelineTitleAndHappenTimeInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET);
+            }
+
+            @Override
+            public void onRespSessionExpired() {
+                ViewHandler.alertShowAndExitApp(TimelineTitleAndHappenTimeInfoActivity.this);
+            }
+        },this);
+        NetUtil.reqSendPost(this,url,map,callback);
     }
 
     @Override
@@ -261,4 +342,21 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
         };
         tpd_happen_time = new TimePickerDialog(this,listener,current_hour,current_minute,true);
     }
+
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            tv_tips.setText("");
+        }
+    };
 }
