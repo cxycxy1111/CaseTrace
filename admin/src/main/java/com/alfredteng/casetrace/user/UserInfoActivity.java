@@ -96,6 +96,7 @@ public class UserInfoActivity extends BaseActivity {
                 }
             }
         }
+        menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
     }
 

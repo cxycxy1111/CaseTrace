@@ -129,6 +129,7 @@ public class ProductInfoActivity extends BaseActivity implements AdapterView.OnI
                     break;
             }
         }
+        menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
     }
 

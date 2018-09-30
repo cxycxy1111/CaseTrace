@@ -17,7 +17,7 @@ import com.alfredteng.casetrace.util.ViewHandler;
 
 import io.github.mthli.knife.KnifeText;
 
-public class TimelineInfoActivity extends BaseActivity {
+public class TimelineEditActivity extends BaseActivity {
 
     private boolean isAdd = false;
     private long id;
@@ -34,14 +34,17 @@ public class TimelineInfoActivity extends BaseActivity {
         ViewHandler.initToolbarWithBackButton(this,toolbar, R.string.toolbar_tilte_timeline_add);
         knife = (KnifeText)findViewById(R.id.kt_a_add_timeline);
         knife.setSelection(knife.getEditableText().length());
-        isAdd = getIntent().getBooleanExtra("isAdd",false);
+        isAdd = getIntent().getBooleanExtra("is_add",false);
         //是新增时，检查是否存在草稿，如果有，加载草稿
         if (isAdd) {
-            if (!Tool.getStringFromPref(this,"timeline_draft","content").equals("")) {
-                knife.fromHtml(Tool.getStringFromPref(this,"timeline_draft","body"));
+            if (Tool.getStringFromPref(this,"timeline_draft","content") != null) {
+                if (!Tool.getStringFromPref(this,"timeline_draft","content").equals("")) {
+                    knife.fromHtml(Tool.getStringFromPref(this,"timeline_draft","content"));
+                }
             }
-        }else {//
+        }else {//不是新增时，从页面中传过来
             String content = getIntent().getStringExtra("content");
+            knife.fromHtml(content);
         }
         setupBold();
         setupItalic();
@@ -56,6 +59,7 @@ public class TimelineInfoActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(1,101,1,"保存");
+        menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
     }
 
@@ -64,7 +68,7 @@ public class TimelineInfoActivity extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 //不是新增时，返回时保存
-                if (!isAdd) {
+                if (isAdd) {
                     saveBeforeQuit();
                 }
                 this.finish();
@@ -103,7 +107,7 @@ public class TimelineInfoActivity extends BaseActivity {
         bold.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(TimelineInfoActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimelineEditActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -122,7 +126,7 @@ public class TimelineInfoActivity extends BaseActivity {
         italic.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(TimelineInfoActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimelineEditActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -141,7 +145,7 @@ public class TimelineInfoActivity extends BaseActivity {
         underline.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(TimelineInfoActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimelineEditActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -160,7 +164,7 @@ public class TimelineInfoActivity extends BaseActivity {
         strikethrough.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(TimelineInfoActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimelineEditActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -180,7 +184,7 @@ public class TimelineInfoActivity extends BaseActivity {
         bullet.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(TimelineInfoActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimelineEditActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -199,7 +203,7 @@ public class TimelineInfoActivity extends BaseActivity {
         quote.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(TimelineInfoActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimelineEditActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -217,7 +221,7 @@ public class TimelineInfoActivity extends BaseActivity {
         link.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(TimelineInfoActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimelineEditActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -236,7 +240,7 @@ public class TimelineInfoActivity extends BaseActivity {
         clear.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(TimelineInfoActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimelineEditActivity.this, R.string.app_name, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -245,9 +249,14 @@ public class TimelineInfoActivity extends BaseActivity {
     private void submit() {
         String body = knife.toHtml();
         if (body.length() < 5000) {
-            Intent intent = new Intent(TimelineInfoActivity.this,TimelineTitleAndHappenTimeInfoActivity.class);
+            Intent intent = new Intent(TimelineEditActivity.this,TimelineTitleAndHappenTimeInfoActivity.class);
             intent.putExtra("content",body);
             intent.putExtra("isAdd",isAdd);
+            if(!isAdd) {
+                intent.putExtra("event_id",event_id);
+                intent.putExtra("timeline_id",timeline_id);
+                intent.putExtra("title",title);
+            }
             startActivityForResult(intent,1);
         }else {
             ViewHandler.toastShow(this,"字数已超过最大限制。");
