@@ -135,7 +135,7 @@ public class TimeLineDetailActivity extends BaseActivity {
 
     public void changeStatus(int op) {
         switch (op) {
-            
+
         }
     }
 }
