@@ -15,6 +15,7 @@ import com.example.alfredtools.HttpResultListener;
 import com.example.alfredtools.JsonUtil;
 import com.example.alfredtools.NetRespStatType;
 import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.Tool;
 import com.example.alfredtools.ViewHandler;
 import com.alfredteng.casetrace.util.adaptor.GeneralRecyclerViewAdaptor;
 
@@ -79,7 +80,7 @@ public class TimelineListActivity extends BaseActivity {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(TimelineListActivity.this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(adaptor1);
-        HttpCallback callback = new HttpCallback(new HttpResultListener() {
+        final HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
             @Override
             public void onRespStatus(String body) {
@@ -129,6 +130,29 @@ public class TimelineListActivity extends BaseActivity {
                         Intent intent = new Intent(TimelineListActivity.this,TimeLineDetailActivity.class);
                         intent.putExtra("title",arrayList.get(position).get("title"));
                         intent.putExtra("id",Long.parseLong(String.valueOf(arrayList.get(position).get("id"))));
+                        int status=0;
+                        switch (req_type) {
+                            case UNCHECKED:
+                                status = UNCHECKED;
+                                break;
+                            case PASSED:
+                                status = PASSED;
+                                break;
+                            case REJECTED:
+                                status = REJECTED;
+                                break;
+                        }
+                        intent.putExtra("status",status);
+                        switch (req_type) {
+                            case DELETED:
+                                intent.putExtra("del",true);
+                                intent.putExtra("status",Integer.parseInt(String.valueOf(arrayList.get(position).get("status"))));
+                                break;
+                            default:
+                                intent.putExtra("del",false);
+                                intent.putExtra("status",Integer.parseInt(String.valueOf(arrayList.get(position).get("status"))));
+                                break;
+                        }
                         startActivityForResult(intent,1);
                     }
                 });
