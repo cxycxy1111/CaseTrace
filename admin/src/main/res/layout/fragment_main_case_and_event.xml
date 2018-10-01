@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".util.MainFragment">
+    tools:context=".util.GeneralMainFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_f_main_case_and_event"

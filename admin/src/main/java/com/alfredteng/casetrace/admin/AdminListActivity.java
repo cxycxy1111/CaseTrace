@@ -17,7 +17,7 @@ import com.example.alfredtools.NetRespStatType;
 import com.example.alfredtools.NetUtil;
 import com.example.alfredtools.Tool;
 import com.example.alfredtools.ViewHandler;
-import com.alfredteng.casetrace.util.RecyclerViewAdaptor1;
+import com.alfredteng.casetrace.util.adaptor.GeneralRecyclerViewAdaptor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class AdminListActivity extends BaseActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private ArrayList<Map<String,String>> arrayList = new ArrayList<>();
-    private RecyclerViewAdaptor1 adaptor1;
+    private GeneralRecyclerViewAdaptor adaptor1;
     private int entity_type = 0;
     private int req_type = 0;
     private int page_no = 1;
@@ -54,11 +54,11 @@ public class AdminListActivity extends BaseActivity {
     private void req(final int req_type) {
         if (page_no == 1) {
             Map<String,String> map = new HashMap<>();
-            map.put("holder_type", String.valueOf(RecyclerViewAdaptor1.TYPE_LOADING));
+            map.put("holder_type", String.valueOf(GeneralRecyclerViewAdaptor.TYPE_LOADING));
             arrayList.add(map);
         }
-        adaptor1 = new RecyclerViewAdaptor1(arrayList,AdminListActivity.this,str_body_key);
-        adaptor1.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
+        adaptor1 = new GeneralRecyclerViewAdaptor(arrayList,AdminListActivity.this,str_body_key);
+        adaptor1.setOnItemClickListener(new GeneralRecyclerViewAdaptor.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
             }
@@ -90,7 +90,7 @@ public class AdminListActivity extends BaseActivity {
                         arrayList.clear();
                         if (arrayList.size() == 0){
                             Map<String,String> map = new HashMap<>();
-                            map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_EMPTY));
+                            map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_EMPTY));
                             arrayList.add(map);
                         }
                         adaptor1.notifyDataSetChanged();
@@ -116,32 +116,32 @@ public class AdminListActivity extends BaseActivity {
                 for (int i = 0;i < arrayList_temp.size();i++) {
                     Map<String,String> map = new HashMap<>();
                     map = arrayList_temp.get(i);
-                    map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_ADMIN));
+                    map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ADMIN));
                     arrayList_temp.set(i,map);
                 }
                 if (arrayList_temp.size() == 0){
                     Map<String,String> map = new HashMap<>();
-                    map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_EMPTY));
+                    map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_EMPTY));
                     arrayList_temp.add(map);
                 }
                 //
                 if (arrayList_temp.size() == BaseActivity.LOAD_NUM) {
                     Map<String,String> map1 = new HashMap<>();
-                    map1.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_LOAD_MORE));
+                    map1.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_LOAD_MORE));
                     arrayList_temp.add(map1);
                 }else {
                     if (page_no != 1) {
                         arrayList.remove(arrayList.size()-1);
                     }
                     Map<String,String> map1 = new HashMap<>();
-                    map1.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_END));
+                    map1.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_END));
                     arrayList_temp.add(map1);
                     isLoadEnd = true;
                 }
                 arrayList.addAll(arrayList_temp);
                 adaptor1.notifyDataSetChanged();
                 adaptor1.setStr_body_key(str_body_key);
-                adaptor1.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
+                adaptor1.setOnItemClickListener(new GeneralRecyclerViewAdaptor.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intent = new Intent(AdminListActivity.this,AdminInfoActivity.class);
@@ -153,14 +153,14 @@ public class AdminListActivity extends BaseActivity {
                     }
                 });
                 if (isLoadEnd) {
-                    adaptor1.setOnLoadMoreClickListener(new RecyclerViewAdaptor1.OnLoadMoreClickListener() {
+                    adaptor1.setOnLoadMoreClickListener(new GeneralRecyclerViewAdaptor.OnLoadMoreClickListener() {
                         @Override
                         public void onLoadMoreClick(View view, int position) {
 
                         }
                     });
                 }else {
-                    adaptor1.setOnLoadMoreClickListener(new RecyclerViewAdaptor1.OnLoadMoreClickListener() {
+                    adaptor1.setOnLoadMoreClickListener(new GeneralRecyclerViewAdaptor.OnLoadMoreClickListener() {
                         @Override
                         public void onLoadMoreClick(View view, int position) {
                             req(req_type);
@@ -175,7 +175,7 @@ public class AdminListActivity extends BaseActivity {
             public void onRespError() {
                 arrayList.clear();
                 Map<String,String> map = new HashMap<>();
-                map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_ERROR));
+                map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ERROR));
                 ArrayList<Map<String,String>> list = new ArrayList<>();
                 list.add(map);
                 arrayList.addAll(list);
@@ -186,7 +186,7 @@ public class AdminListActivity extends BaseActivity {
             public void onReqFailure(Object object) {
                 arrayList.clear();
                 Map<String,String> map = new HashMap<>();
-                map.put("holder_type",String.valueOf(RecyclerViewAdaptor1.TYPE_NET_ERROR));
+                map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_NET_ERROR));
                 ArrayList<Map<String,String>> list = new ArrayList<>();
                 list.add(map);
                 arrayList.addAll(list);

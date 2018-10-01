@@ -19,13 +19,14 @@ import com.alfredteng.casetrace.event.EventListActivity;
 import com.alfredteng.casetrace.product.ProductListActivity;
 import com.alfredteng.casetrace.timeline.TimelineListActivity;
 import com.alfredteng.casetrace.user.UserListActivity;
+import com.alfredteng.casetrace.util.adaptor.GeneralRecyclerViewAdaptor;
 import com.example.alfredtools.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainFragment extends Fragment {
+public class GeneralMainFragment extends Fragment {
     private static final String KEY_1 = "position";
     private static final String KEY_2 = "title";
 
@@ -34,15 +35,15 @@ public class MainFragment extends Fragment {
     private String title;
     private Context context;
     private ArrayList<Map<String,String>> arrayList;
-    private RecyclerViewAdaptor1 adaptor;
+    private GeneralRecyclerViewAdaptor adaptor;
 
     private OnFragmentInteractionListener mListener;
 
-    public MainFragment() {
+    public GeneralMainFragment() {
     }
 
-    public static MainFragment newInstance(int position,String title) {
-        MainFragment fragment = new MainFragment();
+    public static GeneralMainFragment newInstance(int position, String title) {
+        GeneralMainFragment fragment = new GeneralMainFragment();
         Bundle args = new Bundle();
         args.putInt(KEY_1, position);
         args.putString(KEY_2,title);
@@ -138,8 +139,8 @@ public class MainFragment extends Fragment {
                 arrayList.add(12,map_body_timeline_unchecked);
                 arrayList.add(13,map_body_timeline_passed);
                 arrayList.add(14,map_body_timeline_deleted);
-                adaptor = new RecyclerViewAdaptor1(arrayList,getActivity(),"text");
-                adaptor.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
+                adaptor = new GeneralRecyclerViewAdaptor(arrayList,getActivity(),"text");
+                adaptor.setOnItemClickListener(new GeneralRecyclerViewAdaptor.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intent;
@@ -224,8 +225,8 @@ public class MainFragment extends Fragment {
                 arrayList.add(7,map_body_product_unchecked);
                 arrayList.add(8,map_body_product_passed);
                 arrayList.add(9,map_body_product_deleted);
-                adaptor = new RecyclerViewAdaptor1(arrayList,getActivity(),"text");
-                adaptor.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
+                adaptor = new GeneralRecyclerViewAdaptor(arrayList,getActivity(),"text");
+                adaptor.setOnItemClickListener(new GeneralRecyclerViewAdaptor.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intent;
@@ -295,8 +296,8 @@ public class MainFragment extends Fragment {
                 arrayList.add(5,map_body_user_passed);
                 arrayList.add(6,map_body_user_locked);
                 arrayList.add(7,map_body_user_deleted);
-                adaptor = new RecyclerViewAdaptor1(arrayList,getActivity(),"text");
-                adaptor.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
+                adaptor = new GeneralRecyclerViewAdaptor(arrayList,getActivity(),"text");
+                adaptor.setOnItemClickListener(new GeneralRecyclerViewAdaptor.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intent;

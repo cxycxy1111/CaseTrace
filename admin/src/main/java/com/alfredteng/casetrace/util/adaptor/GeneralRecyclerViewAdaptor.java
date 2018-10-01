@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.util;
+package com.alfredteng.casetrace.util.adaptor;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +14,7 @@ import com.example.alfredtools.NetUtil;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class RecyclerViewAdaptor1 extends RecyclerView.Adapter implements View.OnClickListener{
+public class GeneralRecyclerViewAdaptor extends RecyclerView.Adapter implements View.OnClickListener{
 
     public static final int TYPE_HEAD = 1;
     public static final int TYPE_BODY = 2;
@@ -31,7 +31,7 @@ public class RecyclerViewAdaptor1 extends RecyclerView.Adapter implements View.O
     private OnItemClickListener onItemClickListener = null;
     private OnLoadMoreClickListener onLoadMoreClickListener = null;
 
-    public RecyclerViewAdaptor1(ArrayList<Map<String, String>> list, Context context,String str_body_key) {
+    public GeneralRecyclerViewAdaptor(ArrayList<Map<String, String>> list, Context context, String str_body_key) {
         this.arrayList = list;
         this.context = context;
         this.str_body_key = str_body_key;

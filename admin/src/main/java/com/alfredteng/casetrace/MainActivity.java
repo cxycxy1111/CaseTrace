@@ -18,7 +18,7 @@ import com.alfredteng.casetrace.event.EventInfoActivity;
 import com.alfredteng.casetrace.product.ProductInfoActivity;
 import com.alfredteng.casetrace.timeline.TimelineEditActivity;
 import com.alfredteng.casetrace.user.UserInfoActivity;
-import com.alfredteng.casetrace.util.MainFragment;
+import com.alfredteng.casetrace.util.GeneralMainFragment;
 import com.example.alfredtools.BaseActivity;
 import com.example.alfredtools.MainActivityPagerAdapter;
 import com.example.alfredtools.ViewHandler;
@@ -26,7 +26,7 @@ import com.example.alfredtools.ViewHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements MainFragment.OnFragmentInteractionListener {
+public class MainActivity extends BaseActivity implements GeneralMainFragment.OnFragmentInteractionListener {
 
     private Toolbar toolbar;
     private ViewPager viewPager;
@@ -105,9 +105,9 @@ public class MainActivity extends BaseActivity implements MainFragment.OnFragmen
             fragments = new ArrayList<>();
         }
         if (fragments.size() == 0) {
-            fragments.add(MainFragment.newInstance(1,"事件"));
-            fragments.add(MainFragment.newInstance(2,"公司"));
-            fragments.add(MainFragment.newInstance(3,"用户"));
+            fragments.add(GeneralMainFragment.newInstance(1,"事件"));
+            fragments.add(GeneralMainFragment.newInstance(2,"公司"));
+            fragments.add(GeneralMainFragment.newInstance(3,"用户"));
         }
         return fragments;
     }
