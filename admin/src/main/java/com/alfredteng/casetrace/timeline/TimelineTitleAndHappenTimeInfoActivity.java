@@ -2,7 +2,6 @@ package com.alfredteng.casetrace.timeline;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -26,7 +25,6 @@ import com.alfredteng.casetrace.util.BaseHttpResultListener;
 import com.alfredteng.casetrace.util.JsonUtil;
 import com.alfredteng.casetrace.util.NetRespStatType;
 import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.Tool;
 import com.alfredteng.casetrace.util.ViewHandler;
 
 import java.io.IOException;
@@ -61,7 +59,7 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_timeline_add_title_and_happen_time);
+        setContentView(R.layout.activity_timeline_add_title_and_happen_time);
         ViewHandler.initToolbarWithBackButton(this,toolbar,"编辑时间线信息");
         initViews();
         isAdd = getIntent().getBooleanExtra("isAdd",false);
@@ -173,7 +171,7 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
                 if (arrayList_temp.size() != 0) {
                     ArrayList<String> list_temp = new ArrayList<>();
                     list_event.clear();//清空原事件列表
-                    for (int i = 0;i < list_temp.size();i++) {
+                    for (int i = 0;i < arrayList_temp.size();i++) {
                         list_temp.add(arrayList_temp.get(i).get("title"));
                     }
                     list_event.addAll(list_temp);

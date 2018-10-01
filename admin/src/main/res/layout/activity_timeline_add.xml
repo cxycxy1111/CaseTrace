@@ -99,7 +99,7 @@
 
     </HorizontalScrollView>
 
-    <io.github.mthli.knife.KnifeText
+    <com.alfred.casetrace.editor.AlfredText
         android:id="@+id/kt_a_add_timeline"
         android:layout_below="@id/tb_a_add_timeline"
         android:layout_width="match_parent"

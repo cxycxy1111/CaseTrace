@@ -10,12 +10,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.alfred.casetrace.editor.AlfredText;
 import com.alfredteng.casetrace.R;
 import com.alfredteng.casetrace.util.BaseActivity;
 import com.alfredteng.casetrace.util.Tool;
 import com.alfredteng.casetrace.util.ViewHandler;
 
-import io.github.mthli.knife.KnifeText;
 
 public class TimelineEditActivity extends BaseActivity {
 
@@ -25,14 +25,14 @@ public class TimelineEditActivity extends BaseActivity {
     private long timeline_id = 0;
     private String title = "";
     private Toolbar toolbar;
-    private KnifeText knife;
+    private AlfredText knife;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_timeline);
+        setContentView(R.layout.activity_timeline_add);
         ViewHandler.initToolbarWithBackButton(this,toolbar, R.string.toolbar_tilte_timeline_add);
-        knife = (KnifeText)findViewById(R.id.kt_a_add_timeline);
+        knife = (AlfredText) findViewById(R.id.kt_a_add_timeline);
         knife.setSelection(knife.getEditableText().length());
         isAdd = getIntent().getBooleanExtra("is_add",false);
         //是新增时，检查是否存在草稿，如果有，加载草稿
@@ -100,7 +100,7 @@ public class TimelineEditActivity extends BaseActivity {
         bold.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                knife.bold(!knife.contains(KnifeText.FORMAT_BOLD));
+                knife.bold(!knife.contains(AlfredText.FORMAT_BOLD));
             }
         });
 
@@ -119,7 +119,7 @@ public class TimelineEditActivity extends BaseActivity {
         italic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                knife.italic(!knife.contains(KnifeText.FORMAT_ITALIC));
+                knife.italic(!knife.contains(AlfredText.FORMAT_ITALIC));
             }
         });
 
@@ -138,7 +138,7 @@ public class TimelineEditActivity extends BaseActivity {
         underline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                knife.underline(!knife.contains(KnifeText.FORMAT_UNDERLINED));
+                knife.underline(!knife.contains(AlfredText.FORMAT_UNDERLINED));
             }
         });
 
@@ -157,7 +157,7 @@ public class TimelineEditActivity extends BaseActivity {
         strikethrough.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                knife.strikethrough(!knife.contains(KnifeText.FORMAT_STRIKETHROUGH));
+                knife.strikethrough(!knife.contains(AlfredText.FORMAT_STRIKETHROUGH));
             }
         });
 
@@ -176,7 +176,7 @@ public class TimelineEditActivity extends BaseActivity {
         bullet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                knife.bullet(!knife.contains(KnifeText.FORMAT_BULLET));
+                knife.bullet(!knife.contains(AlfredText.FORMAT_BULLET));
             }
         });
 
@@ -196,7 +196,7 @@ public class TimelineEditActivity extends BaseActivity {
         quote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                knife.quote(!knife.contains(KnifeText.FORMAT_QUOTE));
+                knife.quote(!knife.contains(AlfredText.FORMAT_QUOTE));
             }
         });
 

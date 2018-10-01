@@ -35,7 +35,7 @@ public class TimelineListActivity extends BaseActivity {
     private String url = "";
     private String str_body_key = "";
     private static final String TAG = "RecyclerView";
-    private String[] str_key_timeline = new String[]{"id","name","happen_time","creator",
+    private String[] str_key_timeline = new String[]{"id","title","happen_time","creator",
             "creator_type","nick_name","icon"};
 
     @Override
@@ -50,6 +50,24 @@ public class TimelineListActivity extends BaseActivity {
     }
 
     private void req(final int req_type) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("/admin/");
+        builder.append("timeline/qry/");
+        switch (req_type) {
+            case PASSED:
+                builder.append("normal?page_no=1");
+                break;
+            case UNCHECKED:
+                builder.append("unchecked?page_no=1");
+                break;
+            case REJECTED:
+                builder.append("rejected?page_no=1");
+                break;
+            case DELETED:
+                builder.append("deleted?page_no=1");
+                break;
+        }
+        url = builder.toString();
         Map<String,String> map = new HashMap<>();
         map.put("holder_type","-1");
         arrayList.add(map);
@@ -91,7 +109,7 @@ public class TimelineListActivity extends BaseActivity {
                 adaptor1.notifyDataSetChanged();
                 ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
                 arrayList_temp = JsonUtil.strToListMap(body,str_key_timeline);
-                str_body_key = "";
+                str_body_key = "title";
                 for (int i = 0;i < arrayList_temp.size();i++) {
                     Map<String,String> map = new HashMap<>();
                     map = arrayList_temp.get(i);
@@ -109,6 +127,10 @@ public class TimelineListActivity extends BaseActivity {
                 adaptor1.setOnItemClickListener(new RecyclerViewAdaptor1.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(TimelineListActivity.this,TimeLineDetailActivity.class);
+                        intent.putExtra("title",arrayList.get(position).get("title"));
+                        intent.putExtra("id",Long.parseLong(String.valueOf(arrayList.get(position).get("id"))));
+                        startActivityForResult(intent,1);
                     }
                 });
             }
@@ -139,28 +161,20 @@ public class TimelineListActivity extends BaseActivity {
     }
 
     private void initToolbar(int entity_type,int req_type) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("/admin/");
-        builder.append("timeline/qry/");
         switch (req_type) {
             case PASSED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_passed);
-                builder.append("normal?page_no=1");
                 break;
             case UNCHECKED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_unchecked);
-                builder.append("unchecked?page_no=1");
                 break;
             case REJECTED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_rejected);
-                builder.append("rejected?page_no=1");
                 break;
             case DELETED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_deleted);
-                builder.append("deleted?page_no=1");
                 break;
         }
-        url = builder.toString();
     }
 
     @Override

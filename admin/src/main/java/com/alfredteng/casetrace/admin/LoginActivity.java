@@ -36,7 +36,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_admin_login);
         ViewHandler.initToolbar(this,toolbar,TOOLBAR_TITLE);
         et_user_name = (EditText)findViewById(R.id.et_login_user_name);
         et_password = (EditText)findViewById(R.id.et_login_password);

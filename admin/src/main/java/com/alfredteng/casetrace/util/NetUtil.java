@@ -53,12 +53,12 @@ public class NetUtil {
     //使用正式服务器进行调试
     private static final String SERVER_ALIYUN = "http://39.104.72.97:8080/Sailfish";
 
-    public static final String SELECTED_HOST = SERVER_SQ_LINUX;
+    private static final String SELECTED_HOST = SERVER_SQ_LINUX;
 
     private static OkHttpClient client;
 
     /**
-     *  @param context Activity
+     * @param context Activity
      * @param address URL
      * @param callback 回调
      */
@@ -73,19 +73,32 @@ public class NetUtil {
         call.enqueue(callback);
     }
 
+    /**
+     *
+     * @param context
+     * @param url
+     * @param map
+     * @param callback
+     */
     public static void reqSendPost(Context context, String url, HashMap<String,Object> map, Callback callback) {
         FormBody.Builder builder = new FormBody.Builder();
         initOkHttpClient(context);
         for (Map.Entry<String,Object> entry:map.entrySet()) {
-            builder.add(entry.getKey(),String.valueOf(entry.getValue()));
+            builder.addEncoded(entry.getKey(),String.valueOf(entry.getValue()));
         }
         String str = SELECTED_HOST + url;
         RequestBody body = builder.build();
         Request request = new Request.Builder().url(str).post(body).build();
+        request.header("charset=utf-8");
         Call call = client.newCall(request);
         call.enqueue(callback);
     }
 
+    /**
+     *
+     * @param resp
+     * @return
+     */
     public static int respAnalyse(String resp) {
         if (resp.startsWith("[")) {
             return BaseActivity.RESP_TYPE_MAPLIST;
