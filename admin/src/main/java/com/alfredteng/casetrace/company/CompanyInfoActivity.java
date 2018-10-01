@@ -15,13 +15,13 @@ import android.widget.Toast;
 
 import com.alfredteng.casetrace.MainActivity;
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.BaseHttpCallback;
-import com.alfredteng.casetrace.util.BaseHttpResultListener;
-import com.alfredteng.casetrace.util.JsonUtil;
-import com.alfredteng.casetrace.util.NetRespStatType;
-import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.HttpCallback;
+import com.example.alfredtools.HttpResultListener;
+import com.example.alfredtools.JsonUtil;
+import com.example.alfredtools.NetRespStatType;
+import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.ViewHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,11 +58,11 @@ public class CompanyInfoActivity extends BaseActivity {
         tv_status = (TextView)findViewById(R.id.tv_status_main_name_a_company_info);
         isAdd = getIntent().getBooleanExtra("is_add",false);
         if (isAdd) {
-            ViewHandler.initToolbar(this,toolbar,R.string.toolbar_tilte_company_add);
+            ViewHandler.initToolbar(this,toolbar,R.string.toolbar_tilte_company_add,R.id.toolbar_general);
             rl_del.setVisibility(View.GONE);
             rl_status.setVisibility(View.GONE);
         }else{
-            ViewHandler.initToolbar(this,toolbar,R.string.toolbar_tilte_company_edit);
+            ViewHandler.initToolbar(this,toolbar,R.string.toolbar_tilte_company_edit,R.id.toolbar_general);
         }
         editText.addTextChangedListener(watcher);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -128,7 +128,7 @@ public class CompanyInfoActivity extends BaseActivity {
 
     private void load() {
         String url = "/admin/company/qry/detail?id=" + id;
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
             public void onRespStatus(String body) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
@@ -195,7 +195,7 @@ public class CompanyInfoActivity extends BaseActivity {
                     url = "/admin/company/edit?name=" + name + "&id=" + id;
                 }
             }
-            BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+            HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
                 @Override
                 public void onRespStatus(String body) {
@@ -273,7 +273,7 @@ public class CompanyInfoActivity extends BaseActivity {
                 break;
         }
 
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
             public void onRespStatus(String body) {
                 if (NetRespStatType.dealWithRespStat(body).equals(NetRespStatType.STATUS_SESSION_EXPIRED)) {

@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.util;
+package com.example.alfredtools;
 
 import android.app.Activity;
 

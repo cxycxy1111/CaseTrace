@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.util;
+package com.example.alfredtools;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,8 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.alfredteng.casetrace.R;
 
 public class ViewHandler {
 
@@ -145,27 +143,27 @@ public class ViewHandler {
     }
 
 
-    public static void initToolbar(final BaseActivity activity,Toolbar toolbar,final String title) {
-        toolbar = (Toolbar)activity.findViewById(R.id.toolbar_general);
+    public static void initToolbar(final BaseActivity activity, Toolbar toolbar, final String title,final int toolbar_id) {
+        toolbar = (Toolbar)activity.findViewById(toolbar_id);
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setTitle(title);
     }
 
-    public static void initToolbarWithBackButton(final BaseActivity activity,Toolbar toolbar,final String title) {
-        toolbar = (Toolbar)activity.findViewById(R.id.toolbar_general);
+    public static void initToolbarWithBackButton(final BaseActivity activity,Toolbar toolbar,final String title,final int toolbar_id) {
+        toolbar = (Toolbar)activity.findViewById(toolbar_id);
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setTitle(title);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-    public static void initToolbarWithBackButton(final BaseActivity activity,Toolbar toolbar,final int title) {
-        toolbar = (Toolbar)activity.findViewById(R.id.toolbar_general);
+    public static void initToolbarWithBackButton(final BaseActivity activity,Toolbar toolbar,final int title,final int toolbar_id) {
+        toolbar = (Toolbar)activity.findViewById(toolbar_id);
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setTitle(title);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public static void initToolbar(final BaseActivity activity,Toolbar toolbar,final int title) {
-        toolbar = (Toolbar)activity.findViewById(R.id.toolbar_general);
+    public static void initToolbar(final BaseActivity activity,Toolbar toolbar,final int title,final int toolbar_id) {
+        toolbar = (Toolbar)activity.findViewById(toolbar_id);
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setTitle(title);
     }

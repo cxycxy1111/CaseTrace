@@ -10,12 +10,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.BaseHttpCallback;
-import com.alfredteng.casetrace.util.BaseHttpResultListener;
-import com.alfredteng.casetrace.util.NetRespStatType;
-import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.HttpCallback;
+import com.example.alfredtools.HttpResultListener;
+import com.example.alfredtools.NetRespStatType;
+import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.ViewHandler;
 
 import java.io.IOException;
 
@@ -32,7 +32,7 @@ public class AdminPwdModifyActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_pwd_modify);
-        ViewHandler.initToolbarWithBackButton(this,toolbar,"修改密码");
+        ViewHandler.initToolbarWithBackButton(this,toolbar,"修改密码",R.id.toolbar_general);
         et_pwd = (EditText)findViewById(R.id.et_pwd_a_admin_pwd_modify);
         et_pwd_rpt = (EditText)findViewById(R.id.et_rpt_pwd_a_admin_pwd_modify);
         tv_tips = (TextView)findViewById(R.id.tv_tips);
@@ -84,7 +84,7 @@ public class AdminPwdModifyActivity extends BaseActivity {
                 url = "/admin/user/edit/password?id=" + id + "&pwd=" + et_pwd.getText().toString();
                 break;
         }
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
             public void onRespStatus(String body) {
                 switch (NetRespStatType.dealWithRespStat(body)) {

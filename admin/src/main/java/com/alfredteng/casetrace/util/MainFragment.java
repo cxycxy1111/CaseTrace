@@ -19,6 +19,7 @@ import com.alfredteng.casetrace.event.EventListActivity;
 import com.alfredteng.casetrace.product.ProductListActivity;
 import com.alfredteng.casetrace.timeline.TimelineListActivity;
 import com.alfredteng.casetrace.user.UserListActivity;
+import com.example.alfredtools.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;

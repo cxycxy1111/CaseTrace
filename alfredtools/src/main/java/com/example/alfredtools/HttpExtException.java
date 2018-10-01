@@ -1,6 +1,6 @@
-package com.alfredteng.casetrace.util;
+package com.example.alfredtools;
 
-public class BaseHttpExtException extends Exception {
+public class HttpExtException extends Exception{
 
     private static final long serialVersionUID = 1L;
 
@@ -8,7 +8,7 @@ public class BaseHttpExtException extends Exception {
 
     private Object msg;
 
-    public BaseHttpExtException(int msgCode, Object msg){
+    public HttpExtException(int msgCode, Object msg){
         this.msg = msg;
         this.msgCode = msgCode;
     }

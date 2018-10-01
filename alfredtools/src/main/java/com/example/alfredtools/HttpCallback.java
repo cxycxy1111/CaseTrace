@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.util;
+package com.example.alfredtools;
 
 import android.content.Context;
 import android.os.Handler;
@@ -11,15 +11,15 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class BaseHttpCallback implements Callback {
+public class HttpCallback implements Callback {
 
-    private static final String TAG = "BaseHttpCallback";
+    private static final String TAG = "HttpCallback";
     private Handler handler;
-    private BaseHttpResultListener baseHttpResultListener;
+    private HttpResultListener HttpResultListener;
     private Context context;
 
-    public BaseHttpCallback(BaseHttpResultListener baseHttpResultListener,Context context) {
-        this.baseHttpResultListener = baseHttpResultListener;
+    public HttpCallback(HttpResultListener HttpResultListener,Context context) {
+        this.HttpResultListener = HttpResultListener;
         this.handler = new Handler(Looper.getMainLooper());
         this.context = context;
     }
@@ -33,7 +33,7 @@ public class BaseHttpCallback implements Callback {
             @Override
             public void run() {
                 Log.d(TAG, "run: onFailure: 无法连接服务器！");
-                baseHttpResultListener.onReqFailure(new BaseHttpExtException(0,"无法连接服务器，请检查网络"));
+                HttpResultListener.onReqFailure(new HttpExtException(0,"无法连接服务器，请检查网络"));
             }
         });
     }
@@ -52,29 +52,30 @@ public class BaseHttpCallback implements Callback {
 
     private void handleResponse(final String body) {
         if (body == null || body.toString().trim().equals("")) {
-            baseHttpResultListener.onReqFailure(new BaseHttpExtException(-1,"请求结果为空"));
+            HttpResultListener.onReqFailure(new HttpExtException(-1,"请求结果为空"));
             return;
         }
         try {
             if (body.startsWith("[")) {
-                baseHttpResultListener.onRespMapList(body);
+                HttpResultListener.onRespMapList(body);
             }else if (body.startsWith("{")) {
                 if (body.contains(NetUtil.STATUS)) {
                     if (body.contains(NetUtil.STATUS_SESSION_EXPIRED)) {
-                        baseHttpResultListener.onRespSessionExpired();
+                        HttpResultListener.onRespSessionExpired();
                     }else {
-                        baseHttpResultListener.onRespStatus(body);
+                        HttpResultListener.onRespStatus(body);
                     }
                 }else {
                     Log.d(TAG, "handleResponse: " + body);
                 }
             }else {
                 Log.d(TAG, "handleResponse: body: " +body);
-                baseHttpResultListener.onRespError();
+                HttpResultListener.onRespError();
             }
         }catch (Exception e) {
-            baseHttpResultListener.onReqFailure(new BaseHttpExtException(-3,e.getMessage()));
+            HttpResultListener.onReqFailure(new HttpExtException(-3,e.getMessage()));
         }finally {
         }
     }
+
 }

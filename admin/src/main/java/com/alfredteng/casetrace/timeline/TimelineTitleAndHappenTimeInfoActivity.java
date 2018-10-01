@@ -19,13 +19,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.BaseHttpCallback;
-import com.alfredteng.casetrace.util.BaseHttpResultListener;
-import com.alfredteng.casetrace.util.JsonUtil;
-import com.alfredteng.casetrace.util.NetRespStatType;
-import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.HttpCallback;
+import com.example.alfredtools.HttpResultListener;
+import com.example.alfredtools.JsonUtil;
+import com.example.alfredtools.NetRespStatType;
+import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.ViewHandler;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -60,7 +60,7 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline_add_title_and_happen_time);
-        ViewHandler.initToolbarWithBackButton(this,toolbar,"编辑时间线信息");
+        ViewHandler.initToolbarWithBackButton(this,toolbar,"编辑时间线信息",R.id.toolbar_general);
         initViews();
         isAdd = getIntent().getBooleanExtra("isAdd",false);
         content = getIntent().getStringExtra("content");
@@ -159,7 +159,7 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
 
     private void loadEvent() {
         String url = "/admin/event/qry/ignoreStatus";
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
             public void onRespStatus(String body) {
             }
@@ -248,7 +248,7 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
             map.put("content",content);
             map.put("id",timeline_id);
         }
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
             public void onRespStatus(String body) {
                 switch (NetRespStatType.dealWithRespStat(body)) {

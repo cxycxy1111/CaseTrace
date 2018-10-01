@@ -15,16 +15,15 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.alfredteng.casetrace.MainActivity;
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.BaseHttpCallback;
-import com.alfredteng.casetrace.util.BaseHttpResultListener;
-import com.alfredteng.casetrace.util.JsonUtil;
-import com.alfredteng.casetrace.util.NetRespStatType;
-import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.Tool;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.HttpCallback;
+import com.example.alfredtools.HttpResultListener;
+import com.example.alfredtools.JsonUtil;
+import com.example.alfredtools.NetRespStatType;
+import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.Tool;
+import com.example.alfredtools.ViewHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,7 +71,7 @@ public class AdminInfoActivity extends BaseActivity {
             views_add = new View[]{tv_user_name,rl_del,rl_status};
 
             ViewHandler.viewHide(views_add);
-            ViewHandler.initToolbarWithBackButton(this,toolbar,"新增管理员");
+            ViewHandler.initToolbarWithBackButton(this,toolbar,"新增管理员",R.id.toolbar_general);
             initSpinnerType();
             loadCompany();
         }else {
@@ -86,7 +85,7 @@ public class AdminInfoActivity extends BaseActivity {
             }
             views_modify = new View[]{rl_pwd,et_user_name};
             ViewHandler.viewHide(views_modify);
-            ViewHandler.initToolbarWithBackButton(this,toolbar,"编辑管理员");
+            ViewHandler.initToolbarWithBackButton(this,toolbar,"编辑管理员",R.id.toolbar_general);
             load(id);
         }
     }
@@ -177,7 +176,7 @@ public class AdminInfoActivity extends BaseActivity {
 
     private void load(long id) {
         String url = "/admin/admin/qry/detail?id=" + id;
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
             public void onRespStatus(String body) {
 
@@ -246,7 +245,7 @@ public class AdminInfoActivity extends BaseActivity {
 
     private void loadCompany() {
         String url = "/admin/company/qry/ignoreStatus";
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
             public void onRespStatus(String body) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
@@ -371,7 +370,7 @@ public class AdminInfoActivity extends BaseActivity {
     }
 
     private void submit(String url) {
-        BaseHttpCallback baseHttpCallback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback HttpCallback = new HttpCallback(new HttpResultListener() {
             @Override
             public void onRespStatus(String body) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
@@ -409,7 +408,7 @@ public class AdminInfoActivity extends BaseActivity {
                 ViewHandler.alertShowAndExitApp(AdminInfoActivity.this);
             }
         },this);
-        NetUtil.reqSendGet(this,url,baseHttpCallback);
+        NetUtil.reqSendGet(this,url,HttpCallback);
     }
 
 }

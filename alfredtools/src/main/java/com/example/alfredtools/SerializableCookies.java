@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.util;
+package com.example.alfredtools;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 import okhttp3.Cookie;
 
-public class SerializableCookies implements Serializable{
+public class SerializableCookies implements Serializable {
 
     private transient final Cookie cookies;
     private transient Cookie clientCookies;

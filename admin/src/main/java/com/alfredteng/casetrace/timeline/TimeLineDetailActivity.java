@@ -8,13 +8,13 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.BaseHttpCallback;
-import com.alfredteng.casetrace.util.BaseHttpResultListener;
-import com.alfredteng.casetrace.util.JsonUtil;
-import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.Tool;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.HttpCallback;
+import com.example.alfredtools.HttpResultListener;
+import com.example.alfredtools.JsonUtil;
+import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.Tool;
+import com.example.alfredtools.ViewHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class TimeLineDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_time_line_detail);
         initViews();
         String title = getIntent().getStringExtra("title");
-        ViewHandler.initToolbarWithBackButton(this,toolbar,title);
+        ViewHandler.initToolbarWithBackButton(this,toolbar,title,R.id.toolbar_general);
         init();
     }
 
@@ -44,7 +44,7 @@ public class TimeLineDetailActivity extends BaseActivity {
 
     private void init() {
         String url = "/admin/timeline/qry/detail?id=" + getIntent().getLongExtra("id",0);
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
             public void onRespStatus(String body) {
 

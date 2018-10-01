@@ -12,13 +12,13 @@ import android.widget.TextView;
 
 import com.alfredteng.casetrace.MainActivity;
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.BaseHttpCallback;
-import com.alfredteng.casetrace.util.BaseHttpResultListener;
-import com.alfredteng.casetrace.util.NetRespStatType;
-import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.SharedPrefMgr;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.HttpCallback;
+import com.example.alfredtools.HttpResultListener;
+import com.example.alfredtools.NetRespStatType;
+import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.SharedPrefMgr;
+import com.example.alfredtools.ViewHandler;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
@@ -37,7 +37,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_login);
-        ViewHandler.initToolbar(this,toolbar,TOOLBAR_TITLE);
+        ViewHandler.initToolbar(this,toolbar,TOOLBAR_TITLE,R.id.toolbar_general);
         et_user_name = (EditText)findViewById(R.id.et_login_user_name);
         et_password = (EditText)findViewById(R.id.et_login_password);
         btn_login = (Button)findViewById(R.id.btn_login_login);
@@ -78,7 +78,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private void login(final String user_name, final String password) {
         String url = "/admin/admin/login?user_name=" + user_name + "&pwd=" + password;
         Log.d(TAG, "login: url: " + url);
-        NetUtil.reqSendGet(this,url,new BaseHttpCallback(new BaseHttpResultListener() {
+        NetUtil.reqSendGet(this,url,new HttpCallback(new HttpResultListener() {
 
             @Override
             public void onRespStatus(String body) {

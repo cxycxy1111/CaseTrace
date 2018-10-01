@@ -8,15 +8,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.alfredteng.casetrace.MainActivity;
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.BaseHttpCallback;
-import com.alfredteng.casetrace.util.BaseHttpResultListener;
-import com.alfredteng.casetrace.util.JsonUtil;
-import com.alfredteng.casetrace.util.NetRespStatType;
-import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.HttpCallback;
+import com.example.alfredtools.HttpResultListener;
+import com.example.alfredtools.JsonUtil;
+import com.example.alfredtools.NetRespStatType;
+import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.ViewHandler;
 import com.alfredteng.casetrace.util.RecyclerViewAdaptor1;
 
 import java.io.IOException;
@@ -80,7 +79,7 @@ public class TimelineListActivity extends BaseActivity {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(TimelineListActivity.this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(adaptor1);
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
             @Override
             public void onRespStatus(String body) {
@@ -163,16 +162,16 @@ public class TimelineListActivity extends BaseActivity {
     private void initToolbar(int entity_type,int req_type) {
         switch (req_type) {
             case PASSED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_passed);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_passed,R.id.toolbar_general);
                 break;
             case UNCHECKED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_unchecked);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_unchecked,R.id.toolbar_general);
                 break;
             case REJECTED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_rejected);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_rejected,R.id.toolbar_general);
                 break;
             case DELETED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_deleted);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_deleted,R.id.toolbar_general);
                 break;
         }
     }

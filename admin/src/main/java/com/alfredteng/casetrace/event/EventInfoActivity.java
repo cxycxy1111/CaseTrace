@@ -20,13 +20,13 @@ import android.widget.Toast;
 
 import com.alfredteng.casetrace.MainActivity;
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.BaseHttpCallback;
-import com.alfredteng.casetrace.util.BaseHttpResultListener;
-import com.alfredteng.casetrace.util.JsonUtil;
-import com.alfredteng.casetrace.util.NetRespStatType;
-import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.HttpCallback;
+import com.example.alfredtools.HttpResultListener;
+import com.example.alfredtools.JsonUtil;
+import com.example.alfredtools.NetRespStatType;
+import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.ViewHandler;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -74,7 +74,7 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
         et_happen_time.setOnClickListener(this);
         if (isAdd) {
             initCurrentDateIfAdd();
-            ViewHandler.initToolbarWithBackButton(this,toolbar,R.string.toolbar_tilte_event_add);
+            ViewHandler.initToolbarWithBackButton(this,toolbar,R.string.toolbar_tilte_event_add,R.id.toolbar_general);
             views_hide_when_add = new View[]{rl_del,rl_status};
             ViewHandler.viewHide(views_hide_when_add);
         }else{
@@ -86,7 +86,7 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
             }
             et_happen_date.setText(String.valueOf(current_year) + "-" + String.valueOf(current_month + 1) + "-" + String.valueOf(current_date));
             et_happen_time.setText(String.valueOf(current_hour) + ":" + String.valueOf(current_minute));
-            ViewHandler.initToolbarWithBackButton(this,toolbar,R.string.toolbar_tilte_event_edit);
+            ViewHandler.initToolbarWithBackButton(this,toolbar,R.string.toolbar_tilte_event_edit,R.id.toolbar_general);
         }
         initDatePicker();
         initTImePicker();
@@ -240,7 +240,7 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
 
     private void load() {
         String url = "/admin/event/qry/detail?id=" + id;
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
             public void onRespStatus(String body) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
@@ -311,7 +311,7 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
                     url = "/admin/event/edit?title=" + name + "&id=" + id + "&happen_time=" + happen_time;
                 }
             }
-            BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+            HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
                 @Override
                 public void onRespStatus(String body) {
@@ -391,7 +391,7 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
                 break;
         }
 
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
             public void onRespStatus(String body) {
                 if (NetRespStatType.dealWithRespStat(body).equals(NetRespStatType.STATUS_SESSION_EXPIRED)) {

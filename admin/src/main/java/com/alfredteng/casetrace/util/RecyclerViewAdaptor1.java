@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.NetUtil;
+import com.example.alfredtools.NetUtil;
 
 
 import java.util.ArrayList;

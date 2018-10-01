@@ -18,10 +18,10 @@ import com.alfredteng.casetrace.event.EventInfoActivity;
 import com.alfredteng.casetrace.product.ProductInfoActivity;
 import com.alfredteng.casetrace.timeline.TimelineEditActivity;
 import com.alfredteng.casetrace.user.UserInfoActivity;
-import com.alfredteng.casetrace.util.BaseActivity;
 import com.alfredteng.casetrace.util.MainFragment;
-import com.alfredteng.casetrace.util.ViewHandler;
-import com.alfredteng.casetrace.util.adaptor.MainActivityPagerAdapter;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.MainActivityPagerAdapter;
+import com.example.alfredtools.ViewHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity implements MainFragment.OnFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ViewHandler.initToolbar(MainActivity.this,toolbar,TOOLBAR_TITLE);
+        ViewHandler.initToolbar(MainActivity.this,toolbar,TOOLBAR_TITLE,R.id.toolbar_general);
         viewPager = (ViewPager)findViewById(R.id.vp_a_main);
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bnb_a_main);
         fragmentManager = getSupportFragmentManager();

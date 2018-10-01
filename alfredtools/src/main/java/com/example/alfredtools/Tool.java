@@ -1,14 +1,7 @@
-package com.alfredteng.casetrace.util;
+package com.example.alfredtools;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AlertDialog;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class Tool {
-
 
     /**
      * 获取long类型的preferenceShare

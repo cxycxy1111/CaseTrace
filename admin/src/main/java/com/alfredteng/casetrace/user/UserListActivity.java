@@ -8,16 +8,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.alfredteng.casetrace.MainActivity;
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.BaseHttpCallback;
-import com.alfredteng.casetrace.util.BaseHttpResultListener;
-import com.alfredteng.casetrace.util.JsonUtil;
-import com.alfredteng.casetrace.util.NetRespStatType;
-import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.Tool;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.HttpCallback;
+import com.example.alfredtools.HttpResultListener;
+import com.example.alfredtools.JsonUtil;
+import com.example.alfredtools.NetRespStatType;
+import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.Tool;
+import com.example.alfredtools.ViewHandler;
 import com.alfredteng.casetrace.util.RecyclerViewAdaptor1;
 
 import java.io.IOException;
@@ -137,7 +136,7 @@ public class UserListActivity extends BaseActivity {
             }
         }
         url = builder.toString();
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
             @Override
             public void onRespStatus(String body) {
@@ -291,13 +290,13 @@ public class UserListActivity extends BaseActivity {
 
                 switch (req_type) {
                     case PASSED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_passed);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_passed,R.id.toolbar_general);
                         break;
                     case DELETED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_deleted);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_deleted,R.id.toolbar_general);
                         break;
                     case LOCKED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_locked);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_locked,R.id.toolbar_general);
                         break;
                     default:
                         break;
@@ -306,13 +305,13 @@ public class UserListActivity extends BaseActivity {
             case ENTITY_USER:
                 switch (req_type) {
                     case PASSED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_user_passed);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_user_passed,R.id.toolbar_general);
                         break;
                     case DELETED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_user_deleted);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_user_deleted,R.id.toolbar_general);
                         break;
                     case LOCKED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_user_locked);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_user_locked,R.id.toolbar_general);
                         break;
                     default:
                         break;
@@ -321,80 +320,80 @@ public class UserListActivity extends BaseActivity {
             case ENTITY_COMPANY:
                 switch (req_type) {
                     case PASSED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_company_passed);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_company_passed,R.id.toolbar_general);
                         break;
                     case UNCHECKED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_company_unchecked);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_company_unchecked,R.id.toolbar_general);
                         break;
                     case REJECTED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_company_rejected);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_company_rejected,R.id.toolbar_general);
                         break;
                     case DELETED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_company_deleted);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_company_deleted,R.id.toolbar_general);
                         break;
                 }
                 break;
             case ENTITY_PRODUCT:
                 switch (req_type) {
                     case PASSED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_passed);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_passed,R.id.toolbar_general);
                         break;
                     case UNCHECKED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_unchecked);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_unchecked,R.id.toolbar_general);
                         break;
                     case REJECTED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_rejected);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_rejected,R.id.toolbar_general);
                         break;
                     case DELETED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_deleted);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_deleted,R.id.toolbar_general);
                         break;
                 }
                 break;
             case ENTITY_EVENT:
                 switch (req_type) {
                     case PASSED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_event_passed);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_event_passed,R.id.toolbar_general);
                         break;
                     case UNCHECKED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_event_unchecked);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_event_unchecked,R.id.toolbar_general);
                         break;
                     case REJECTED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_event_rejected);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_event_rejected,R.id.toolbar_general);
                         break;
                     case DELETED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_event_deleted);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_event_deleted,R.id.toolbar_general);
                         break;
                 }
                 break;
             case ENTITY_TIMELINE:
                 switch (req_type) {
                     case PASSED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_passed);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_passed,R.id.toolbar_general);
                         break;
                     case UNCHECKED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_unchecked);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_unchecked,R.id.toolbar_general);
                         break;
                     case REJECTED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_rejected);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_rejected,R.id.toolbar_general);
                         break;
                     case DELETED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_deleted);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_timeline_deleted,R.id.toolbar_general);
                         break;
                 }
                 break;
             case ENTITY_CASE:
                 switch (req_type) {
                     case PASSED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_passed);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_passed,R.id.toolbar_general);
                         break;
                     case UNCHECKED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_unchecked);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_unchecked,R.id.toolbar_general);
                         break;
                     case REJECTED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_rejected);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_rejected,R.id.toolbar_general);
                         break;
                     case DELETED:
-                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_deleted);
+                        ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_deleted,R.id.toolbar_general);
                         break;
                 }
                 break;

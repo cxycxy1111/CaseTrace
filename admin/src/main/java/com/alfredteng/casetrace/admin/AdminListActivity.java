@@ -8,16 +8,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.alfredteng.casetrace.MainActivity;
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.BaseHttpCallback;
-import com.alfredteng.casetrace.util.BaseHttpResultListener;
-import com.alfredteng.casetrace.util.JsonUtil;
-import com.alfredteng.casetrace.util.NetRespStatType;
-import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.Tool;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.HttpCallback;
+import com.example.alfredtools.HttpResultListener;
+import com.example.alfredtools.JsonUtil;
+import com.example.alfredtools.NetRespStatType;
+import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.Tool;
+import com.example.alfredtools.ViewHandler;
 import com.alfredteng.casetrace.util.RecyclerViewAdaptor1;
 
 import java.io.IOException;
@@ -82,7 +81,7 @@ public class AdminListActivity extends BaseActivity {
                 break;
         }
         String url = builder.toString();
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
             @Override
             public void onRespStatus(String body) {
@@ -200,13 +199,13 @@ public class AdminListActivity extends BaseActivity {
     private void initToolbar(int entity_type,int req_type) {
         switch (req_type) {
             case PASSED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_passed);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_passed,R.id.toolbar_general);
                 break;
             case DELETED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_deleted);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_deleted,R.id.toolbar_general);
                 break;
             case LOCKED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_locked);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_admin_locked,R.id.toolbar_general);
                 break;
             default:
                 break;

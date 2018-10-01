@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.util;
+package com.example.alfredtools;
 
 import android.content.Context;
 import android.util.Log;
@@ -30,12 +30,12 @@ public class NetUtil {
     public static final String ID = "id";
     public static final String DATA = "data";
 
-    static final String STATUS_NO_SUCH_RESULT = "no_such_record";
-    static final String STATUS_FAIL = "fail";
-    static final String STATUS_SUCCESS = "success";
-    static final String STATUS_DUPLICATE = "duplicate";
-    static final String STATUS_EMPTY = "empty";
-    static final String STATUS_PARTYLY_FAIL = "exe_partly_fail";
+    public static final String STATUS_NO_SUCH_RESULT = "no_such_record";
+    public static final String STATUS_FAIL = "fail";
+    public static final String STATUS_SUCCESS = "success";
+    public static final String STATUS_DUPLICATE = "duplicate";
+    public static final String STATUS_EMPTY = "empty";
+    public static final String STATUS_PARTYLY_FAIL = "exe_partly_fail";
     static final String STATUS_NOT_MATCH = "not_match";
     static final String STATUS_SESSION_EXPIRED = "session_expired";
     static final String STATUS_AUTHORIZE_FAIL = "authorize_fail";
@@ -62,7 +62,7 @@ public class NetUtil {
      * @param address URL
      * @param callback 回调
      */
-    public static void reqSendGet(Context context, String address, BaseHttpCallback callback) {
+    public static void reqSendGet(Context context, String address, HttpCallback callback) {
         String str = SELECTED_HOST + address;
         Log.d(TAG, "reqSendGet: url: " + str);
         initOkHttpClient(context);

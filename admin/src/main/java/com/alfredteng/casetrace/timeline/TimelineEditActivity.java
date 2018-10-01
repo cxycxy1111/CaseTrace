@@ -12,9 +12,9 @@ import android.widget.Toast;
 
 import com.alfred.casetrace.editor.AlfredText;
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.Tool;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.Tool;
+import com.example.alfredtools.ViewHandler;
 
 
 public class TimelineEditActivity extends BaseActivity {
@@ -31,7 +31,7 @@ public class TimelineEditActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline_add);
-        ViewHandler.initToolbarWithBackButton(this,toolbar, R.string.toolbar_tilte_timeline_add);
+        ViewHandler.initToolbarWithBackButton(this,toolbar, R.string.toolbar_tilte_timeline_add,R.id.toolbar_general);
         knife = (AlfredText) findViewById(R.id.kt_a_add_timeline);
         knife.setSelection(knife.getEditableText().length());
         isAdd = getIntent().getBooleanExtra("is_add",false);

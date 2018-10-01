@@ -1,8 +1,8 @@
-package com.alfredteng.casetrace.util;
+package com.example.alfredtools;
 
 import java.io.IOException;
 
-public interface BaseHttpResultListener {
+public interface HttpResultListener {
 
     public void onRespStatus(String body);
 
@@ -13,5 +13,4 @@ public interface BaseHttpResultListener {
     public void onReqFailure(Object object);
 
     public void  onRespSessionExpired();
-
 }

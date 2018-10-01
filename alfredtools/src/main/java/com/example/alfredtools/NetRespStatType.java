@@ -1,14 +1,18 @@
-package com.alfredteng.casetrace.util;
-
-import com.alfredteng.casetrace.MainActivity;
+package com.example.alfredtools;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.alfredteng.casetrace.util.NetUtil.*;
+import static com.example.alfredtools.NetUtil.STATUS;
+import static com.example.alfredtools.NetUtil.STATUS_DUPLICATE;
+import static com.example.alfredtools.NetUtil.STATUS_EMPTY;
+import static com.example.alfredtools.NetUtil.STATUS_FAIL;
+import static com.example.alfredtools.NetUtil.STATUS_NO_SUCH_RESULT;
+import static com.example.alfredtools.NetUtil.STATUS_PARTYLY_FAIL;
+import static com.example.alfredtools.NetUtil.STATUS_SUCCESS;
 
-public enum NetRespStatType {
+public enum  NetRespStatType {
 
     NSR("no_such_record"),
     FAIL("fail"),
@@ -60,7 +64,8 @@ public enum NetRespStatType {
                 return STATUS_AUTHORIZE_FAIL;
             default:
                 return null;
-            }
         }
+    }
+
 
 }

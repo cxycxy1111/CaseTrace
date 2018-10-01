@@ -8,15 +8,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.alfredteng.casetrace.MainActivity;
 import com.alfredteng.casetrace.R;
-import com.alfredteng.casetrace.util.BaseActivity;
-import com.alfredteng.casetrace.util.BaseHttpCallback;
-import com.alfredteng.casetrace.util.BaseHttpResultListener;
-import com.alfredteng.casetrace.util.JsonUtil;
-import com.alfredteng.casetrace.util.NetRespStatType;
-import com.alfredteng.casetrace.util.NetUtil;
-import com.alfredteng.casetrace.util.ViewHandler;
+import com.example.alfredtools.BaseActivity;
+import com.example.alfredtools.HttpCallback;
+import com.example.alfredtools.HttpResultListener;
+import com.example.alfredtools.JsonUtil;
+import com.example.alfredtools.NetRespStatType;
+import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.ViewHandler;
 import com.alfredteng.casetrace.util.RecyclerViewAdaptor1;
 
 import java.io.IOException;
@@ -72,24 +71,24 @@ public class ProductListActivity extends BaseActivity {
         builder.append("/admin/").append("product/qry/");
         switch (req_type) {
             case PASSED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_passed);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_passed,R.id.toolbar_general);
                 builder.append("normal?page_no=").append(page_no);
                 break;
             case UNCHECKED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_unchecked);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_unchecked,R.id.toolbar_general);
                 builder.append("unchecked?page_no=").append(page_no);
                 break;
             case REJECTED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_rejected);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_rejected,R.id.toolbar_general);
                 builder.append("rejected?page_no=").append(page_no);
                 break;
             case DELETED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_deleted);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_deleted,R.id.toolbar_general);
                 builder.append("deleted?page_no=").append(page_no);
                 break;
         }
         url = builder.toString();
-        BaseHttpCallback callback = new BaseHttpCallback(new BaseHttpResultListener() {
+        HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
             @Override
             public void onRespStatus(String body) {
@@ -201,16 +200,16 @@ public class ProductListActivity extends BaseActivity {
     private void initToolbar(int entity_type,int req_type) {
         switch (req_type) {
             case PASSED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_passed);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_passed,R.id.toolbar_general);
                 break;
             case UNCHECKED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_unchecked);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_unchecked,R.id.toolbar_general);
                 break;
             case REJECTED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_rejected);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_rejected,R.id.toolbar_general);
                 break;
             case DELETED:
-                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_deleted);
+                ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_product_deleted,R.id.toolbar_general);
                 break;
         }
     }

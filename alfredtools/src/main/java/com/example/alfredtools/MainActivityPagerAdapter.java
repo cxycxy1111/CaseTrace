@@ -1,4 +1,4 @@
-package com.alfredteng.casetrace.util.adaptor;
+package com.example.alfredtools;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,4 +27,5 @@ public class MainActivityPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return fragments.size();
     }
+
 }
