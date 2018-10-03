@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -15,7 +16,6 @@ import com.example.alfredtools.HttpResultListener;
 import com.example.alfredtools.JsonUtil;
 import com.example.alfredtools.NetRespStatType;
 import com.example.alfredtools.NetUtil;
-import com.example.alfredtools.Tool;
 import com.example.alfredtools.ViewHandler;
 import com.alfredteng.casetrace.util.adaptor.GeneralRecyclerViewAdaptor;
 
@@ -127,30 +127,18 @@ public class TimelineListActivity extends BaseActivity {
                 adaptor1.setOnItemClickListener(new GeneralRecyclerViewAdaptor.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(TimelineListActivity.this,TimeLineDetailActivity.class);
+                        Log.d(TAG, "onItemClick: before intent create");
+                        Intent intent = new Intent(TimelineListActivity.this,TimelineDetailActivity.class);
+                        Log.d(TAG, "onItemClick: after intent created");
                         intent.putExtra("title",arrayList.get(position).get("title"));
                         intent.putExtra("id",Long.parseLong(String.valueOf(arrayList.get(position).get("id"))));
-                        int status=0;
-                        switch (req_type) {
-                            case UNCHECKED:
-                                status = UNCHECKED;
-                                break;
-                            case PASSED:
-                                status = PASSED;
-                                break;
-                            case REJECTED:
-                                status = REJECTED;
-                                break;
-                        }
-                        intent.putExtra("status",status);
+                        intent.putExtra("status",Integer.parseInt(String.valueOf(arrayList.get(position).get("status"))));
                         switch (req_type) {
                             case DELETED:
                                 intent.putExtra("del",true);
-                                intent.putExtra("status",Integer.parseInt(String.valueOf(arrayList.get(position).get("status"))));
                                 break;
                             default:
                                 intent.putExtra("del",false);
-                                intent.putExtra("status",Integer.parseInt(String.valueOf(arrayList.get(position).get("status"))));
                                 break;
                         }
                         startActivityForResult(intent,1);

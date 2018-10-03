@@ -37,11 +37,11 @@
         <activity android:name=".product.ProductListActivity" />
         <activity android:name=".product.ProductInfoActivity" />
         <activity android:name=".timeline.TimelineListActivity" />
-        <activity android:name=".user.UserListActivity" />
-        <activity android:name=".user.UserInfoActivity" />
         <activity android:name=".timeline.TimelineEditActivity" />
         <activity android:name=".timeline.TimelineTitleAndHappenTimeInfoActivity" />
-        <activity android:name=".timeline.TimeLineDetailActivity"/>
+        <activity android:name=".timeline.TimelineDetailActivity"/>
+        <activity android:name=".user.UserListActivity" />
+        <activity android:name=".user.UserInfoActivity" />
     </application>
 
 </manifest>

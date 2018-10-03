@@ -20,10 +20,10 @@ import com.example.alfredtools.ViewHandler;
 public class TimelineEditActivity extends BaseActivity {
 
     private boolean isAdd = false;
-    private long id;
     private long event_id = 0;
     private long timeline_id = 0;
     private String title = "";
+    private String happen_time;
     private Toolbar toolbar;
     private AlfredText knife;
 
@@ -44,16 +44,13 @@ public class TimelineEditActivity extends BaseActivity {
             }
         }else {//不是新增时，从页面中传过来
             String content = getIntent().getStringExtra("content");
+            timeline_id = getIntent().getLongExtra("id",0);
+            event_id = getIntent().getLongExtra("event_id",0);
+            happen_time = getIntent().getStringExtra("happen_time");
+            title = getIntent().getStringExtra("title");
             knife.fromHtml(content);
         }
-        setupBold();
-        setupItalic();
-        setupUnderline();
-        setupStrikethrough();
-        setupBullet();
-        setupQuote();
-        setupLink();
-        setupClear();
+        setUpAlfredText();
     }
 
     @Override
@@ -86,12 +83,55 @@ public class TimelineEditActivity extends BaseActivity {
             case 1:
                 switch (resultCode) {
                     case 1:
+                        setResult(1);
+                        TimelineEditActivity.this.finish();
                         break;
                     default:break;
                 }
                 break;
             default:break;
         }
+    }
+
+    private void submit() {
+        String body = knife.toHtml();
+        if (body.length() <= 5000) {
+            Intent intent = new Intent(TimelineEditActivity.this,TimelineTitleAndHappenTimeInfoActivity.class);
+            intent.putExtra("content",body);
+            intent.putExtra("isAdd",isAdd);
+            if(!isAdd) {
+                intent.putExtra("event_id",event_id);
+                intent.putExtra("timeline_id",timeline_id);
+                intent.putExtra("title",title);
+                intent.putExtra("happen_time",happen_time);
+            }
+            startActivityForResult(intent,1);
+        }else {
+            ViewHandler.toastShow(this,"字数已超过最大限制。");
+        }
+    }
+
+    private void saveBeforeQuit() {
+        if (isAdd) {
+            if (!knife.toHtml().equals("")) {
+                SharedPreferences sharedPreferences = getSharedPreferences("timeline_draft",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.putString("content",knife.toHtml());
+                editor.apply();
+            }
+        }
+    }
+
+    private void setUpAlfredText() {
+        setupBold();
+        setupItalic();
+        setupUnderline();
+        setupStrikethrough();
+        setupBullet();
+        setupQuote();
+        setupLink();
+        setupClear();
     }
 
     private void setupBold() {
@@ -244,32 +284,5 @@ public class TimelineEditActivity extends BaseActivity {
                 return true;
             }
         });
-    }
-
-    private void submit() {
-        String body = knife.toHtml();
-        if (body.length() < 5000) {
-            Intent intent = new Intent(TimelineEditActivity.this,TimelineTitleAndHappenTimeInfoActivity.class);
-            intent.putExtra("content",body);
-            intent.putExtra("isAdd",isAdd);
-            if(!isAdd) {
-                intent.putExtra("event_id",event_id);
-                intent.putExtra("timeline_id",timeline_id);
-                intent.putExtra("title",title);
-            }
-            startActivityForResult(intent,1);
-        }else {
-            ViewHandler.toastShow(this,"字数已超过最大限制。");
-        }
-    }
-
-    private void saveBeforeQuit() {
-        if (!knife.toHtml().equals("")) {
-            SharedPreferences sharedPreferences = getSharedPreferences("timeline_draft",MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.putString("content",knife.toHtml());
-            editor.apply();
-        }
     }
 }

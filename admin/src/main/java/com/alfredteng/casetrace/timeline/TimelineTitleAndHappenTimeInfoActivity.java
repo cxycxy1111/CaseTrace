@@ -69,7 +69,7 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
             timeline_id = getIntent().getLongExtra("timeline_id",0);
             et_title.setText(getIntent().getStringExtra("title"));
             et_date.setText(getIntent().getStringExtra("happen_time").split(" ")[0]);
-            et_time.setText(getIntent().getStringExtra("happen_time").split(" ")[2]);
+            et_time.setText(getIntent().getStringExtra("happen_time").split(" ")[1].substring(0,8));
         }
         if (isAdd) {
             initCurrentDateIfAdd();
@@ -184,8 +184,9 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
                     }else {
                         //不是新增的话，循环比对找出id相等的公司
                         for (int i = 0;i < arrayList_event.size();i++) {
-                            if (event_id == Long.parseLong(String.valueOf(arrayList_event.get(i).get("id")))) {
+                                 if (event_id == Long.parseLong(String.valueOf(arrayList_event.get(i).get("id")))) {
                                 sp_event.setSelection(i);
+                                event_id = Long.parseLong(String.valueOf(arrayList_event.get(i).get("id")));
                             }
                         }
                     }
@@ -240,7 +241,11 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
 
         }else {
             String title = et_title.getText().toString();
-            String happen_time = et_date.getText().toString() + " " + et_time.getText().toString() + ":00";
+            String time = et_time.getText().toString();
+            if (time.length() < 8) {
+                time = time + ":00";
+            }
+            String happen_time = et_date.getText().toString() + " " + time;
             url = "/admin/timeline/edit";
             map.put("event",String.valueOf(event_id));
             map.put("title",title);
@@ -253,10 +258,14 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
             public void onRespStatus(String body) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case SUCCESS:
+                        setResult(1);
+                        TimelineTitleAndHappenTimeInfoActivity.this.finish();
                         break;
                     case FAIL:
+                        ViewHandler.toastShow(TimelineTitleAndHappenTimeInfoActivity.this,BaseActivity.OPERATE_FAIL);
                         break;
                     case DUPLICATE:
+                        ViewHandler.toastShow(TimelineTitleAndHappenTimeInfoActivity.this,NetUtil.STATUS_DUPLICATE);
                         break;
                     default:break;
                 }
