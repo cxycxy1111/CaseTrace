@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.alfredteng.casetrace">
 
@@ -38,10 +37,13 @@
         <activity android:name=".product.ProductInfoActivity" />
         <activity android:name=".timeline.TimelineListActivity" />
         <activity android:name=".timeline.TimelineEditActivity" />
-        <activity android:name=".timeline.TimelineTitleAndHappenTimeInfoActivity" />
-        <activity android:name=".timeline.TimelineDetailActivity"/>
+        <activity android:name=".timeline.TimelineEditExtInfoActivity" />
+        <activity android:name=".timeline.TimelineViewActivity" />
         <activity android:name=".user.UserListActivity" />
         <activity android:name=".user.UserInfoActivity" />
+        <activity android:name=".cases.CaseEditActivity" />
+        <activity android:name=".cases.CaseEditExtInfoActivity" />
+        <activity android:name=".cases.CaseViewActivity"></activity>
     </application>
 
 </manifest>

@@ -83,7 +83,7 @@ public class TimelineListActivity extends BaseActivity {
         final HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case EMPTY:
                         arrayList.clear();
@@ -99,12 +99,12 @@ public class TimelineListActivity extends BaseActivity {
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
                 ViewHandler.alertShowAndExitApp(TimelineListActivity.this);
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException {
+            public void onRespMapList(String body,int source) throws IOException {
                 arrayList.clear();
                 adaptor1.notifyDataSetChanged();
                 ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
@@ -128,7 +128,7 @@ public class TimelineListActivity extends BaseActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         Log.d(TAG, "onItemClick: before intent create");
-                        Intent intent = new Intent(TimelineListActivity.this,TimelineDetailActivity.class);
+                        Intent intent = new Intent(TimelineListActivity.this,TimelineViewActivity.class);
                         Log.d(TAG, "onItemClick: after intent created");
                         intent.putExtra("title",arrayList.get(position).get("title"));
                         intent.putExtra("id",Long.parseLong(String.valueOf(arrayList.get(position).get("id"))));
@@ -147,7 +147,7 @@ public class TimelineListActivity extends BaseActivity {
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 arrayList.clear();
                 Map<String,String> map = new HashMap<>();
                 map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ERROR));
@@ -158,7 +158,7 @@ public class TimelineListActivity extends BaseActivity {
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 arrayList.clear();
                 Map<String,String> map = new HashMap<>();
                 map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_NET_ERROR));
@@ -167,7 +167,7 @@ public class TimelineListActivity extends BaseActivity {
                 arrayList.addAll(list);
                 adaptor1.notifyDataSetChanged();
             }
-        },TimelineListActivity.this);
+        },TimelineListActivity.this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 

@@ -81,7 +81,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         NetUtil.reqSendGet(this,url,new HttpCallback(new HttpResultListener() {
 
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 Log.d(TAG, "onRespStatus: " + NetRespStatType.dealWithRespStat(body));
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case SUCCESS:
@@ -98,25 +98,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
 
             }
 
             @Override
-            public void onRespMapList(String body) {
+            public void onRespMapList(String body,int source) {
 
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 tv_tips.setText(NetUtil.CANT_CONNECT_INTERNET);
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 tv_tips.setText(NetUtil.CANT_CONNECT_INTERNET);
             }
-        },LoginActivity.this));
+        },LoginActivity.this,1));
     }
 
     TextWatcher watcher = new TextWatcher() {

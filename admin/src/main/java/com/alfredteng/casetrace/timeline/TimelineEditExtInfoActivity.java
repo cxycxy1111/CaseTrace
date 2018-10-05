@@ -1,12 +1,15 @@
 package com.alfredteng.casetrace.timeline;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity implements View.OnClickListener,View.OnFocusChangeListener{
+public class TimelineEditExtInfoActivity extends BaseActivity implements View.OnClickListener,View.OnFocusChangeListener{
 
     private boolean isAdd = false;
     private int current_year,current_month,current_date,current_hour,current_minute,current_second;
@@ -45,6 +48,7 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
     private long timeline_id = 0;
     private String content = "";
     private String[] keys_event = new String[]{"id","title"};
+    private static final String TAG = "TLTitleAndHappenTimeInfo";
     private Toolbar toolbar;
     private TextView tv_tips;
     private List<String> list_event = new ArrayList<>();
@@ -56,6 +60,7 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
     private TimePickerDialog tpd_happen_time;
 
 
+    @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +71,7 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
         content = getIntent().getStringExtra("content");
         if (!isAdd) {
             event_id = getIntent().getLongExtra("event_id",0);
+            Log.d(TAG, "onCreate: event_id: " + event_id);
             timeline_id = getIntent().getLongExtra("timeline_id",0);
             et_title.setText(getIntent().getStringExtra("title"));
             et_date.setText(getIntent().getStringExtra("happen_time").split(" ")[0]);
@@ -161,11 +167,12 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
         String url = "/admin/event/qry/ignoreStatus";
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
             }
 
+            @SuppressLint("LongLogTag")
             @Override
-            public void onRespMapList(String body) throws IOException {
+            public void onRespMapList(String body,int source) throws IOException {
                 ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
                 arrayList_temp = JsonUtil.strToListMap(body,keys_event);
                 if (arrayList_temp.size() != 0) {
@@ -180,13 +187,17 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
                     adapter_event.notifyDataSetChanged();
                     if (isAdd) {//新增的话，定位到0
                         sp_event.setSelection(0);
-                        event_id = Long.parseLong(String.valueOf(arrayList_event.get(0).get("id")));
+                        event_id = Long.parseLong(String.valueOf(arrayList_temp.get(0).get("id")));
                     }else {
                         //不是新增的话，循环比对找出id相等的公司
-                        for (int i = 0;i < arrayList_event.size();i++) {
-                                 if (event_id == Long.parseLong(String.valueOf(arrayList_event.get(i).get("id")))) {
-                                sp_event.setSelection(i);
-                                event_id = Long.parseLong(String.valueOf(arrayList_event.get(i).get("id")));
+                        for (int i = 0;i < arrayList_temp.size();i++) {
+                            Map<String,String> map = arrayList_temp.get(i);
+                            Object o = map.get("id");
+                            String s = String.valueOf(o);
+                            Long l = Long.parseLong(s);
+                            if (event_id == l) {
+                                 sp_event.setSelection(i);
+                                 event_id = l;
                             }
                         }
                     }
@@ -194,23 +205,24 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
             }
 
             @Override
-            public void onRespError() {
-                ViewHandler.toastShow(TimelineTitleAndHappenTimeInfoActivity.this,NetUtil.UNKNOWN_ERROR+"，无法初始化公司列表");
+            public void onRespError(int source) {
+                ViewHandler.toastShow(TimelineEditExtInfoActivity.this,NetUtil.UNKNOWN_ERROR+"，无法初始化公司列表");
             }
 
             @Override
-            public void onReqFailure(Object object) {
-                ViewHandler.toastShow(TimelineTitleAndHappenTimeInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET + "，无法初始化公司列表");
+            public void onReqFailure(Object object,int source) {
+                ViewHandler.toastShow(TimelineEditExtInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET + "，无法初始化公司列表");
             }
 
             @Override
-            public void onRespSessionExpired() {
-                ViewHandler.alertShowAndExitApp(TimelineTitleAndHappenTimeInfoActivity.this);
+            public void onRespSessionExpired(int source) {
+                ViewHandler.alertShowAndExitApp(TimelineEditExtInfoActivity.this);
             }
-        },this);
+        },this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 
+    @SuppressLint("LongLogTag")
     public void checkBeforeCommit() {
         if (et_title.getText().toString().equals("")) {
             tv_tips.setText("标题不能为空，请补充。");
@@ -220,6 +232,7 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
             tv_tips.setText("日期或事件不能为空，请补充");
             return;
         }
+        Log.d(TAG, "checkBeforeCommit: event_id=" + event_id);
         if (event_id == 0) {
             tv_tips.setText("请先添加事件");
             return;
@@ -255,41 +268,46 @@ public class TimelineTitleAndHappenTimeInfoActivity extends BaseActivity impleme
         }
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case SUCCESS:
                         setResult(1);
-                        TimelineTitleAndHappenTimeInfoActivity.this.finish();
+                        if (isAdd) {
+                            SharedPreferences sharedPreferences = getSharedPreferences("timeline_draft",MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.clear().apply();
+                        }
+                        TimelineEditExtInfoActivity.this.finish();
                         break;
                     case FAIL:
-                        ViewHandler.toastShow(TimelineTitleAndHappenTimeInfoActivity.this,BaseActivity.OPERATE_FAIL);
+                        ViewHandler.toastShow(TimelineEditExtInfoActivity.this,BaseActivity.OPERATE_FAIL);
                         break;
                     case DUPLICATE:
-                        ViewHandler.toastShow(TimelineTitleAndHappenTimeInfoActivity.this,NetUtil.STATUS_DUPLICATE);
+                        ViewHandler.toastShow(TimelineEditExtInfoActivity.this,NetUtil.STATUS_DUPLICATE);
                         break;
                     default:break;
                 }
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException {
+            public void onRespMapList(String body,int source) throws IOException {
             }
 
             @Override
-            public void onRespError() {
-                ViewHandler.toastShow(TimelineTitleAndHappenTimeInfoActivity.this,NetUtil.UNKNOWN_ERROR);
+            public void onRespError(int source) {
+                ViewHandler.toastShow(TimelineEditExtInfoActivity.this,NetUtil.UNKNOWN_ERROR);
             }
 
             @Override
-            public void onReqFailure(Object object) {
-                ViewHandler.toastShow(TimelineTitleAndHappenTimeInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET);
+            public void onReqFailure(Object object,int source) {
+                ViewHandler.toastShow(TimelineEditExtInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET);
             }
 
             @Override
-            public void onRespSessionExpired() {
-                ViewHandler.alertShowAndExitApp(TimelineTitleAndHappenTimeInfoActivity.this);
+            public void onRespSessionExpired(int source) {
+                ViewHandler.alertShowAndExitApp(TimelineEditExtInfoActivity.this);
             }
-        },this);
+        },this,1);
         NetUtil.reqSendPost(this,url,map,callback);
     }
 

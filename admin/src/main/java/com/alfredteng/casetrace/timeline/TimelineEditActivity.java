@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,7 @@ public class TimelineEditActivity extends BaseActivity {
     private String happen_time;
     private Toolbar toolbar;
     private AlfredText knife;
+    private static final String TAG="TimelineEditActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +98,12 @@ public class TimelineEditActivity extends BaseActivity {
     private void submit() {
         String body = knife.toHtml();
         if (body.length() <= 5000) {
-            Intent intent = new Intent(TimelineEditActivity.this,TimelineTitleAndHappenTimeInfoActivity.class);
+            Intent intent = new Intent(TimelineEditActivity.this,TimelineEditExtInfoActivity.class);
             intent.putExtra("content",body);
             intent.putExtra("isAdd",isAdd);
             if(!isAdd) {
                 intent.putExtra("event_id",event_id);
+                Log.d(TAG, "submit: event_id:" + event_id);
                 intent.putExtra("timeline_id",timeline_id);
                 intent.putExtra("title",title);
                 intent.putExtra("happen_time",happen_time);

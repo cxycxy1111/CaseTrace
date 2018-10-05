@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".cases.CaseEditExtInfoActivity">
+
+    <include
+        android:id="@+id/tb_a_case_ext_info_edit"
+        layout="@layout/tile_toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/rl_name_a_case_ext_info_edit"
+        android:layout_below="@id/tb_a_case_ext_info_edit"
+        android:layout_marginTop="@dimen/distance16"
+        style="@style/RelativeLayoutTile">
+        <TextView
+            android:id="@+id/tv_name_a_case_ext_info_edit"
+            style="@style/Paragraph"
+            android:text="事件"
+            android:layout_alignParentLeft="true"
+            android:layout_height="wrap_content" />
+        <Spinner
+            android:id="@+id/sp_name_a_case_ext_info_edit"
+            style="@style/EditTextNormal"
+            android:textAlignment="textEnd"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/distance256"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+    <TextView
+        android:layout_below="@id/rl_name_a_case_ext_info_edit"
+        android:id="@+id/tv_tips"
+        style="@style/TipsNormal" />
+
+</RelativeLayout>

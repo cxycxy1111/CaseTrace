@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".timeline.TimelineDetailActivity">
+    tools:context=".timeline.TimelineViewActivity">
 
     <include
         android:id="@+id/tb_a_timeline_detail"

@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class TimelineDetailActivity extends BaseActivity {
+public class TimelineViewActivity extends BaseActivity {
 
 
     private boolean del = false;
@@ -53,31 +53,31 @@ public class TimelineDetailActivity extends BaseActivity {
         String url = "/admin/timeline/qry/detail?id=" + getIntent().getLongExtra("id",0);
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
 
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException {
+            public void onRespMapList(String body,int source) throws IOException {
                 mapArrayList_content = JsonUtil.strToListMap(body,keys);
                 webView.loadData(mapArrayList_content.get(0).get("content"),"text/html","utf-8");
             }
 
             @Override
-            public void onRespError() {
-                ViewHandler.toastShow(TimelineDetailActivity.this,NetUtil.UNKNOWN_ERROR);
+            public void onRespError(int source) {
+                ViewHandler.toastShow(TimelineViewActivity.this,NetUtil.UNKNOWN_ERROR);
             }
 
             @Override
-            public void onReqFailure(Object object) {
-                ViewHandler.toastShow(TimelineDetailActivity.this,NetUtil.CANT_CONNECT_INTERNET);
+            public void onReqFailure(Object object,int source) {
+                ViewHandler.toastShow(TimelineViewActivity.this,NetUtil.CANT_CONNECT_INTERNET);
             }
 
             @Override
-            public void onRespSessionExpired() {
-                ViewHandler.alertShowAndExitApp(TimelineDetailActivity.this);
+            public void onRespSessionExpired(int source) {
+                ViewHandler.alertShowAndExitApp(TimelineViewActivity.this);
             }
-        },this);
+        },this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 
@@ -116,7 +116,7 @@ public class TimelineDetailActivity extends BaseActivity {
                 break;
             case 101:
                 if (mapArrayList_content.size()!=0) {
-                    Intent intent = new Intent(TimelineDetailActivity.this,TimelineEditActivity.class);
+                    Intent intent = new Intent(TimelineViewActivity.this,TimelineEditActivity.class);
                     intent.putExtra("is_add",false);
                     intent.putExtra("content",mapArrayList_content.get(0).get("content"));
                     intent.putExtra("id",Long.parseLong(String.valueOf(mapArrayList_content.get(0).get("id"))));
@@ -149,7 +149,7 @@ public class TimelineDetailActivity extends BaseActivity {
             case 1:
                 switch (resultCode) {
                     case 1:
-                        TimelineDetailActivity.this.finish();
+                        TimelineViewActivity.this.finish();
                         break;
                     default:break;
                 }
@@ -179,13 +179,15 @@ public class TimelineDetailActivity extends BaseActivity {
         builder.append("?id=").append(id);
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case SUCCESS:
-                        ViewHandler.toastShow(TimelineDetailActivity.this,BaseActivity.OPERATE_SUCCESS);
+                        ViewHandler.toastShow(TimelineViewActivity.this,BaseActivity.OPERATE_SUCCESS);
+                        setResult(1);
+                        TimelineViewActivity.this.finish();
                         break;
                     case FAIL:
-                        ViewHandler.toastShow(TimelineDetailActivity.this,BaseActivity.OPERATE_FAIL);
+                        ViewHandler.toastShow(TimelineViewActivity.this,BaseActivity.OPERATE_FAIL);
                         break;
                     case EMPTY:
                         break;
@@ -194,25 +196,25 @@ public class TimelineDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException {
+            public void onRespMapList(String body,int source) throws IOException {
 
             }
 
             @Override
-            public void onRespError() {
-                ViewHandler.toastShow(TimelineDetailActivity.this,NetUtil.UNKNOWN_ERROR);
+            public void onRespError(int source) {
+                ViewHandler.toastShow(TimelineViewActivity.this,NetUtil.UNKNOWN_ERROR);
             }
 
             @Override
-            public void onReqFailure(Object object) {
-                ViewHandler.toastShow(TimelineDetailActivity.this,NetUtil.CANT_CONNECT_INTERNET);
+            public void onReqFailure(Object object,int source) {
+                ViewHandler.toastShow(TimelineViewActivity.this,NetUtil.CANT_CONNECT_INTERNET);
             }
 
             @Override
-            public void onRespSessionExpired() {
-                ViewHandler.alertShowAndExitApp(TimelineDetailActivity.this);
+            public void onRespSessionExpired(int source) {
+                ViewHandler.alertShowAndExitApp(TimelineViewActivity.this);
             }
-        },this);
+        },this,1);
         NetUtil.reqSendGet(this,builder.toString(),callback);
     }
 }

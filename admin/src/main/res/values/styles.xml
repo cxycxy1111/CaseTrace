@@ -238,18 +238,18 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="RelativeLayoutFirst">
-        <item name="android:background">#fff</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="RelativeLayoutFirst" parent="RelativeLayout">
         <item name="android:layout_marginTop">@dimen/distance32</item>
     </style>
 
-    <style name="RelativeLayoutNormal">
+    <style name="RelativeLayoutNormal" parent="RelativeLayout">
+        <item name="android:layout_marginTop">@dimen/distance1</item>
+    </style>
+
+    <style name="RelativeLayout">
         <item name="android:background">#fff</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/distance1</item>
     </style>
 
     <style name="ImageNormal">

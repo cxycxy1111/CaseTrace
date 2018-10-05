@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.alfredteng.casetrace.admin.AdminInfoActivity;
+import com.alfredteng.casetrace.cases.CaseEditActivity;
 import com.alfredteng.casetrace.company.CompanyInfoActivity;
 import com.alfredteng.casetrace.event.EventInfoActivity;
 import com.alfredteng.casetrace.product.ProductInfoActivity;
@@ -75,6 +76,9 @@ public class MainActivity extends BaseActivity implements GeneralMainFragment.On
                 break;
             case 102:
                 intent = new Intent(this, TimelineEditActivity.class);
+                break;
+            case 103:
+                intent = new Intent(this,CaseEditActivity.class);
                 break;
             case 104:
                 intent = new Intent(this,CompanyInfoActivity.class);

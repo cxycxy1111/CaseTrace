@@ -35,6 +35,8 @@
     <string name="toolbar_tilte_case_passed">已通过的案例</string>
     <string name="toolbar_tilte_case_rejected">未通过的案例</string>
     <string name="toolbar_tilte_case_deleted">已删除的案例</string>
+    <string name="toolbar_tilte_case_add">新增案例</string>
+    <string name="toolbar_tilte_case_edit">编辑案例</string>
 
     <string name="toolbar_tilte_event_unchecked">待审核的事件</string>
     <string name="toolbar_tilte_event_passed">已通过的事件</string>

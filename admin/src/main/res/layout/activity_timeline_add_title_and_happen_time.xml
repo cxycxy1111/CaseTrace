@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".timeline.TimelineTitleAndHappenTimeInfoActivity">
+    tools:context=".timeline.TimelineEditExtInfoActivity">
 
     <include
         android:id="@+id/tb_a_add_timeline_add_title_and_happen_time"

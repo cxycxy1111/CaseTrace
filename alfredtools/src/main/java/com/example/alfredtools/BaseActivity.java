@@ -19,7 +19,9 @@ import com.example.alfredtools.NetUtil;
 import com.example.alfredtools.Tool;
 import com.example.alfredtools.ViewHandler;
 
-public class BaseActivity extends AppCompatActivity {
+import java.io.IOException;
+
+public class BaseActivity extends AppCompatActivity implements HttpResultListener{
 
     public static final String OPERATE_ADD_SUCCESS = "新增成功";
     public static final String OPERATE_ADD_FAIL = "新增失败";
@@ -123,4 +125,28 @@ public class BaseActivity extends AppCompatActivity {
         this.progressBar = progressBar;
     }
 
+    @Override
+    public void onRespStatus(String body,int source) {
+
+    }
+
+    @Override
+    public void onRespMapList(String body,int source) throws IOException {
+
+    }
+
+    @Override
+    public void onRespError(int source) {
+        ViewHandler.toastShow(this,NetUtil.UNKNOWN_ERROR);
+    }
+
+    @Override
+    public void onReqFailure(Object object,int source) {
+        ViewHandler.toastShow(this,NetUtil.CANT_CONNECT_INTERNET);
+    }
+
+    @Override
+    public void onRespSessionExpired(int source) {
+        ViewHandler.alertShowAndExitApp(this);
+    }
 }

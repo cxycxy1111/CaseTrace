@@ -139,7 +139,7 @@ public class UserListActivity extends BaseActivity {
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case EMPTY:
                         arrayList.clear();
@@ -157,12 +157,12 @@ public class UserListActivity extends BaseActivity {
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
                 ViewHandler.alertShowAndExitApp(UserListActivity.this);
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException {
+            public void onRespMapList(String body,int source) throws IOException {
                 if (page_no == 1) {
                     arrayList.clear();
                 }
@@ -258,7 +258,7 @@ public class UserListActivity extends BaseActivity {
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 arrayList.clear();
                 Map<String,String> map = new HashMap<>();
                 map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ERROR));
@@ -269,7 +269,7 @@ public class UserListActivity extends BaseActivity {
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 arrayList.clear();
                 Map<String,String> map = new HashMap<>();
                 map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_NET_ERROR));
@@ -279,7 +279,7 @@ public class UserListActivity extends BaseActivity {
                 adaptor1.notifyDataSetChanged();
 
             }
-        },UserListActivity.this);
+        },UserListActivity.this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 

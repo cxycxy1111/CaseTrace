@@ -86,7 +86,7 @@ public class AdminPwdModifyActivity extends BaseActivity {
         }
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case SUCCESS:
                         ViewHandler.toastShow(AdminPwdModifyActivity.this,BaseActivity.OPERATE_MODIFY_SUCCESS);
@@ -98,25 +98,25 @@ public class AdminPwdModifyActivity extends BaseActivity {
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException {
+            public void onRespMapList(String body,int source) throws IOException {
 
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 ViewHandler.toastShow(AdminPwdModifyActivity.this,NetUtil.UNKNOWN_ERROR);
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 ViewHandler.toastShow(AdminPwdModifyActivity.this,NetUtil.CANT_CONNECT_INTERNET);
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
                 ViewHandler.alertShowAndExitApp(AdminPwdModifyActivity.this);
             }
-        },this);
+        },this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 

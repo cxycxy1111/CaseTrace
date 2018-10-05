@@ -158,12 +158,12 @@ public class UserInfoActivity extends BaseActivity {
         String url = "/admin/user/qry/detail?id=" + id;
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
 
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException {
+            public void onRespMapList(String body,int source) throws IOException {
                 arrayList = JsonUtil.strToListMap(body,str_keys);
                 Map<String,String> map = new HashMap<>();
                 map = arrayList.get(0);
@@ -183,20 +183,20 @@ public class UserInfoActivity extends BaseActivity {
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 ViewHandler.toastShow(UserInfoActivity.this, NetUtil.UNKNOWN_ERROR);
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 ViewHandler.toastShow(UserInfoActivity.this, NetUtil.CANT_CONNECT_INTERNET);
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
                 ViewHandler.alertShowAndExitApp(UserInfoActivity.this);
             }
-        },UserInfoActivity.this);
+        },UserInfoActivity.this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 
@@ -262,7 +262,7 @@ public class UserInfoActivity extends BaseActivity {
     private void submit(String url) {
         HttpCallback HttpCallback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case DUPLICATE:
                         ViewHandler.toastShow(UserInfoActivity.this,"用户名重复，请重新输入");
@@ -279,25 +279,25 @@ public class UserInfoActivity extends BaseActivity {
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException {
+            public void onRespMapList(String body,int source) throws IOException {
 
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 ViewHandler.toastShow(UserInfoActivity.this,NetUtil.UNKNOWN_ERROR);
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 ViewHandler.toastShow(UserInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET);
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
                 ViewHandler.alertShowAndExitApp(UserInfoActivity.this);
             }
-        },this);
+        },this,1);
         NetUtil.reqSendGet(this,url,HttpCallback);
     }
 

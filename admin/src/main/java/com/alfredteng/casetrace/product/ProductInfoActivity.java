@@ -173,7 +173,7 @@ public class ProductInfoActivity extends BaseActivity implements AdapterView.OnI
         String url = "/admin/product/qry/detail?id=" + id;
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case STATUS_SESSION_EXPIRED:
                         ViewHandler.alertShowAndExitApp(ProductInfoActivity.this);
@@ -182,12 +182,12 @@ public class ProductInfoActivity extends BaseActivity implements AdapterView.OnI
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
                 ViewHandler.alertShowAndExitApp(ProductInfoActivity.this);
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException{
+            public void onRespMapList(String body,int source) throws IOException{
                 arrayList = JsonUtil.strToListMap(body,keys);
                 editText.setText(arrayList.get(0).get("name"));
                 switch (Integer.parseInt(String.valueOf(arrayList.get(0).get("status")))){
@@ -211,17 +211,17 @@ public class ProductInfoActivity extends BaseActivity implements AdapterView.OnI
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 Toast.makeText(ProductInfoActivity.this,NetUtil.UNKNOWN_ERROR,Toast.LENGTH_SHORT).show();
                 ProductInfoActivity.this.finish();
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 Toast.makeText(ProductInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET,Toast.LENGTH_SHORT).show();
                 ProductInfoActivity.this.finish();
             }
-        },ProductInfoActivity.this);
+        },ProductInfoActivity.this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 
@@ -229,7 +229,7 @@ public class ProductInfoActivity extends BaseActivity implements AdapterView.OnI
         String url = "/admin/company/qry/ignoreStatus";
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case EMPTY:
                         break;
@@ -238,7 +238,7 @@ public class ProductInfoActivity extends BaseActivity implements AdapterView.OnI
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException {
+            public void onRespMapList(String body,int source) throws IOException {
                 list_company.clear();
                 arryList_company.clear();
                 ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
@@ -262,20 +262,20 @@ public class ProductInfoActivity extends BaseActivity implements AdapterView.OnI
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 ViewHandler.toastShow(ProductInfoActivity.this,NetUtil.UNKNOWN_ERROR);
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 ViewHandler.toastShow(ProductInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET);
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
                 ViewHandler.alertShowAndExitApp(ProductInfoActivity.this);
             }
-        },ProductInfoActivity.this);
+        },this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 
@@ -295,7 +295,7 @@ public class ProductInfoActivity extends BaseActivity implements AdapterView.OnI
             HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
                 @Override
-                public void onRespStatus(String body) {
+                public void onRespStatus(String body,int source) {
                     Log.d(TAG, "onRespStatus: ");
                     if (isAdd) {
                         switch (NetRespStatType.dealWithRespStat(body)) {
@@ -330,25 +330,25 @@ public class ProductInfoActivity extends BaseActivity implements AdapterView.OnI
                 }
 
                 @Override
-                public void onRespMapList(String body) {
+                public void onRespMapList(String body,int source) {
                     Log.d(TAG, "onRespMapList: ");
                 }
 
                 @Override
-                public void onRespError() {
+                public void onRespError(int source) {
                     tv_tips.setText(TIPS_RESP_ERROR);
                 }
 
                 @Override
-                public void onRespSessionExpired() {
+                public void onRespSessionExpired(int source) {
                     ViewHandler.alertShowAndExitApp(ProductInfoActivity.this);
                 }
 
                 @Override
-                public void onReqFailure(Object object) {
+                public void onReqFailure(Object object,int source) {
                     tv_tips.setText(NetUtil.CANT_CONNECT_INTERNET);
                 }
-            },ProductInfoActivity.this);
+            },ProductInfoActivity.this,1);
             NetUtil.reqSendGet(this,url,callback);
         }
     }
@@ -372,7 +372,7 @@ public class ProductInfoActivity extends BaseActivity implements AdapterView.OnI
 
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 if (NetRespStatType.dealWithRespStat(body).equals(NetRespStatType.STATUS_SESSION_EXPIRED)) {
                     ViewHandler.alertShowAndExitApp(ProductInfoActivity.this);
                     return;
@@ -430,27 +430,27 @@ public class ProductInfoActivity extends BaseActivity implements AdapterView.OnI
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
 
             }
 
             @Override
-            public void onRespMapList(String body) {
+            public void onRespMapList(String body,int source) {
 
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 Toast.makeText(ProductInfoActivity.this,NetUtil.UNKNOWN_ERROR,Toast.LENGTH_SHORT).show();
                 ProductInfoActivity.this.finish();
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 Toast.makeText(ProductInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET,Toast.LENGTH_SHORT).show();
                 ProductInfoActivity.this.finish();
             }
-        },ProductInfoActivity.this);
+        },ProductInfoActivity.this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 

@@ -130,7 +130,7 @@ public class CompanyInfoActivity extends BaseActivity {
         String url = "/admin/company/qry/detail?id=" + id;
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case STATUS_SESSION_EXPIRED:
                         ViewHandler.alertShowAndExitApp(CompanyInfoActivity.this);
@@ -139,12 +139,12 @@ public class CompanyInfoActivity extends BaseActivity {
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
 
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException{
+            public void onRespMapList(String body,int source) throws IOException{
                 ArrayList<Map<String,String>> arrayList = new ArrayList<>();
                 arrayList = JsonUtil.strToListMap(body,keys);
                 editText.setText(arrayList.get(0).get("name"));
@@ -168,17 +168,17 @@ public class CompanyInfoActivity extends BaseActivity {
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 Toast.makeText(CompanyInfoActivity.this,NetUtil.UNKNOWN_ERROR,Toast.LENGTH_SHORT).show();
                 CompanyInfoActivity.this.finish();
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 Toast.makeText(CompanyInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET,Toast.LENGTH_SHORT).show();
                 CompanyInfoActivity.this.finish();
             }
-        },CompanyInfoActivity.this);
+        },CompanyInfoActivity.this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 
@@ -198,7 +198,7 @@ public class CompanyInfoActivity extends BaseActivity {
             HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
                 @Override
-                public void onRespStatus(String body) {
+                public void onRespStatus(String body,int source) {
                     Log.d(TAG, "onRespStatus: ");
                     if (isAdd) {
                         switch (NetRespStatType.dealWithRespStat(body)) {
@@ -233,25 +233,25 @@ public class CompanyInfoActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onRespMapList(String body) {
+                public void onRespMapList(String body,int source) {
                     Log.d(TAG, "onRespMapList: ");
                 }
 
                 @Override
-                public void onRespError() {
+                public void onRespError(int source) {
                     tv_tips.setText(TIPS_RESP_ERROR);
                 }
 
                 @Override
-                public void onRespSessionExpired() {
+                public void onRespSessionExpired(int source) {
                     ViewHandler.alertShowAndExitApp(CompanyInfoActivity.this);
                 }
 
                 @Override
-                public void onReqFailure(Object object) {
+                public void onReqFailure(Object object,int source) {
                     tv_tips.setText(NetUtil.CANT_CONNECT_INTERNET);
                 }
-            },CompanyInfoActivity.this);
+            },CompanyInfoActivity.this,1);
             NetUtil.reqSendGet(this,url,callback);
         }
     }
@@ -275,7 +275,7 @@ public class CompanyInfoActivity extends BaseActivity {
 
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 if (NetRespStatType.dealWithRespStat(body).equals(NetRespStatType.STATUS_SESSION_EXPIRED)) {
                     ViewHandler.alertShowAndExitApp(CompanyInfoActivity.this);
                     return;
@@ -333,27 +333,27 @@ public class CompanyInfoActivity extends BaseActivity {
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
 
             }
 
             @Override
-            public void onRespMapList(String body) {
+            public void onRespMapList(String body,int source) {
 
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 Toast.makeText(CompanyInfoActivity.this,NetUtil.UNKNOWN_ERROR,Toast.LENGTH_SHORT).show();
                 CompanyInfoActivity.this.finish();
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 Toast.makeText(CompanyInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET,Toast.LENGTH_SHORT).show();
                 CompanyInfoActivity.this.finish();
             }
-        },CompanyInfoActivity.this);
+        },CompanyInfoActivity.this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 

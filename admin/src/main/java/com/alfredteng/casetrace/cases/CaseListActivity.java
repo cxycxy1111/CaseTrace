@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CaseListActivity extends BaseActivity {
+public class CaseListActivity extends BaseActivity implements HttpResultListener{
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
@@ -63,79 +63,7 @@ public class CaseListActivity extends BaseActivity {
             }
         });
         recyclerView.setAdapter(adaptor1);
-        HttpCallback callback = new HttpCallback(new HttpResultListener() {
-
-            @Override
-            public void onRespStatus(String body) {
-                switch (NetRespStatType.dealWithRespStat(body)) {
-                    case EMPTY:
-                        arrayList.clear();
-                        if (arrayList.size() == 0){
-                            Map<String,String> map = new HashMap<>();
-                            map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_EMPTY));
-                            arrayList.add(map);
-                        }
-                        adaptor1.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onRespSessionExpired() {
-                ViewHandler.alertShowAndExitApp(CaseListActivity.this);
-            }
-
-            @Override
-            public void onRespMapList(String body) throws IOException {
-                arrayList.clear();
-                adaptor1.notifyDataSetChanged();
-                ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
-                arrayList_temp = JsonUtil.strToListMap(body,str_key_case);
-                str_body_key = "title";
-                for (int i = 0;i < arrayList_temp.size();i++) {
-                    Map<String,String> map = new HashMap<>();
-                    map = arrayList_temp.get(i);
-                    map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ADMIN));
-                    arrayList_temp.set(i,map);
-                }
-                if (arrayList_temp.size() == 0){
-                    Map<String,String> map = new HashMap<>();
-                    map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_EMPTY));
-                    arrayList_temp.add(map);
-                }
-                arrayList.addAll(arrayList_temp);
-                adaptor1.notifyDataSetChanged();
-                adaptor1.setStr_body_key(str_body_key);
-                adaptor1.setOnItemClickListener(new GeneralRecyclerViewAdaptor.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onRespError() {
-                arrayList.clear();
-                Map<String,String> map = new HashMap<>();
-                map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ERROR));
-                ArrayList<Map<String,String>> list = new ArrayList<>();
-                list.add(map);
-                arrayList.addAll(list);
-                adaptor1.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onReqFailure(Object object) {
-                arrayList.clear();
-                Map<String,String> map = new HashMap<>();
-                map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_NET_ERROR));
-                ArrayList<Map<String,String>> list = new ArrayList<>();
-                list.add(map);
-                arrayList.addAll(list);
-                adaptor1.notifyDataSetChanged();
-            }
-        },CaseListActivity.this);
-        NetUtil.reqSendGet(this,url,callback);
+        NetUtil.reqSendGet(this,url,new HttpCallback(this,this,1));
     }
 
     private void initToolbar(int entity_type,int req_type) {
@@ -185,4 +113,98 @@ public class CaseListActivity extends BaseActivity {
         return true;
     }
 
+    @Override
+    public void onRespStatus(String body, int source) {
+        super.onRespStatus(body, source);
+        if (source == 1) {
+            switch (NetRespStatType.dealWithRespStat(body)) {
+                case EMPTY:
+                    arrayList.clear();
+                    if (arrayList.size() == 0){
+                        Map<String,String> map = new HashMap<>();
+                        map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_EMPTY));
+                        arrayList.add(map);
+                    }
+                    adaptor1.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    public void onRespMapList(String body, int source) throws IOException {
+        super.onRespMapList(body, source);
+        if (source == 1) {
+            arrayList.clear();
+            adaptor1.notifyDataSetChanged();
+            ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
+            arrayList_temp = JsonUtil.strToListMap(body,str_key_case);
+            str_body_key = "title";
+            for (int i = 0;i < arrayList_temp.size();i++) {
+                Map<String,String> map = new HashMap<>();
+                map = arrayList_temp.get(i);
+                map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ADMIN));
+                arrayList_temp.set(i,map);
+            }
+            if (arrayList_temp.size() == 0){
+                Map<String,String> map = new HashMap<>();
+                map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_EMPTY));
+                arrayList_temp.add(map);
+            }
+            arrayList.addAll(arrayList_temp);
+            adaptor1.notifyDataSetChanged();
+            adaptor1.setStr_body_key(str_body_key);
+            adaptor1.setOnItemClickListener(new GeneralRecyclerViewAdaptor.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Intent intent = new Intent(CaseListActivity.this,CaseViewActivity.class);
+                    ArrayList<String> arrayList_intent = new ArrayList<>();
+
+                    arrayList_intent.add(0,String.valueOf(arrayList.get(position).get("id")));
+                    arrayList_intent.add(1,String.valueOf(arrayList.get(position).get("status")));
+                    switch (req_type) {//del
+                        case DELETED:
+                            arrayList_intent.add(2,String.valueOf(true));
+                            break;
+                        default:
+                            arrayList_intent.add(2,String.valueOf(false));
+                            break;
+                    }
+                    intent.putExtra("is_add",false);
+                    intent.putStringArrayListExtra("data",arrayList_intent);
+                    startActivityForResult(intent,1);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onRespError(int source) {
+        if (source == 1) {
+            arrayList.clear();
+            Map<String,String> map = new HashMap<>();
+            map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ERROR));
+            ArrayList<Map<String,String>> list = new ArrayList<>();
+            list.add(map);
+            arrayList.addAll(list);
+            adaptor1.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onReqFailure(Object object, int source) {
+        if (source == 1) {
+            arrayList.clear();
+            Map<String,String> map = new HashMap<>();
+            map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_NET_ERROR));
+            ArrayList<Map<String,String>> list = new ArrayList<>();
+            list.add(map);
+            arrayList.addAll(list);
+            adaptor1.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onRespSessionExpired(int source) {
+        super.onRespSessionExpired(source);
+    }
 }

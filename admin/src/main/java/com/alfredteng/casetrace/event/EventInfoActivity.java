@@ -242,7 +242,7 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
         String url = "/admin/event/qry/detail?id=" + id;
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
                     case STATUS_SESSION_EXPIRED:
                         ViewHandler.alertShowAndExitApp(EventInfoActivity.this);
@@ -252,12 +252,12 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
                 ViewHandler.alertShowAndExitApp(EventInfoActivity.this);
             }
 
             @Override
-            public void onRespMapList(String body) throws IOException{
+            public void onRespMapList(String body,int source) throws IOException{
                 ArrayList<Map<String,String>> arrayList = new ArrayList<>();
                 arrayList = JsonUtil.strToListMap(body,keys);
                 et_name.setText(arrayList.get(0).get("name"));
@@ -281,17 +281,17 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 Toast.makeText(EventInfoActivity.this,NetUtil.UNKNOWN_ERROR,Toast.LENGTH_SHORT).show();
                 EventInfoActivity.this.finish();
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 Toast.makeText(EventInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET,Toast.LENGTH_SHORT).show();
                 EventInfoActivity.this.finish();
             }
-        },EventInfoActivity.this);
+        },EventInfoActivity.this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 
@@ -314,7 +314,7 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
             HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
                 @Override
-                public void onRespStatus(String body) {
+                public void onRespStatus(String body,int source) {
                     Log.d(TAG, "onRespStatus: ");
                     if (isAdd) {
                         switch (NetRespStatType.dealWithRespStat(body)) {
@@ -351,25 +351,25 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
                 }
 
                 @Override
-                public void onRespMapList(String body) {
+                public void onRespMapList(String body,int source) {
                     Log.d(TAG, "onRespMapList: ");
                 }
 
                 @Override
-                public void onRespError() {
+                public void onRespError(int source) {
                     tv_tips.setText(TIPS_RESP_ERROR);
                 }
 
                 @Override
-                public void onRespSessionExpired() {
+                public void onRespSessionExpired(int source) {
                     ViewHandler.alertShowAndExitApp(EventInfoActivity.this);
                 }
 
                 @Override
-                public void onReqFailure(Object object) {
+                public void onReqFailure(Object object,int source) {
                     tv_tips.setText(NetUtil.CANT_CONNECT_INTERNET);
                 }
-            },EventInfoActivity.this);
+            },EventInfoActivity.this,1);
             NetUtil.reqSendGet(this,url,callback);
         }
     }
@@ -393,7 +393,7 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
 
         HttpCallback callback = new HttpCallback(new HttpResultListener() {
             @Override
-            public void onRespStatus(String body) {
+            public void onRespStatus(String body,int source) {
                 if (NetRespStatType.dealWithRespStat(body).equals(NetRespStatType.STATUS_SESSION_EXPIRED)) {
                     ViewHandler.alertShowAndExitApp(EventInfoActivity.this);
                     return;
@@ -451,27 +451,27 @@ public class EventInfoActivity extends BaseActivity implements View.OnClickListe
             }
 
             @Override
-            public void onRespSessionExpired() {
+            public void onRespSessionExpired(int source) {
 
             }
 
             @Override
-            public void onRespMapList(String body) {
+            public void onRespMapList(String body,int source) {
 
             }
 
             @Override
-            public void onRespError() {
+            public void onRespError(int source) {
                 Toast.makeText(EventInfoActivity.this,NetUtil.UNKNOWN_ERROR,Toast.LENGTH_SHORT).show();
                 EventInfoActivity.this.finish();
             }
 
             @Override
-            public void onReqFailure(Object object) {
+            public void onReqFailure(Object object,int source) {
                 Toast.makeText(EventInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET,Toast.LENGTH_SHORT).show();
                 EventInfoActivity.this.finish();
             }
-        },EventInfoActivity.this);
+        },EventInfoActivity.this,1);
         NetUtil.reqSendGet(this,url,callback);
     }
 
