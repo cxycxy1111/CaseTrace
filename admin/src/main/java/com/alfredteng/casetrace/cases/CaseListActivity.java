@@ -29,8 +29,10 @@ public class CaseListActivity extends BaseActivity implements HttpResultListener
     private RecyclerView recyclerView;
     private ArrayList<Map<String,String>> arrayList = new ArrayList<>();
     private GeneralRecyclerViewAdaptor adaptor1;
+    private boolean isLoadEnd = false;
     private int entity_type = 0;
     private int req_type = 0;
+    private int page_no = 1;
     private String url = "";
     private String str_body_key = "";
     private static final String TAG = "RecyclerView";
@@ -42,6 +44,7 @@ public class CaseListActivity extends BaseActivity implements HttpResultListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view_list);
+        recyclerView = (RecyclerView)findViewById(R.id.rv_a_rv_list);
         entity_type = getIntent().getIntExtra("entity_type",0);
         req_type = getIntent().getIntExtra("req_type",0);
         initToolbar(entity_type,req_type);
@@ -50,10 +53,11 @@ public class CaseListActivity extends BaseActivity implements HttpResultListener
     }
 
     private void req(final int req_type) {
-        Map<String,String> map = new HashMap<>();
-        map.put("holder_type","-1");
-        arrayList.add(map);
-        recyclerView = (RecyclerView)findViewById(R.id.rv_a_rv_list);
+        if (page_no == 1) {
+            Map<String,String> map = new HashMap<>();
+            map.put("holder_type","-1");
+            arrayList.add(map);
+        }
         adaptor1 = new GeneralRecyclerViewAdaptor(arrayList,CaseListActivity.this,str_body_key);
         recyclerView.setLayoutManager(new LinearLayoutManager(CaseListActivity.this,LinearLayoutManager.VERTICAL,false));
 
@@ -63,32 +67,41 @@ public class CaseListActivity extends BaseActivity implements HttpResultListener
             }
         });
         recyclerView.setAdapter(adaptor1);
+        StringBuilder builder = new StringBuilder();
+        builder.append("/admin/case/qry/");
+        switch (req_type) {
+            case PASSED:
+                builder.append("normal?page_no=").append(page_no);
+                break;
+            case UNCHECKED:
+                builder.append("unchecked?page_no=").append(page_no);
+                break;
+            case REJECTED:
+                builder.append("rejected?page_no=").append(page_no);
+                break;
+            case DELETED:
+                builder.append("deleted?page_no=").append(page_no);
+                break;
+        }
+        url = builder.toString();
         NetUtil.reqSendGet(this,url,new HttpCallback(this,this,1));
     }
 
     private void initToolbar(int entity_type,int req_type) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("/admin/");
-        builder.append("case/qry/");
         switch (req_type) {
             case PASSED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_passed,R.id.toolbar_general);
-                builder.append("normal?page_no=1");
                 break;
             case UNCHECKED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_unchecked,R.id.toolbar_general);
-                builder.append("unchecked?page_no=1");
                 break;
             case REJECTED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_rejected,R.id.toolbar_general);
-                builder.append("rejected?page_no=1");
                 break;
             case DELETED:
                 ViewHandler.initToolbar(this, toolbar, R.string.toolbar_tilte_case_deleted,R.id.toolbar_general);
-                builder.append("deleted?page_no=1");
                 break;
         }
-        url = builder.toString();
     }
 
     @Override
@@ -98,6 +111,7 @@ public class CaseListActivity extends BaseActivity implements HttpResultListener
         recyclerView.setLayoutManager(null);
         recyclerView.setAdapter(null);
         adaptor1.setOnItemClickListener(null);
+        page_no = 1;
         req(req_type);
     }
 
@@ -134,8 +148,9 @@ public class CaseListActivity extends BaseActivity implements HttpResultListener
     public void onRespMapList(String body, int source) throws IOException {
         super.onRespMapList(body, source);
         if (source == 1) {
-            arrayList.clear();
-            adaptor1.notifyDataSetChanged();
+            if (page_no == 1) {
+                arrayList.clear();
+            }
             ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
             arrayList_temp = JsonUtil.strToListMap(body,str_key_case);
             str_body_key = "title";
@@ -149,6 +164,19 @@ public class CaseListActivity extends BaseActivity implements HttpResultListener
                 Map<String,String> map = new HashMap<>();
                 map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_EMPTY));
                 arrayList_temp.add(map);
+            }
+            if (arrayList_temp.size() >= BaseActivity.LOAD_NUM) {
+                Map<String,String> map1 = new HashMap<>();
+                map1.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_LOAD_MORE));
+                arrayList_temp.add(map1);
+            }else {
+                if (page_no != 1) {
+                    arrayList.remove(arrayList.size()-1);
+                }
+                Map<String,String> map1 = new HashMap<>();
+                map1.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_END));
+                arrayList_temp.add(map1);
+                isLoadEnd = true;
             }
             arrayList.addAll(arrayList_temp);
             adaptor1.notifyDataSetChanged();
@@ -174,6 +202,23 @@ public class CaseListActivity extends BaseActivity implements HttpResultListener
                     startActivityForResult(intent,1);
                 }
             });
+            if (isLoadEnd) {
+                adaptor1.setOnLoadMoreClickListener(new GeneralRecyclerViewAdaptor.OnLoadMoreClickListener() {
+                    @Override
+                    public void onLoadMoreClick(View view, int position) {
+
+                    }
+                });
+            }else {
+                adaptor1.setOnLoadMoreClickListener(new GeneralRecyclerViewAdaptor.OnLoadMoreClickListener() {
+                    @Override
+                    public void onLoadMoreClick(View view, int position) {
+                        req(req_type);
+                    }
+                });
+            }
+            page_no = page_no+1;
+            adaptor1.notifyDataSetChanged();
         }
     }
 

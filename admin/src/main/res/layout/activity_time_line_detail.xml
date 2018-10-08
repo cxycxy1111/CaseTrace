@@ -10,11 +10,186 @@
         android:id="@+id/tb_a_timeline_detail"
         layout="@layout/tile_toolbar"/>
 
-    <WebView
-        android:id="@+id/wv_a_timeline_detail"
+    <ScrollView
         android:layout_below="@id/tb_a_timeline_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </WebView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <WebView
+                android:id="@+id/wv_a_timeline_detail"
+                android:layout_below="@id/tb_a_timeline_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </WebView>
+            <RelativeLayout
+                android:id="@+id/rl_id_a_timeline_view"
+                style="@style/RelativeLayoutNormal">
+                <TextView
+                    android:id="@+id/tv_id_a_timeline_view"
+                    style="@style/Paragraph"
+                    android:text="ID"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/et_id_a_timeline_view"
+                    android:text="@string/app_name"
+                    style="@style/HintNormal"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_title_a_timeline_view"
+                style="@style/RelativeLayoutNormal">
+                <TextView
+                    android:id="@+id/tv_title_a_timeline_view"
+                    style="@style/Paragraph"
+                    android:text="标题"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/et_title_a_timeline_view"
+                    android:text="@string/app_name"
+                    style="@style/HintNormal"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_event_id_a_timeline_view"
+                style="@style/RelativeLayoutFirst">
+                <TextView
+                    android:id="@+id/tv_event_id_a_timeline_view"
+                    style="@style/Paragraph"
+                    android:text="事件ID"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/et_event_id_a_timeline_view"
+                    android:text="@string/app_name"
+                    style="@style/HintNormal"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_event_title_a_timeline_view"
+                style="@style/RelativeLayoutNormal">
+                <TextView
+                    android:id="@+id/tv_event_title_a_timeline_view"
+                    style="@style/Paragraph"
+                    android:text="事件标题"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/et_event_title_a_timeline_view"
+                    android:text="@string/app_name"
+                    style="@style/HintNormal"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_happen_time_a_timeline_view"
+                style="@style/RelativeLayoutNormal">
+                <TextView
+                    android:id="@+id/tv_happen_time_a_timeline_view"
+                    style="@style/Paragraph"
+                    android:text="发生时间"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/et_happen_time_a_timeline_view"
+                    android:text="@string/app_name"
+                    style="@style/HintNormal"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_creator_a_timeline_view"
+                style="@style/RelativeLayoutFirst">
+                <TextView
+                    android:id="@+id/tv_creator_a_timeline_view"
+                    style="@style/Paragraph"
+                    android:text="创建者ID"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/et_creator_a_timeline_view"
+                    android:text="@string/app_name"
+                    style="@style/HintNormal"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_creator_type_a_timeline_view"
+                style="@style/RelativeLayoutNormal">
+                <TextView
+                    android:id="@+id/tv_creator_type_a_timeline_view"
+                    style="@style/Paragraph"
+                    android:text="创建者类型"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/et_creator_type_a_timeline_view"
+                    android:text="@string/app_name"
+                    style="@style/HintNormal"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_nick_name_a_timeline_view"
+                style="@style/RelativeLayoutNormal">
+                <TextView
+                    android:id="@+id/tv_nick_name_a_timeline_view"
+                    style="@style/Paragraph"
+                    android:text="创建者昵称"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/et_nick_name_a_timeline_view"
+                    android:text="@string/app_name"
+                    style="@style/HintNormal"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_create_time_a_timeline_view"
+                style="@style/RelativeLayoutNormal">
+                <TextView
+                    android:id="@+id/tv_create_time_a_timeline_view"
+                    style="@style/Paragraph"
+                    android:text="创建时间"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/et_create_time_a_timeline_view"
+                    android:text="@string/app_name"
+                    style="@style/HintNormal"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_del_a_timeline_view"
+                style="@style/RelativeLayoutFirst">
+                <TextView
+                    android:id="@+id/tv_del_a_timeline_view"
+                    style="@style/Paragraph"
+                    android:text="是否删除"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/et_del_a_timeline_view"
+                    android:text="@string/app_name"
+                    style="@style/HintNormal"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_status_a_timeline_view"
+                style="@style/RelativeLayoutLast">
+                <TextView
+                    android:id="@+id/tv_status_a_timeline_view"
+                    style="@style/Paragraph"
+                    android:text="状态"
+                    android:layout_alignParentLeft="true"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/et_status_a_timeline_view"
+                    android:text="@string/app_name"
+                    style="@style/HintNormal"
+                    android:textAlignment="textEnd" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

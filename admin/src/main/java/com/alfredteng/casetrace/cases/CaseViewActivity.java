@@ -16,6 +16,7 @@ import com.example.alfredtools.HttpResultListener;
 import com.example.alfredtools.JsonUtil;
 import com.example.alfredtools.NetRespStatType;
 import com.example.alfredtools.NetUtil;
+import com.example.alfredtools.Tool;
 import com.example.alfredtools.ViewHandler;
 
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class CaseViewActivity extends BaseActivity implements HttpResultListener
         id = Long.parseLong(arrayList_intent.get(0));
         status = Integer.parseInt(arrayList_intent.get(1));
         del = Boolean.parseBoolean(arrayList_intent.get(2));
-        ViewHandler.initToolbarWithBackButton(this,toolbar,"案例详情",R.id.toolbar_general);
+        ViewHandler.initToolbarWithBackButton(this,toolbar, R.string.toolbar_tilte_case_info,R.id.toolbar_general);
         NetUtil.reqSendGet(this,"/admin/case/qry/detail?id=" + arrayList_intent.get(0),new HttpCallback(this,this,
                 SOURCE_LOAD_DETAIL));
     }
@@ -80,21 +81,23 @@ public class CaseViewActivity extends BaseActivity implements HttpResultListener
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(1,101,1,"修改");
+        menu.add(1,101,1,R.string.option_menu_edit);
         if (del) {
-            menu.add(1,102,2,"恢复");
+            menu.add(1,102,2,R.string.option_menu_recover);
         }else {
-            menu.add(1,103,3,"删除");
+            menu.add(1,103,3,R.string.option_menu_delete);
             switch (status) {
                 case BaseActivity.PASSED:
-                    menu.add(1,104,4,"拒绝");
+                    menu.add(1,104,4,R.string.option_menu_reject);
                     break;
                 case BaseActivity.UNCHECKED:
-                    menu.add(1,105,5,"通过");
-                    menu.add(1,104,6,"拒绝");
+                    menu.add(1,105,5,R.string.option_menu_pass);
+                    menu.add(1,104,6,R.string.option_menu_reject);
+                    menu.add(1,103,7,R.string.option_menu_delete);
                     break;
                 case BaseActivity.REJECTED:
-                    menu.add(1,105,7,"通过");
+                    menu.add(1,105,7,R.string.option_menu_pass);
+                    menu.add(1,103,8,R.string.option_menu_delete);
                     break;
                 default:break;
             }
@@ -164,7 +167,7 @@ public class CaseViewActivity extends BaseActivity implements HttpResultListener
                     content = mapArrayList_case.get(0).get("content");
                     id = Long.valueOf(String.valueOf(mapArrayList_case.get(0).get("id")));
                     event_id = Long.valueOf(String.valueOf(mapArrayList_case.get(0).get("event_id")));
-                    webView.loadData(content,"text/html","utf-8");
+                    webView.loadData(str_html_prefix + content + str_html_suffix,"text/html","utf-8");
                     arrayList_intent.add(3,String.valueOf(event_id));
                     arrayList_intent.add(4,content);
 
@@ -190,6 +193,23 @@ public class CaseViewActivity extends BaseActivity implements HttpResultListener
                     tv_downvote_count.setText(s4);
                     tv_read_count.setText(s5);
 
+                    if (del) {
+                        tv_del.setText(R.string.entity_del_deleted);
+                    }else {
+                        tv_del.setText(R.string.entity_del_undeleted);
+                    }
+                    switch (status) {
+                        case BaseActivity.REJECTED:
+                            tv_status.setText(R.string.entity_status_rejected);
+                            break;
+                        case BaseActivity.PASSED:
+                            tv_status.setText(R.string.entity_status_passed);
+                            break;
+                        case BaseActivity.UNCHECKED:
+                            tv_status.setText(R.string.entity_status_unchecked);
+                            break;
+                        default:break;
+                    }
                 }
                 break;
             default:break;

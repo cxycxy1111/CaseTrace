@@ -242,6 +242,10 @@
         <item name="android:layout_marginTop">@dimen/distance32</item>
     </style>
 
+    <style name="RelativeLayoutLast" parent="RelativeLayout">
+        <item name="android:layout_marginBottom">@dimen/distance32</item>
+    </style>
+
     <style name="RelativeLayoutNormal" parent="RelativeLayout">
         <item name="android:layout_marginTop">@dimen/distance1</item>
     </style>

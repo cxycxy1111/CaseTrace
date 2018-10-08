@@ -92,7 +92,7 @@ public class CaseEditExtInfoActivity extends BaseActivity implements HttpResultL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(1,101,1,"保存");
+        menu.add(1,101,1,R.string.option_menu_submit);
         menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
     }
@@ -137,7 +137,13 @@ public class CaseEditExtInfoActivity extends BaseActivity implements HttpResultL
             map.put("id",String.valueOf(case_id));
         }
         event_id = Long.valueOf(String.valueOf(mapArrayList_event.get(selected_pos).get("id")));
-        String tilte = content.substring(0,20);
+        String tilte = "";
+        if (content.length() <= 20) {
+            int length = content.length();
+            tilte = content.substring(0,length-1);
+        }else {
+            tilte = content.substring(0,20);
+        }
         map.put("event",String.valueOf(event_id));
         map.put("title",tilte);
         map.put("content",content);
@@ -232,7 +238,6 @@ public class CaseEditExtInfoActivity extends BaseActivity implements HttpResultL
         Object o = mapArrayList_event.get(position).get("id");
         String s = String.valueOf(o);
         event_id = Long.parseLong(s);
-
     }
 
     @Override

@@ -131,7 +131,7 @@ public class AlfredParser {
     // remove some tag because we don't need them in Knife.
     private static void withinParagraph(StringBuilder out, Spanned text, int start, int end, int nl) {
         int next;
-
+        out.append("<p>");
         for (int i = start; i < end; i = next) {
             next = text.nextSpanTransition(i, end, CharacterStyle.class);
 
@@ -202,9 +202,9 @@ public class AlfredParser {
             }
         }
 
-        for (int i = 0; i < nl; i++) {
-            out.append("<br>");
-        }
+        //for (int i = 0; i <= nl; i++) {
+            out.append("</p>");
+        //}
     }
 
     private static void withinStyle(StringBuilder out, CharSequence text, int start, int end) {

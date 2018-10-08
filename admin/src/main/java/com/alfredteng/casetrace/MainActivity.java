@@ -20,6 +20,7 @@ import com.alfredteng.casetrace.product.ProductInfoActivity;
 import com.alfredteng.casetrace.timeline.TimelineEditActivity;
 import com.alfredteng.casetrace.user.UserInfoActivity;
 import com.alfredteng.casetrace.util.GeneralMainFragment;
+import com.alfredteng.casetrace.util.Test;
 import com.example.alfredtools.BaseActivity;
 import com.example.alfredtools.MainActivityPagerAdapter;
 import com.example.alfredtools.ViewHandler;
@@ -64,6 +65,7 @@ public class MainActivity extends BaseActivity implements GeneralMainFragment.On
         menu.add(2,105,5,"新增产品");
         menu.add(3,106,6,"新增管理员");
         menu.add(3,107,7,"新增用户");
+        menu.add(3,108,8,"测试");
         return true;
     }
 
@@ -92,6 +94,10 @@ public class MainActivity extends BaseActivity implements GeneralMainFragment.On
             case 107:
                 intent = new Intent(this, UserInfoActivity.class);
                 break;
+            case 108:
+                intent = new Intent(this, Test.class);
+                break;
+            default:break;
         }
         if (intent != null) {
             intent.putExtra("is_add",true);

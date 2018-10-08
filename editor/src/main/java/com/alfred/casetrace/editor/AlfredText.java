@@ -19,6 +19,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.text.TextWatcher;
 
+import com.example.alfredtools.Tool;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -829,7 +831,7 @@ public class AlfredText extends EditText implements TextWatcher {
     }
 
     public String toHtml() {
-        return AlfredParser.toHtml(getEditableText());
+        return Tool.transformUnicodeToStr(AlfredParser.toHtml(getEditableText()));
     }
 
     protected void switchToAlfredStyle(Editable editable, int start, int end) {

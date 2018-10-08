@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.alfredteng.casetrace.R;
 import com.example.alfredtools.BaseActivity;
@@ -18,6 +20,7 @@ import com.example.alfredtools.ViewHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class TimelineViewActivity extends BaseActivity {
@@ -26,6 +29,7 @@ public class TimelineViewActivity extends BaseActivity {
     private boolean del = false;
     private int status;
     private long id = 0;
+    private TextView tv_id,tv_title,tv_event_id,tv_event_title,tv_happen_time,tv_creator,tv_creator_type,tv_creator_nick_name,tv_create_time,tv_del,tv_status;
     private Toolbar toolbar;
     private WebView webView;
     private ArrayList<Map<String,String>> mapArrayList_content = new ArrayList<>();
@@ -47,6 +51,17 @@ public class TimelineViewActivity extends BaseActivity {
     private void initViews() {
         toolbar = (Toolbar)findViewById(R.id.toolbar_general);
         webView = (WebView)findViewById(R.id.wv_a_timeline_detail);
+        tv_id = (TextView)findViewById(R.id.et_id_a_timeline_view);
+        tv_title = (TextView)findViewById(R.id.et_title_a_timeline_view);
+        tv_event_id = (TextView)findViewById(R.id.et_event_id_a_timeline_view);
+        tv_event_title = (TextView)findViewById(R.id.et_event_title_a_timeline_view);
+        tv_happen_time = (TextView)findViewById(R.id.et_happen_time_a_timeline_view);
+        tv_create_time = (TextView)findViewById(R.id.et_create_time_a_timeline_view);
+        tv_creator = (TextView)findViewById(R.id.et_creator_a_timeline_view);
+        tv_creator_type = (TextView)findViewById(R.id.et_creator_type_a_timeline_view);
+        tv_creator_nick_name = (TextView)findViewById(R.id.et_nick_name_a_timeline_view);
+        tv_del = (TextView)findViewById(R.id.et_del_a_timeline_view);
+        tv_status = (TextView)findViewById(R.id.et_status_a_timeline_view);
     }
 
     private void init() {
@@ -60,7 +75,48 @@ public class TimelineViewActivity extends BaseActivity {
             @Override
             public void onRespMapList(String body,int source) throws IOException {
                 mapArrayList_content = JsonUtil.strToListMap(body,keys);
-                webView.loadData(mapArrayList_content.get(0).get("content"),"text/html","utf-8");
+                Map<String,String> map = new HashMap<>();
+                map = mapArrayList_content.get(0);
+                webView.loadData(str_html_prefix + map.get("content") + str_html_suffix,"text/html","utf-8");
+                Object o1 = map.get("id");
+                tv_id.setText(String.valueOf(o1));
+
+                Object o2= map.get("event_id");
+                tv_event_id.setText(String.valueOf(o2));
+
+                Object o3 = map.get("status");
+                status = Integer.parseInt(String.valueOf(o3));
+                if (status == PASSED) {
+                    tv_status.setText(R.string.entity_status_passed);
+                }else if (status == REJECTED) {
+                    tv_status.setText(R.string.entity_status_rejected);
+                }else if (status == UNCHECKED) {
+                    tv_status.setText(R.string.entity_status_unchecked);
+                }
+                Object o4 = map.get("del");
+                if (Boolean.parseBoolean(String.valueOf(o4))) {
+                    tv_del.setText(R.string.entity_del_deleted);
+                }else {
+                    tv_del.setText(R.string.entity_del_undeleted);
+                }
+
+                Object o5 = map.get("creator");
+                tv_creator.setText(String.valueOf(o5));
+
+                Object o6 = map.get("creator_type");
+                int i = Integer.parseInt(String.valueOf(o6));
+                if (i == 0) {
+                    tv_creator_type.setText("管理员");
+                }else {
+                    tv_creator_type.setText("用户");
+                }
+
+                tv_title.setText(map.get("title"));
+                tv_event_title.setText(map.get("event_title"));
+                tv_happen_time.setText(map.get("happen_time").substring(0,map.get("happen_time").length()-2));
+                tv_create_time.setText(map.get("create_time").substring(0,map.get("create_time").length()-2));
+                tv_creator_nick_name.setText(map.get("nick_name"));
+
             }
 
             @Override

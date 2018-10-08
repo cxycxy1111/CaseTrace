@@ -138,6 +138,7 @@ public class CompanyListActivity extends BaseActivity {
                     isLoadEnd = true;
                 }
                 arrayList.addAll((page_no-1)*BaseActivity.LOAD_NUM,arrayList_temp);
+                adaptor1.notifyDataSetChanged();
                 adaptor1.setStr_body_key(str_body_key);
                 adaptor1.setOnItemClickListener(new GeneralRecyclerViewAdaptor.OnItemClickListener() {
                     @Override

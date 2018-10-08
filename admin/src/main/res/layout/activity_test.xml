@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".util.Test">
+
+    <include
+        android:id="@+id/tb_a_test"
+        layout="@layout/tile_toolbar"/>
+
+
+    <EditText
+        android:id="@+id/et_unicode"
+        android:hint="请输入unicode"
+        style="@style/EditTextNormal" />
+
+    <Button
+        android:id="@+id/btn_unicode"
+        android:text="转换为汉字"
+        style="@style/ButtonNormal" />
+
+    <TextView
+        android:id="@+id/tv_unicode"
+        android:text="@string/example"
+        style="@style/Paragraph" />
+
+    <EditText
+        android:id="@+id/et_zh"
+        android:layout_marginTop="@dimen/distance96"
+        android:hint="请输入汉字"
+        style="@style/EditTextNormal" />
+
+    <Button
+        android:id="@+id/btn_zh"
+        android:text="转换为unicode十进制"
+        style="@style/ButtonNormal" />
+
+    <TextView
+        android:id="@+id/tv_zh"
+        android:text="@string/example"
+        style="@style/Paragraph" />
+
+</LinearLayout>

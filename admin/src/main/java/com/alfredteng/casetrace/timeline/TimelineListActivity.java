@@ -24,14 +24,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TimelineListActivity extends BaseActivity {
+public class TimelineListActivity extends BaseActivity implements HttpResultListener{
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private ArrayList<Map<String,String>> arrayList = new ArrayList<>();
     private GeneralRecyclerViewAdaptor adaptor1;
+    private boolean isLoadEnd = false;
     private int entity_type = 0;
     private int req_type = 0;
+    private int page_no = 1;
+    private static final int SOURCE_LOAD_LIST = 1;
     private String url = "";
     private String str_body_key = "";
     private static final String TAG = "RecyclerView";
@@ -55,19 +58,20 @@ public class TimelineListActivity extends BaseActivity {
         builder.append("timeline/qry/");
         switch (req_type) {
             case PASSED:
-                builder.append("normal?page_no=1");
+                builder.append("normal?page_no=").append(page_no);
                 break;
             case UNCHECKED:
-                builder.append("unchecked?page_no=1");
+                builder.append("unchecked?page_no=").append(page_no);
                 break;
             case REJECTED:
-                builder.append("rejected?page_no=1");
+                builder.append("rejected?page_no=").append(page_no);
                 break;
             case DELETED:
-                builder.append("deleted?page_no=1");
+                builder.append("deleted?page_no=").append(page_no);
                 break;
         }
         url = builder.toString();
+
         Map<String,String> map = new HashMap<>();
         map.put("holder_type","-1");
         arrayList.add(map);
@@ -80,95 +84,8 @@ public class TimelineListActivity extends BaseActivity {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(TimelineListActivity.this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(adaptor1);
-        final HttpCallback callback = new HttpCallback(new HttpResultListener() {
 
-            @Override
-            public void onRespStatus(String body,int source) {
-                switch (NetRespStatType.dealWithRespStat(body)) {
-                    case EMPTY:
-                        arrayList.clear();
-                        if (arrayList.size() == 0){
-                            Map<String,String> map = new HashMap<>();
-                            map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_EMPTY));
-                            arrayList.add(map);
-                        }
-                        adaptor1.notifyDataSetChanged();
-                        break;
-                    default:break;
-                }
-            }
-
-            @Override
-            public void onRespSessionExpired(int source) {
-                ViewHandler.alertShowAndExitApp(TimelineListActivity.this);
-            }
-
-            @Override
-            public void onRespMapList(String body,int source) throws IOException {
-                arrayList.clear();
-                adaptor1.notifyDataSetChanged();
-                ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
-                arrayList_temp = JsonUtil.strToListMap(body,str_key_timeline);
-                str_body_key = "title";
-                for (int i = 0;i < arrayList_temp.size();i++) {
-                    Map<String,String> map = new HashMap<>();
-                    map = arrayList_temp.get(i);
-                    map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ADMIN));
-                    arrayList_temp.set(i,map);
-                }
-                if (arrayList_temp.size() == 0){
-                    Map<String,String> map = new HashMap<>();
-                    map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_EMPTY));
-                    arrayList_temp.add(map);
-                }
-                arrayList.addAll(arrayList_temp);
-                adaptor1.notifyDataSetChanged();
-                adaptor1.setStr_body_key(str_body_key);
-                adaptor1.setOnItemClickListener(new GeneralRecyclerViewAdaptor.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Log.d(TAG, "onItemClick: before intent create");
-                        Intent intent = new Intent(TimelineListActivity.this,TimelineViewActivity.class);
-                        Log.d(TAG, "onItemClick: after intent created");
-                        intent.putExtra("title",arrayList.get(position).get("title"));
-                        intent.putExtra("id",Long.parseLong(String.valueOf(arrayList.get(position).get("id"))));
-                        intent.putExtra("status",Integer.parseInt(String.valueOf(arrayList.get(position).get("status"))));
-                        switch (req_type) {
-                            case DELETED:
-                                intent.putExtra("del",true);
-                                break;
-                            default:
-                                intent.putExtra("del",false);
-                                break;
-                        }
-                        startActivityForResult(intent,1);
-                    }
-                });
-            }
-
-            @Override
-            public void onRespError(int source) {
-                arrayList.clear();
-                Map<String,String> map = new HashMap<>();
-                map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ERROR));
-                ArrayList<Map<String,String>> list = new ArrayList<>();
-                list.add(map);
-                arrayList.addAll(list);
-                adaptor1.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onReqFailure(Object object,int source) {
-                arrayList.clear();
-                Map<String,String> map = new HashMap<>();
-                map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_NET_ERROR));
-                ArrayList<Map<String,String>> list = new ArrayList<>();
-                list.add(map);
-                arrayList.addAll(list);
-                adaptor1.notifyDataSetChanged();
-            }
-        },TimelineListActivity.this,1);
-        NetUtil.reqSendGet(this,url,callback);
+        NetUtil.reqSendGet(this,url,new HttpCallback(this,this,SOURCE_LOAD_LIST));
     }
 
     private void initToolbar(int entity_type,int req_type) {
@@ -195,6 +112,7 @@ public class TimelineListActivity extends BaseActivity {
         recyclerView.setLayoutManager(null);
         recyclerView.setAdapter(null);
         adaptor1.setOnItemClickListener(null);
+        page_no = 1;
         req(req_type);
     }
 
@@ -210,4 +128,126 @@ public class TimelineListActivity extends BaseActivity {
         return true;
     }
 
+    @Override
+    public void onRespStatus(String body, int source) {
+        super.onRespStatus(body, source);
+        switch (NetRespStatType.dealWithRespStat(body)) {
+            case EMPTY:
+                arrayList.clear();
+                if (arrayList.size() == 0){
+                    Map<String,String> map = new HashMap<>();
+                    map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_EMPTY));
+                    arrayList.add(map);
+                }
+                adaptor1.notifyDataSetChanged();
+                break;
+            default:break;
+        }
+    }
+
+    @Override
+    public void onRespMapList(String body, int source) throws IOException {
+        super.onRespMapList(body, source);
+        if (source == SOURCE_LOAD_LIST) {
+            if (page_no == 1) {
+                arrayList.clear();
+            }
+            ArrayList<Map<String,String>> arrayList_temp = new ArrayList<>();
+            arrayList_temp = JsonUtil.strToListMap(body,str_key_timeline);
+            str_body_key = "title";
+            for (int i = 0;i < arrayList_temp.size();i++) {
+                Map<String,String> map = new HashMap<>();
+                map = arrayList_temp.get(i);
+                map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ADMIN));
+                arrayList_temp.set(i,map);
+            }
+            if (arrayList_temp.size() == 0){
+                Map<String,String> map = new HashMap<>();
+                map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_EMPTY));
+                arrayList_temp.add(map);
+            }
+            if (arrayList_temp.size() >= BaseActivity.LOAD_NUM) {
+                Map<String,String> map1 = new HashMap<>();
+                map1.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_LOAD_MORE));
+                arrayList_temp.add(map1);
+            }else {
+                if (page_no != 1) {
+                    arrayList.remove(arrayList.size()-1);
+                }
+                Map<String,String> map1 = new HashMap<>();
+                map1.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_END));
+                arrayList_temp.add(map1);
+                isLoadEnd = true;
+            }
+            arrayList.addAll(arrayList_temp);
+            adaptor1.notifyDataSetChanged();
+            adaptor1.setStr_body_key(str_body_key);
+            adaptor1.setOnItemClickListener(new GeneralRecyclerViewAdaptor.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Log.d(TAG, "onItemClick: before intent create");
+                    Intent intent = new Intent(TimelineListActivity.this,TimelineViewActivity.class);
+                    Log.d(TAG, "onItemClick: after intent created");
+                    intent.putExtra("title",arrayList.get(position).get("title"));
+                    intent.putExtra("id",Long.parseLong(String.valueOf(arrayList.get(position).get("id"))));
+                    intent.putExtra("status",Integer.parseInt(String.valueOf(arrayList.get(position).get("status"))));
+                    switch (req_type) {
+                        case DELETED:
+                            intent.putExtra("del",true);
+                            break;
+                        default:
+                            intent.putExtra("del",false);
+                            break;
+                    }
+                    startActivityForResult(intent,1);
+                }
+            });
+            if (isLoadEnd) {
+                adaptor1.setOnLoadMoreClickListener(new GeneralRecyclerViewAdaptor.OnLoadMoreClickListener() {
+                    @Override
+                    public void onLoadMoreClick(View view, int position) {
+
+                    }
+                });
+            }else {
+                adaptor1.setOnLoadMoreClickListener(new GeneralRecyclerViewAdaptor.OnLoadMoreClickListener() {
+                    @Override
+                    public void onLoadMoreClick(View view, int position) {
+                        req(req_type);
+                    }
+                });
+            }
+            page_no =page_no + 1;
+            adaptor1.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onRespError(int source) {
+        super.onRespError(source);
+        arrayList.clear();
+        Map<String,String> map = new HashMap<>();
+        map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_ERROR));
+        ArrayList<Map<String,String>> list = new ArrayList<>();
+        list.add(map);
+        arrayList.addAll(list);
+        adaptor1.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onReqFailure(Object object, int source) {
+        super.onReqFailure(object, source);
+        arrayList.clear();
+        Map<String,String> map = new HashMap<>();
+        map.put("holder_type",String.valueOf(GeneralRecyclerViewAdaptor.TYPE_NET_ERROR));
+        ArrayList<Map<String,String>> list = new ArrayList<>();
+        list.add(map);
+        arrayList.addAll(list);
+        adaptor1.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRespSessionExpired(int source) {
+        super.onRespSessionExpired(source);
+    }
 }

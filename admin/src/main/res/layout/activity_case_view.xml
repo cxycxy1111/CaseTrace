@@ -19,10 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <WebView
-                android:id="@+id/wv_a_case_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
             <RelativeLayout
                 android:id="@+id/rl_id_a_case_view"
                 style="@style/RelativeLayoutNormal">
@@ -49,10 +45,18 @@
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/et_title_a_case_view"
+                    android:layout_toRightOf="@id/tv_title_a_case_view"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:text="@string/app_name"
                     style="@style/HintNormal"
                     android:textAlignment="textEnd" />
             </RelativeLayout>
+            <WebView
+                android:id="@+id/wv_a_case_view"
+                android:layout_marginTop="@dimen/distance1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
             <RelativeLayout
                 android:id="@+id/rl_event_id_a_case_view"
                 style="@style/RelativeLayoutFirst">

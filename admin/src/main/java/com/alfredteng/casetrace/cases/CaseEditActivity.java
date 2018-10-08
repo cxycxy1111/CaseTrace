@@ -81,7 +81,7 @@ public class CaseEditActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(1,101,1,"保存");
+        menu.add(1,101,1,R.string.option_menu_submit);
         menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
     }
@@ -133,13 +133,13 @@ public class CaseEditActivity extends BaseActivity {
         }else {
             if (body.length() <= 5000) {
                 Intent intent = new Intent(this,CaseEditExtInfoActivity.class);
-                arrayList_intent.add(4,body);
                 intent.putExtra("content",body);
                 intent.putExtra("is_add",isAdd);
                 if (isAdd) {
                     saveBeforeFinish();//保存
                     startActivityForResult(intent,1);
                 }else {
+                    arrayList_intent.add(4,body);
                     intent.putStringArrayListExtra("data",arrayList_intent);
                     if (isLoaded) {
                         startActivityForResult(intent,1);

@@ -17,6 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Tool {
 
@@ -194,4 +196,27 @@ public class Tool {
         return !string.contains("0");
     }
 
+    /**
+     * 获取Text
+     * @param context
+     * @param resId
+     * @return
+     */
+    public static CharSequence getText(Context context,int resId) {
+        return context.getResources().getText(resId);
+    }
+
+    public static String transformUnicodeToStr(String unicodeStr) {
+        String regExp = "&#\\d*;";
+        Matcher m = Pattern.compile(regExp).matcher(unicodeStr);
+        StringBuffer sb = new StringBuffer();
+        while (m.find()) {
+            String s = m.group(0);
+            s = s.replaceAll("(&#)|;", "");
+            char c = (char) Integer.parseInt(s);
+            m.appendReplacement(sb, Character.toString(c));
+        }
+        m.appendTail(sb);
+        return sb.toString();
+    }
 }

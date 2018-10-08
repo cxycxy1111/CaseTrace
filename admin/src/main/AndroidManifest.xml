@@ -43,7 +43,8 @@
         <activity android:name=".user.UserInfoActivity" />
         <activity android:name=".cases.CaseEditActivity" />
         <activity android:name=".cases.CaseEditExtInfoActivity" />
-        <activity android:name=".cases.CaseViewActivity"></activity>
+        <activity android:name=".cases.CaseViewActivity" />
+        <activity android:name=".util.Test"></activity>
     </application>
 
 </manifest>

@@ -45,7 +45,7 @@ public class NetUtil {
     //使用家里LINUX机器网络进行调试
     private static final String SERVER_SQ_LINUX= "http://10.0.0.8:8080";
     //使用冯静霞家的网络进行调试
-    private static final String SERVER_FJX_HOME = "http://192.168.0.104:8080";
+    private static final String SERVER_FJX_HOME = "http://192.168.0.106:8080";
     //使用省移动网络进行调试
     private static final String SERVER_CHINA_MOBILE = "http://10.167.151.237:8080/Sailfish";
     //使用iPhone手机网络进行调试
@@ -53,7 +53,7 @@ public class NetUtil {
     //使用正式服务器进行调试
     private static final String SERVER_ALIYUN = "http://39.104.72.97:8080/Sailfish";
 
-    private static final String SELECTED_HOST = SERVER_SQ_LINUX;
+    private static final String SELECTED_HOST = SERVER_FJX_HOME;
 
     private static OkHttpClient client;
 

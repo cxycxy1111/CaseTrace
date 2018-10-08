@@ -73,6 +73,9 @@ public class BaseActivity extends AppCompatActivity implements HttpResultListene
     public static final int ENTITY_USER = 6;
     public static final int ENTITY_ADMIN = 7;
 
+    public String str_html_prefix = "<html lang=\"en\"><head><style type=\"text/css\">p {line-height: 150%;color:#111;font-size:18px;}</style></head><body>";
+    public String str_html_suffix = "</body></html>";
+
     public static final int LOAD_NUM = 10;
 
 

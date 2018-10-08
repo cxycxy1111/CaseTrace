@@ -65,7 +65,7 @@ public class TimelineEditExtInfoActivity extends BaseActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline_add_title_and_happen_time);
-        ViewHandler.initToolbarWithBackButton(this,toolbar,"编辑时间线信息",R.id.toolbar_general);
+        ViewHandler.initToolbarWithBackButton(this,toolbar,R.string.toolbar_tilte_timeline_edit,R.id.toolbar_general);
         initViews();
         isAdd = getIntent().getBooleanExtra("isAdd",false);
         content = getIntent().getStringExtra("content");
@@ -113,7 +113,7 @@ public class TimelineEditExtInfoActivity extends BaseActivity implements View.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(1,101,1,"保存");
+        menu.add(1,101,1,R.string.option_menu_submit);
         menu.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
     }
