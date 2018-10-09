@@ -53,7 +53,7 @@ public class NetUtil {
     //使用正式服务器进行调试
     private static final String SERVER_ALIYUN = "http://39.104.72.97:8080/Sailfish";
 
-    private static final String SELECTED_HOST = SERVER_FJX_HOME;
+    private static final String SELECTED_HOST = SERVER_SQ_LINUX;
 
     private static OkHttpClient client;
 

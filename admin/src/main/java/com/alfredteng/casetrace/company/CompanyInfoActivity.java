@@ -23,6 +23,7 @@ import com.example.alfredtools.NetRespStatType;
 import com.example.alfredtools.NetUtil;
 import com.example.alfredtools.ViewHandler;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -39,7 +40,11 @@ public class CompanyInfoActivity extends BaseActivity {
     private boolean isAdd = false;
     private long id = 0;
     private int req_type;
+    private int operate_type;
     private String[] keys = new String[]{"id","name","del","status","creator","creator_type","nick_name","icon"};
+    private static final int SOURCE_LOAD = 1;
+    private static final int SOURCE_SUBMIT = 2;
+    private static final int SOURCE_OPERATE = 3;
     private static final String TAG = "CompanyInfoActivity";
     private static final String TIPS_EMPTY = "公司名称不允许为空，请输入";
     private static final String TIPS_RESP_ERROR = "未知错误";
@@ -69,7 +74,8 @@ public class CompanyInfoActivity extends BaseActivity {
         if (!isAdd) {
             id = getIntent().getLongExtra("id",0);
             req_type = getIntent().getIntExtra("req_type",0);
-            load();
+            String url = "/admin/company/qry/detail?id=" + id;
+            NetUtil.reqSendGet(this,url,new HttpCallback(this,this,SOURCE_LOAD));
         }
     }
 
@@ -103,83 +109,122 @@ public class CompanyInfoActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                break;
-            case 101:
-                save();
-                break;
-            case 102:
-                operate(OP_DELETE);
-                break;
-            case 103:
-                operate(OP_REJECT);
-                break;
-            case 104:
-                operate(OP_PASS);
-                break;
-            case 105:
-                operate(OP_RECOVER);
-                break;
+            case android.R.id.home: this.finish();break;
+            case 101: save();break;
+            case 102: operate(OP_DELETE);break;
+            case 103: operate(OP_REJECT);break;
+            case 104: operate(OP_PASS);break;
+            case 105: operate(OP_RECOVER);break;
             default:break;
         }
         return true;
     }
 
-    private void load() {
-        String url = "/admin/company/qry/detail?id=" + id;
-        HttpCallback callback = new HttpCallback(new HttpResultListener() {
-            @Override
-            public void onRespStatus(String body,int source) {
+    @Override
+    public void onRespStatus(String body, int source) {
+        super.onRespStatus(body, source);
+        if (source == SOURCE_SUBMIT) {
+            if (isAdd) {
                 switch (NetRespStatType.dealWithRespStat(body)) {
+                    case SUCCESS:
+                        ViewHandler.toastShow(CompanyInfoActivity.this, BaseActivity.OPERATE_ADD_SUCCESS);
+                        CompanyInfoActivity.this.finish();
+                        break;
+                    case DUPLICATE:
+                        tv_tips.setText(TIPS_DUPLICATE);
+                        break;
+                    case FAIL:
+                        tv_tips.setText(BaseActivity.OPERATE_ADD_FAIL);
+                        break;
                     case STATUS_SESSION_EXPIRED:
                         ViewHandler.alertShowAndExitApp(CompanyInfoActivity.this);
                         break;
                 }
-            }
-
-            @Override
-            public void onRespSessionExpired(int source) {
-
-            }
-
-            @Override
-            public void onRespMapList(String body,int source) throws IOException{
-                ArrayList<Map<String,String>> arrayList = new ArrayList<>();
-                arrayList = JsonUtil.strToListMap(body,keys);
-                editText.setText(arrayList.get(0).get("name"));
-                switch (Integer.parseInt(String.valueOf(arrayList.get(0).get("status")))){
-                    case PASSED:
-                        tv_status.setText("已通过");
+            }else {
+                switch (NetRespStatType.dealWithRespStat(body)) {
+                    case SUCCESS:
+                        ViewHandler.toastShow(CompanyInfoActivity.this, BaseActivity.OPERATE_MODIFY_SUCCESS);
+                        CompanyInfoActivity.this.finish();
                         break;
-                    case UNCHECKED:
-                        tv_status.setText("待审核");
+                    case DUPLICATE:
+                        tv_tips.setText(TIPS_DUPLICATE);
                         break;
-                    case REJECTED:
-                        tv_status.setText("已拒绝");
+                    case FAIL:
+                        tv_tips.setText(OPERATE_MODIFY_FAIL);
                         break;
                 }
-                boolean b = Boolean.parseBoolean(String.valueOf(arrayList.get(0).get("del")));
-                if (b) {
-                    tv_del.setText("已删除");
-                }else {
-                    tv_del.setText("未删除");
-                }
             }
+        }else if (source == SOURCE_LOAD) {
 
-            @Override
-            public void onRespError(int source) {
-                Toast.makeText(CompanyInfoActivity.this,NetUtil.UNKNOWN_ERROR,Toast.LENGTH_SHORT).show();
-                CompanyInfoActivity.this.finish();
+        }else if (source == SOURCE_OPERATE) {
+            switch (NetRespStatType.dealWithRespStat(body)) {
+                case SUCCESS:
+                    switch (operate_type) {
+                        case OP_DELETE:
+                            ViewHandler.toastShow(CompanyInfoActivity.this,"已删除");
+                            break;
+                        case OP_PASS:
+                            ViewHandler.toastShow(CompanyInfoActivity.this,"已通过");
+                            break;
+                        case OP_RECOVER:
+                            ViewHandler.toastShow(CompanyInfoActivity.this,"已恢复");
+                            break;
+                        case OP_REJECT:
+                            ViewHandler.toastShow(CompanyInfoActivity.this,"已拒绝");
+                            break;
+                    }
+                    setResult(1);
+                    CompanyInfoActivity.this.finish();
+                    break;
+                case FAIL:
+                    ViewHandler.toastShow(CompanyInfoActivity.this,"请求失败");
+                    break;
             }
+        }
+    }
 
-            @Override
-            public void onReqFailure(Object object,int source) {
-                Toast.makeText(CompanyInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET,Toast.LENGTH_SHORT).show();
-                CompanyInfoActivity.this.finish();
+    @Override
+    public void onRespMapList(String body, int source) throws IOException {
+        super.onRespMapList(body, source);
+        if (source == SOURCE_LOAD) {
+            ArrayList<Map<String,String>> arrayList = new ArrayList<>();
+            arrayList = JsonUtil.strToListMap(body,keys);
+            editText.setText(arrayList.get(0).get("name"));
+            switch (Integer.parseInt(String.valueOf(arrayList.get(0).get("status")))){
+                case PASSED:
+                    tv_status.setText("已通过");
+                    break;
+                case UNCHECKED:
+                    tv_status.setText("待审核");
+                    break;
+                case REJECTED:
+                    tv_status.setText("已拒绝");
+                    break;
             }
-        },CompanyInfoActivity.this,1);
-        NetUtil.reqSendGet(this,url,callback);
+            boolean b = Boolean.parseBoolean(String.valueOf(arrayList.get(0).get("del")));
+            if (b) {
+                tv_del.setText("已删除");
+            }else {
+                tv_del.setText("未删除");
+            }
+        }else if (source == SOURCE_SUBMIT) {
+
+        }
+    }
+
+    @Override
+    public void onRespError(int source) {
+        super.onRespError(source);
+    }
+
+    @Override
+    public void onReqFailure(Object object, int source) {
+        super.onReqFailure(object, source);
+    }
+
+    @Override
+    public void onRespSessionExpired(int source) {
+        super.onRespSessionExpired(source);
     }
 
     private void save() {
@@ -195,69 +240,13 @@ public class CompanyInfoActivity extends BaseActivity {
                     url = "/admin/company/edit?name=" + name + "&id=" + id;
                 }
             }
-            HttpCallback callback = new HttpCallback(new HttpResultListener() {
-
-                @Override
-                public void onRespStatus(String body,int source) {
-                    Log.d(TAG, "onRespStatus: ");
-                    if (isAdd) {
-                        switch (NetRespStatType.dealWithRespStat(body)) {
-                            case SUCCESS:
-                                ViewHandler.toastShow(CompanyInfoActivity.this, BaseActivity.OPERATE_ADD_SUCCESS);
-                                CompanyInfoActivity.this.finish();
-                                break;
-                            case DUPLICATE:
-                                tv_tips.setText(TIPS_DUPLICATE);
-                                break;
-                            case FAIL:
-                                tv_tips.setText(BaseActivity.OPERATE_ADD_FAIL);
-                                break;
-                            case STATUS_SESSION_EXPIRED:
-                                ViewHandler.alertShowAndExitApp(CompanyInfoActivity.this);
-                                break;
-                        }
-                    }else {
-                        switch (NetRespStatType.dealWithRespStat(body)) {
-                            case SUCCESS:
-                                ViewHandler.toastShow(CompanyInfoActivity.this, BaseActivity.OPERATE_MODIFY_SUCCESS);
-                                CompanyInfoActivity.this.finish();
-                                break;
-                            case DUPLICATE:
-                                tv_tips.setText(TIPS_DUPLICATE);
-                                break;
-                            case FAIL:
-                                tv_tips.setText(OPERATE_MODIFY_FAIL);
-                                break;
-                        }
-                    }
-                }
-
-                @Override
-                public void onRespMapList(String body,int source) {
-                    Log.d(TAG, "onRespMapList: ");
-                }
-
-                @Override
-                public void onRespError(int source) {
-                    tv_tips.setText(TIPS_RESP_ERROR);
-                }
-
-                @Override
-                public void onRespSessionExpired(int source) {
-                    ViewHandler.alertShowAndExitApp(CompanyInfoActivity.this);
-                }
-
-                @Override
-                public void onReqFailure(Object object,int source) {
-                    tv_tips.setText(NetUtil.CANT_CONNECT_INTERNET);
-                }
-            },CompanyInfoActivity.this,1);
-            NetUtil.reqSendGet(this,url,callback);
+            NetUtil.reqSendGet(this,url,new HttpCallback(this,this,SOURCE_SUBMIT));
         }
     }
 
     private void operate(final int operate_type) {
         String url = "";
+        this.operate_type = operate_type;
         switch (operate_type) {
             case OP_DELETE:
                 url = "/admin/company/delete?id=" + id;
@@ -272,89 +261,7 @@ public class CompanyInfoActivity extends BaseActivity {
                 url = "/admin/company/reject?id=" + id;
                 break;
         }
-
-        HttpCallback callback = new HttpCallback(new HttpResultListener() {
-            @Override
-            public void onRespStatus(String body,int source) {
-                if (NetRespStatType.dealWithRespStat(body).equals(NetRespStatType.STATUS_SESSION_EXPIRED)) {
-                    ViewHandler.alertShowAndExitApp(CompanyInfoActivity.this);
-                    return;
-                }
-                switch (operate_type) {
-                    case OP_DELETE:
-                        switch (NetRespStatType.dealWithRespStat(body)) {
-                            case FAIL:
-                                ViewHandler.toastShow(CompanyInfoActivity.this,"请求失败");
-                                break;
-                            case SUCCESS:
-                                ViewHandler.toastShow(CompanyInfoActivity.this,"已删除");
-                                setResult(1);
-                                CompanyInfoActivity.this.finish();
-                                break;
-                        }
-                        break;
-                    case OP_PASS:
-                        switch (NetRespStatType.dealWithRespStat(body)) {
-                            case FAIL:
-                                ViewHandler.toastShow(CompanyInfoActivity.this,"请求失败");
-                                break;
-                            case SUCCESS:
-                                ViewHandler.toastShow(CompanyInfoActivity.this,"已通过");
-                                setResult(1);
-                                CompanyInfoActivity.this.finish();
-                                break;
-                        }
-                        break;
-                    case OP_RECOVER:
-                        switch (NetRespStatType.dealWithRespStat(body)) {
-                            case FAIL:
-                                ViewHandler.toastShow(CompanyInfoActivity.this,"请求失败");
-                                break;
-                            case SUCCESS:
-                                ViewHandler.toastShow(CompanyInfoActivity.this,"已恢复");
-                                setResult(1);
-                                CompanyInfoActivity.this.finish();
-                                break;
-                        }
-                        break;
-                    case OP_REJECT:
-                        switch (NetRespStatType.dealWithRespStat(body)) {
-                            case FAIL:
-                                ViewHandler.toastShow(CompanyInfoActivity.this,"请求失败");
-                                break;
-                            case SUCCESS:
-                                ViewHandler.toastShow(CompanyInfoActivity.this,"已拒绝");
-                                setResult(1);
-                                CompanyInfoActivity.this.finish();
-                                break;
-                        }
-                        break;
-                }
-            }
-
-            @Override
-            public void onRespSessionExpired(int source) {
-
-            }
-
-            @Override
-            public void onRespMapList(String body,int source) {
-
-            }
-
-            @Override
-            public void onRespError(int source) {
-                Toast.makeText(CompanyInfoActivity.this,NetUtil.UNKNOWN_ERROR,Toast.LENGTH_SHORT).show();
-                CompanyInfoActivity.this.finish();
-            }
-
-            @Override
-            public void onReqFailure(Object object,int source) {
-                Toast.makeText(CompanyInfoActivity.this,NetUtil.CANT_CONNECT_INTERNET,Toast.LENGTH_SHORT).show();
-                CompanyInfoActivity.this.finish();
-            }
-        },CompanyInfoActivity.this,1);
-        NetUtil.reqSendGet(this,url,callback);
+        NetUtil.reqSendGet(this,url,new HttpCallback(this,this,SOURCE_OPERATE));
     }
 
     TextWatcher watcher = new TextWatcher() {
