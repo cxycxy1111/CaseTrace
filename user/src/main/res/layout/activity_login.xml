@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Login.LoginActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <include
+        android:id="@+id/tb_a_login"
+        layout="@layout/tile_toolbar"/>
+
+    <EditText
+        android:id="@+id/et_a_login_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_enter_user_name"
+        style="@style/EditTextCenter"
+        android:inputType="text" />
+    <EditText
+        android:id="@+id/et_a_login_password"
+        android:hint="@string/hint_enter_pwd"
+        style="@style/EditTextCenter"
+        android:inputType="textPassword" />
+    <TextView
+        android:id="@+id/tv_a_login_tips"
+        android:layout_marginLeft="@dimen/distance16"
+        android:layout_marginRight="@dimen/distance16"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_a_login_login"
+        android:text="@string/btn_a_login"
+        style="@style/ButtonNormal" />
+
+</LinearLayout>

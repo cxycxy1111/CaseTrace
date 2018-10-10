@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">案例追踪</string>
+
+    <string name="toolbar_title_login">登录</string>
+
+    <string name="hint_enter_user_name">请输入帐号</string>
+    <string name="hint_enter_pwd">请输入密码</string>
+
+    <string name="btn_a_login">登录</string>
+
+    <string name="tips_empty_content">用户名或密码不能为空，请重新输入。</string>
+    <string name="tips_user_name_too_long">用户名过长，请重新输入。</string>
+    <string name="tips_user_name_pwd_not_match">用户名与密码不匹配，请检查。</string>
+
+    <string name="bnb_1">首页</string>
+    <string name="bnb_2">发现</string>
+    <string name="bnb_3">我的</string>
 </resources>
